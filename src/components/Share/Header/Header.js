@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
+import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
 import male from "../../../images/male.png";
 
@@ -177,8 +178,10 @@ const Header = () => {
               </NavLink>
             ) : (
               <div>
-                <NavLink to="/login">
-                  <h3>Login</h3>
+                <NavLink to="/login" style={{ textDecoration: "none" }}>
+                  <Button variant="outlined" startIcon={<FingerprintIcon />}>
+                    Login
+                  </Button>
                 </NavLink>
               </div>
             )}

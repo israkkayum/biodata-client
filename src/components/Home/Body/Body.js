@@ -6,36 +6,41 @@ import couple from "../../../images/couple.png";
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
 import relation from "../../../images/relation.png";
+import { NavLink } from "react-router-dom";
 
 const Body = () => {
   return (
     <div>
       <Container maxWidth="lg" sx={{ my: 10, textAlign: "center" }}>
-        <Button
-          style={{
-            backgroundColor: "gold",
-            color: "black",
-            fontWeight: "bold",
-            fontSize: "20px",
-          }}
-          sx={{ py: 3, px: 10 }}
-          variant="contained"
-        >
-          আপনার বায়োডাটা সম্পূর্ণ করুন
-        </Button>
+        <NavLink to="/profile" style={{ textDecoration: "none" }}>
+          <Button
+            style={{
+              backgroundColor: "gold",
+              color: "black",
+              fontWeight: "bold",
+              fontSize: "20px",
+            }}
+            sx={{ py: 3, px: 10 }}
+            variant="contained"
+          >
+            আপনার বায়োডাটা সম্পূর্ণ করুন
+          </Button>
+        </NavLink>
         <br></br>
-        <Button
-          style={{
-            backgroundColor: "blue",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "15px",
-          }}
-          sx={{ py: 3, px: 8, my: 5 }}
-          variant="contained"
-        >
-          যেভাবে বায়োডাটা তৈরি করবেন (ভিডিও)
-        </Button>
+        <NavLink to="/tutorial" style={{ textDecoration: "none" }}>
+          <Button
+            style={{
+              backgroundColor: "blue",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "15px",
+            }}
+            sx={{ py: 3, px: 8, my: 5 }}
+            variant="contained"
+          >
+            যেভাবে বায়োডাটা তৈরি করবেন (ভিডিও)
+          </Button>
+        </NavLink>
         <div>
           <Box
             sx={{
