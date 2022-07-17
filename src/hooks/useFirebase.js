@@ -189,20 +189,20 @@ const useFirebase = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:65000/users")
+    fetch("https://biodata-server.herokuapp.com/users")
       .then((res) => res.json())
       .then((data) => setGetuser(data));
   }, []);
 
   // useEffect(() => {
-  //   fetch(`http://localhost:65000/users/${user.email}`)
+  //   fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
   //     .then((res) => res.json())
   //     .then((data) => setAdmin(data.admin));
   // }, [user.email]);
 
   const saveUser = (email, displayName, biodataNumber, method) => {
     const user = { email, displayName, biodataNumber };
-    fetch("http://localhost:65000/users", {
+    fetch("https://biodata-server.herokuapp.com/users", {
       method: method,
       headers: {
         "content-type": "application/json",

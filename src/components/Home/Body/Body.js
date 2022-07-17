@@ -45,7 +45,7 @@ const Body = () => {
               my: 10,
               "& > :not(style)": {
                 m: 1,
-                width: 250,
+                width: { xs: "100%", md: 250, lg: 250 },
                 height: 280,
               },
             }}

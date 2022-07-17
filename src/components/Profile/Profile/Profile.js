@@ -62,7 +62,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:65000/users/${user.email}`)
+    fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
