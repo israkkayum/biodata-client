@@ -1,38 +1,112 @@
-import React from "react";
+import React, { useContext, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import DateFnsUtils from "@date-io/date-fns";
+import PreviewIcon from "@mui/icons-material/Preview";
 
 import {
+  Alert,
+  CircularProgress,
   Divider,
   FormControl,
   MenuItem,
   Select,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
+import useAuth from "../../../hooks/useAuth";
 
-const EditBiodata = () => {
+const EditBiodata = ({ biodataProfile, profile }) => {
+  const { user } = useAuth();
+
+  const [bioData, setBioData] = useState({});
   const [activeStep, setActiveStep] = React.useState(0);
-  const [value, setValue] = React.useState(new Date());
+  const [publishSuccess, setPublishSuccess] = useState(false);
+  const [publishFail, setPublishFail] = useState(false);
+  const [isLoding, setIsLoding] = useState(false);
 
-  const [age, setAge] = React.useState("");
-  const [study, setStudy] = React.useState("");
-  const [hadith, setHadith] = React.useState("");
-  const [takashos, setTakashos] = React.useState("");
-  const [ssc, setSsc] = React.useState("");
-  const [hsc, setHsc] = React.useState("");
+  // Handle On Change normal text field
 
-  const handleNext = () => {
+  const handleOnBlur = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = { ...bioData };
+    newInfo[field] = value;
+    setBioData(newInfo);
+  };
+
+  const handleTimeChange = (newValue, fieldName) => {
+    const field = fieldName;
+    const value = newValue.toString().slice(4, 15);
+    const newInfo = { ...bioData };
+    newInfo[field] = value;
+    setBioData(newInfo);
+  };
+
+  const handleBiodataSubmit = (e) => {
+    setIsLoding(true);
+
+    // collect data
+    const allbiodata = {
+      ...bioData,
+      email: user.email,
+      biodataNumber: profile.biodataNumber,
+    };
+    // send to the server
+
+    if (biodataProfile == null) {
+      fetch("https://biodata-server.herokuapp.com/biodatas", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(allbiodata),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.insertedId) {
+            setPublishSuccess(true);
+            setPublishFail(false);
+            setIsLoding(false);
+          } else {
+            setPublishSuccess(false);
+            setPublishFail(true);
+            setIsLoding(false);
+          }
+        });
+    } else {
+      fetch("https://biodata-server.herokuapp.com/biodatas", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(allbiodata),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.acknowledged) {
+            setPublishSuccess(true);
+            setPublishFail(false);
+            setIsLoding(false);
+          } else {
+            setPublishSuccess(false);
+            setPublishFail(true);
+            setIsLoding(false);
+          }
+        });
+    }
+
+    e.preventDefault();
+  };
+
+  const handleNext = (e) => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -40,2706 +114,3507 @@ const EditBiodata = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-  const handleStudyChange = (event) => {
-    setStudy(event.target.value);
-  };
-  const handleHadithChange = (event) => {
-    setHadith(event.target.value);
-  };
-  const handleTakashosChange = (event) => {
-    setTakashos(event.target.value);
-  };
-  const handleSscChange = (event) => {
-    setSsc(event.target.value);
-  };
-  const handleHscChange = (event) => {
-    setHsc(event.target.value);
-  };
-
-  const handleTimeChange = (newValue) => {
-    setValue(newValue);
-  };
   return (
     <div>
-      <Box sx={{ maxWidth: "100%", p: { xs: 2, md: 3, lg: 3 } }}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>নাম</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  সম্পূর্ণ নাম *
-                </legend>
-                <Box
-                  sx={{
+      <form onSubmit={handleBiodataSubmit}>
+        <Box sx={{ maxWidth: "100%", p: { xs: 2, md: 3, lg: 3 } }}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>নাম</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
                     width: "100%",
-                    mb: 2,
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
                   }}
                 >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # নাম নেয়া হচ্ছে ভেরিফিকেশনের জন্য, পূর্ণ নাম লিখবেন। আপনার
-                  নাম পাবলিকলি প্রকাশ করা হবে না।
-                </h5>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>সাধারণ তথ্য</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বায়োডাটার ধরন *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>সকল বায়োডাটা</MenuItem>
-                      <MenuItem value={20}>পাত্রের বায়োডাটা</MenuItem>
-                      <MenuItem value={30}>পাত্রীর বায়োডাটা</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বৈবাহিক অবস্থা *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>সকল</MenuItem>
-                      <MenuItem value={20}>অবিবাহিত</MenuItem>
-                      <MenuItem value={30}>বিবাহিত</MenuItem>
-                      <MenuItem value={40}>ডিভোর্সড</MenuItem>
-                      <MenuItem value={50}>বিধবা</MenuItem>
-                      <MenuItem value={60}>বিপত্নীক</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  স্থায়ী ঠিকানা *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>সকল জেলা</MenuItem>
-                      <MenuItem value={20}>কুমিল্লা</MenuItem>
-                      <MenuItem value={30}>কক্সবাজার</MenuItem>
-                      <MenuItem value={40}>কুষ্টিয়া</MenuItem>
-                      <MenuItem value={50}>কিশোরগঞ্জ</MenuItem>
-                      <MenuItem value={60}>কুড়িগ্রাম</MenuItem>
-                      <MenuItem value={70}>খাগড়াছড়ি</MenuItem>
-                      <MenuItem value={80}>খুলনা</MenuItem>
-                      <MenuItem value={90}>গাজীপুর</MenuItem>
-                      <MenuItem value={100}>গোপালগঞ্জ</MenuItem>
-                      <MenuItem value={110}>গাইবান্ধা</MenuItem>
-                      <MenuItem value={120}>হবিগঞ্জ</MenuItem>
-                      <MenuItem value={130}>চাঁদপুর</MenuItem>
-                      <MenuItem value={140}>চট্টগ্রাম</MenuItem>
-                      <MenuItem value={150}>চাঁপাইনবাবগঞ্জ</MenuItem>
-                      <MenuItem value={160}>চুয়াডাঙ্গা</MenuItem>
-                      <MenuItem value={170}>জয়পুরহাট</MenuItem>
-                      <MenuItem value={180}>জামালপুর</MenuItem>
-                      <MenuItem value={190}>ঝিনাইদহ</MenuItem>
-                      <MenuItem value={200}>ঝালকাঠি</MenuItem>
-                      <MenuItem value={210}>যশোর</MenuItem>
-                      <MenuItem value={220}>শরীয়তপুর</MenuItem>
-                      <MenuItem value={230}>শেরপুর</MenuItem>
-                      <MenuItem value={240}>টাঙ্গাইল</MenuItem>
-                      <MenuItem value={250}>ঠাকুরগাঁও</MenuItem>
-                      <MenuItem value={260}>ঢাকা</MenuItem>
-                      <MenuItem value={270}>রাঙ্গামাটি</MenuItem>
-                      <MenuItem value={280}>রাজশাহী</MenuItem>
-                      <MenuItem value={290}>রাজবাড়ী</MenuItem>
-                      <MenuItem value={300}>রংপুর</MenuItem>
-                      <MenuItem value={310}>দিনাজপুর</MenuItem>
-                      <MenuItem value={320}>নোয়াখালী</MenuItem>
-                      <MenuItem value={330}>নাটোর</MenuItem>
-                      <MenuItem value={340}>নওগাঁ</MenuItem>
-                      <MenuItem value={350}>নড়াইল</MenuItem>
-                      <MenuItem value={360}>নরসিংদী</MenuItem>
-                      <MenuItem value={370}>নারায়ণগঞ্জ</MenuItem>
-                      <MenuItem value={380}>নীলফামারী</MenuItem>
-                      <MenuItem value={390}>নেত্রকোণা</MenuItem>
-                      <MenuItem value={400}>লক্ষ্মীপুর</MenuItem>
-                      <MenuItem value={410}>লালমনিরহাট</MenuItem>
-                      <MenuItem value={420}>সিরাজগঞ্জ</MenuItem>
-                      <MenuItem value={430}>সাতক্ষীরা</MenuItem>
-                      <MenuItem value={440}>সিলেট</MenuItem>
-                      <MenuItem value={450}>সুনামগঞ্জ</MenuItem>
-                      <MenuItem value={460}>পাবনা</MenuItem>
-                      <MenuItem value={470}>পটুয়াখালী</MenuItem>
-                      <MenuItem value={480}>পিরোজপুর</MenuItem>
-                      <MenuItem value={490}>পঞ্চগড়</MenuItem>
-                      <MenuItem value={500}>ফেনী</MenuItem>
-                      <MenuItem value={510}>ফরিদপুর</MenuItem>
-                      <MenuItem value={520}>ব্রাহ্মণবাড়িয়া</MenuItem>
-                      <MenuItem value={530}>বান্দরবান</MenuItem>
-                      <MenuItem value={540}>বগুড়া</MenuItem>
-                      <MenuItem value={550}>বাগেরহাট</MenuItem>
-                      <MenuItem value={560}>বরিশাল</MenuItem>
-                      <MenuItem value={570}>বরগুনা</MenuItem>
-                      <MenuItem value={580}>ভোলা</MenuItem>
-                      <MenuItem value={590}>ময়মনসিংহ</MenuItem>
-                      <MenuItem value={600}>মেহেরপুর</MenuItem>
-                      <MenuItem value={610}>মাগুরা</MenuItem>
-                      <MenuItem value={620}>মৌলভীবাজার</MenuItem>
-                      <MenuItem value={630}>মানিকগঞ্জ</MenuItem>
-                      <MenuItem value={640}>মুন্সিগঞ্জ</MenuItem>
-                      <MenuItem value={650}>মাদারীপুর</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বিভাগ *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>ঢাকা</MenuItem>
-                      <MenuItem value={20}>ময়মনসিংহ</MenuItem>
-                      <MenuItem value={30}>চট্টগ্রাম</MenuItem>
-                      <MenuItem value={40}>রাজশাহী</MenuItem>
-                      <MenuItem value={50}>খুলনা</MenuItem>
-                      <MenuItem value={60}>বরিশাল</MenuItem>
-                      <MenuItem value={70}>সিলেট</MenuItem>
-                      <MenuItem value={80}>রংপুর</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # স্থায়ী ঠিকানা যে বিভাগের আওতাধীন
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বর্তমান ঠিকানা *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>সকল জেলা</MenuItem>
-                      <MenuItem value={20}>কুমিল্লা</MenuItem>
-                      <MenuItem value={30}>কক্সবাজার</MenuItem>
-                      <MenuItem value={40}>কুষ্টিয়া</MenuItem>
-                      <MenuItem value={50}>কিশোরগঞ্জ</MenuItem>
-                      <MenuItem value={60}>কুড়িগ্রাম</MenuItem>
-                      <MenuItem value={70}>খাগড়াছড়ি</MenuItem>
-                      <MenuItem value={80}>খুলনা</MenuItem>
-                      <MenuItem value={90}>গাজীপুর</MenuItem>
-                      <MenuItem value={100}>গোপালগঞ্জ</MenuItem>
-                      <MenuItem value={110}>গাইবান্ধা</MenuItem>
-                      <MenuItem value={120}>হবিগঞ্জ</MenuItem>
-                      <MenuItem value={130}>চাঁদপুর</MenuItem>
-                      <MenuItem value={140}>চট্টগ্রাম</MenuItem>
-                      <MenuItem value={150}>চাঁপাইনবাবগঞ্জ</MenuItem>
-                      <MenuItem value={160}>চুয়াডাঙ্গা</MenuItem>
-                      <MenuItem value={170}>জয়পুরহাট</MenuItem>
-                      <MenuItem value={180}>জামালপুর</MenuItem>
-                      <MenuItem value={190}>ঝিনাইদহ</MenuItem>
-                      <MenuItem value={200}>ঝালকাঠি</MenuItem>
-                      <MenuItem value={210}>যশোর</MenuItem>
-                      <MenuItem value={220}>শরীয়তপুর</MenuItem>
-                      <MenuItem value={230}>শেরপুর</MenuItem>
-                      <MenuItem value={240}>টাঙ্গাইল</MenuItem>
-                      <MenuItem value={250}>ঠাকুরগাঁও</MenuItem>
-                      <MenuItem value={260}>ঢাকা</MenuItem>
-                      <MenuItem value={270}>রাঙ্গামাটি</MenuItem>
-                      <MenuItem value={280}>রাজশাহী</MenuItem>
-                      <MenuItem value={290}>রাজবাড়ী</MenuItem>
-                      <MenuItem value={300}>রংপুর</MenuItem>
-                      <MenuItem value={310}>দিনাজপুর</MenuItem>
-                      <MenuItem value={320}>নোয়াখালী</MenuItem>
-                      <MenuItem value={330}>নাটোর</MenuItem>
-                      <MenuItem value={340}>নওগাঁ</MenuItem>
-                      <MenuItem value={350}>নড়াইল</MenuItem>
-                      <MenuItem value={360}>নরসিংদী</MenuItem>
-                      <MenuItem value={370}>নারায়ণগঞ্জ</MenuItem>
-                      <MenuItem value={380}>নীলফামারী</MenuItem>
-                      <MenuItem value={390}>নেত্রকোণা</MenuItem>
-                      <MenuItem value={400}>লক্ষ্মীপুর</MenuItem>
-                      <MenuItem value={410}>লালমনিরহাট</MenuItem>
-                      <MenuItem value={420}>সিরাজগঞ্জ</MenuItem>
-                      <MenuItem value={430}>সাতক্ষীরা</MenuItem>
-                      <MenuItem value={440}>সিলেট</MenuItem>
-                      <MenuItem value={450}>সুনামগঞ্জ</MenuItem>
-                      <MenuItem value={460}>পাবনা</MenuItem>
-                      <MenuItem value={470}>পটুয়াখালী</MenuItem>
-                      <MenuItem value={480}>পিরোজপুর</MenuItem>
-                      <MenuItem value={490}>পঞ্চগড়</MenuItem>
-                      <MenuItem value={500}>ফেনী</MenuItem>
-                      <MenuItem value={510}>ফরিদপুর</MenuItem>
-                      <MenuItem value={520}>ব্রাহ্মণবাড়িয়া</MenuItem>
-                      <MenuItem value={530}>বান্দরবান</MenuItem>
-                      <MenuItem value={540}>বগুড়া</MenuItem>
-                      <MenuItem value={550}>বাগেরহাট</MenuItem>
-                      <MenuItem value={560}>বরিশাল</MenuItem>
-                      <MenuItem value={570}>বরগুনা</MenuItem>
-                      <MenuItem value={580}>ভোলা</MenuItem>
-                      <MenuItem value={590}>ময়মনসিংহ</MenuItem>
-                      <MenuItem value={600}>মেহেরপুর</MenuItem>
-                      <MenuItem value={610}>মাগুরা</MenuItem>
-                      <MenuItem value={620}>মৌলভীবাজার</MenuItem>
-                      <MenuItem value={630}>মানিকগঞ্জ</MenuItem>
-                      <MenuItem value={640}>মুন্সিগঞ্জ</MenuItem>
-                      <MenuItem value={650}>মাদারীপুর</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বিভাগ *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>ঢাকা</MenuItem>
-                      <MenuItem value={20}>ময়মনসিংহ</MenuItem>
-                      <MenuItem value={30}>চট্টগ্রাম</MenuItem>
-                      <MenuItem value={40}>রাজশাহী</MenuItem>
-                      <MenuItem value={50}>খুলনা</MenuItem>
-                      <MenuItem value={60}>বরিশাল</MenuItem>
-                      <MenuItem value={70}>সিলেট</MenuItem>
-                      <MenuItem value={80}>রংপুর</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # বর্তমান ঠিকানা যে বিভাগের আওতাধীন
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  জন্মসন (আসল) *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Stack spacing={3}>
-                      <DesktopDatePicker
-                        inputFormat="MM/dd/yyyy"
-                        value={value}
-                        onChange={handleTimeChange}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # অবশ্যই সত্যটা দিবেন। সার্টিফিকেটের নয়।
-                </h5>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  গাত্রবর্ণ
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>কালো</MenuItem>
-                      <MenuItem value={30}>শ্যামলা</MenuItem>
-                      <MenuItem value={40}>উজ্জ্বল শ্যামলা</MenuItem>
-                      <MenuItem value={50}>ফর্সা</MenuItem>
-                      <MenuItem value={60}>উজ্জ্বল ফর্সা</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  উচ্চতা
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>৪'১''</MenuItem>
-                      <MenuItem value={20}>৪'২''</MenuItem>
-                      <MenuItem value={30}>৪'৩''</MenuItem>
-                      <MenuItem value={40}>৪'৪''</MenuItem>
-                      <MenuItem value={50}>৪'৫''</MenuItem>
-                      <MenuItem value={60}>৪'৬''</MenuItem>
-                      <MenuItem value={70}>৪'৭''</MenuItem>
-                      <MenuItem value={80}>৪'৮''</MenuItem>
-                      <MenuItem value={90}>৪'৯''</MenuItem>
-                      <MenuItem value={100}>৪'১০''</MenuItem>
-                      <MenuItem value={110}>৪'১১''</MenuItem>
-                      <MenuItem value={120}>৪'১২''</MenuItem>
-                      <MenuItem value={130}>৫'০''</MenuItem>
-                      <MenuItem value={140}>৫'১''</MenuItem>
-                      <MenuItem value={150}>৫'২''</MenuItem>
-                      <MenuItem value={160}>৫'৩''</MenuItem>
-                      <MenuItem value={170}>৫'৪''</MenuItem>
-                      <MenuItem value={180}>৫'৫''</MenuItem>
-                      <MenuItem value={190}>৫'৬''</MenuItem>
-                      <MenuItem value={200}>৫'৭''</MenuItem>
-                      <MenuItem value={210}>৫'৮''</MenuItem>
-                      <MenuItem value={220}>৫'৯''</MenuItem>
-                      <MenuItem value={230}>৫'১০''</MenuItem>
-                      <MenuItem value={240}>৫'১১''</MenuItem>
-                      <MenuItem value={250}>৫'১২''</MenuItem>
-                      <MenuItem value={260}>৬'০''</MenuItem>
-                      <MenuItem value={270}>৬'১''</MenuItem>
-                      <MenuItem value={280}>৬'২''</MenuItem>
-                      <MenuItem value={290}>৬'৩''</MenuItem>
-                      <MenuItem value={300}>৬'৪''</MenuItem>
-                      <MenuItem value={310}>৬'৫''</MenuItem>
-                      <MenuItem value={320}>৬'৬''</MenuItem>
-                      <MenuItem value={330}>৬'৭''</MenuItem>
-                      <MenuItem value={340}>৬'৮''</MenuItem>
-                      <MenuItem value={350}>৬'৯''</MenuItem>
-                      <MenuItem value={360}>৬'১০''</MenuItem>
-                      <MenuItem value={370}>৬'১১''</MenuItem>
-                      <MenuItem value={380}>৬'১২''</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  রক্তের গ্রুপ *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>A+</MenuItem>
-                      <MenuItem value={20}>A-</MenuItem>
-                      <MenuItem value={30}>B+</MenuItem>
-                      <MenuItem value={40}>B-</MenuItem>
-                      <MenuItem value={50}>O+</MenuItem>
-                      <MenuItem value={60}>O-</MenuItem>
-                      <MenuItem value={70}>AB+</MenuItem>
-                      <MenuItem value={80}>AB-</MenuItem>
-                      <MenuItem value={90}>জানা নেই</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পেশা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # সর্বোচ্চ ৩ শব্দে শুধু পদবী লিখবেন। পেশা সম্পর্কে বিস্তারিত
-                  লিখার জন্য সামনে প্রশ্ন আছে।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মাসিক আয়
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # জানাতে অনিচ্ছুক হলে ঘরটি ফাঁকা রাখুন। জানাতে চাইলে এভাবে
-                  লিখবেনঃ ৩০ হাজার
-                </h5>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>ঠিকানা</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  স্থায়ী ঠিকানা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
-                  মিরপুর-২,ঢাকা।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বর্তমান ঠিকানা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
-                  মিরপুর-২,ঢাকা।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  কোথায় বড় হয়েছেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>শিক্ষাগত যোগ্যতা</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  কোন মাধ্যমে পড়াশোনা করেছেন? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={study}
-                      onChange={handleStudyChange}
-                      required
-                      displayEmpty
-                    >
-                      <MenuItem value="">
-                        <em>---</em>
-                      </MenuItem>
-                      <MenuItem value={10}>মাদ্রাসা</MenuItem>
-                      <MenuItem value={20}>জেনারেল</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # আলিয়া / মাধ্যমিক / কারিগরি / ইংরেজি মাধ্যমে শিক্ষিতরা
-                  "জেনারেল" অপশন সিলেক্ট করুন।
-                </h5>
-              </fieldset>
-
-              {study == 10 && (
-                <div>
-                  <fieldset
-                    style={{
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    সম্পূর্ণ নাম *
+                  </legend>
+                  <Box
+                    sx={{
                       width: "100%",
-                      border: "2px solid lightGray",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      marginBottom: "30px",
+                      mb: 2,
                     }}
                   >
-                    <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      আপনি কি হাফেজ?
-                    </legend>
-                    <Box sx={{ width: "100%" }}>
-                      <FormControl fullWidth>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={age}
-                          onChange={handleChange}
+                    <TextField
+                      name="yourName"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourName : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="name"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    নাম নেয়া হচ্ছে ভেরিফিকেশনের জন্য, পূর্ণ নাম লিখবেন। আপনার
+                    নাম পাবলিকলি প্রকাশ করা হবে না।
+                  </h5>
+                </fieldset>
+
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>সাধারণ তথ্য</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বায়োডাটার ধরন *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="biodataType"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.biodataType : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="সকল বায়োডাটা">সকল বায়োডাটা</MenuItem>
+                        <MenuItem value="পাত্রের বায়োডাটা">
+                          পাত্রের বায়োডাটা
+                        </MenuItem>
+                        <MenuItem value="পাত্রীর বায়োডাটা">
+                          পাত্রীর বায়োডাটা
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বৈবাহিক অবস্থা *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="maritalStatus"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.maritalStatus : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="সকল">সকল</MenuItem>
+                        <MenuItem value="অবিবাহিত">অবিবাহিত</MenuItem>
+                        <MenuItem value="বিবাহিত">বিবাহিত</MenuItem>
+                        <MenuItem value="ডিভোর্সড">ডিভোর্সড</MenuItem>
+                        <MenuItem value="বিধবা">বিধবা</MenuItem>
+                        <MenuItem value="বিপত্নীক">বিপত্নীক</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    স্থায়ী ঠিকানা *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="parmanentDistrict"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.parmanentDistrict : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
+                        <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                        <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
+                        <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
+                        <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
+                        <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
+                        <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
+                        <MenuItem value="খুলনা">খুলনা</MenuItem>
+                        <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
+                        <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
+                        <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
+                        <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
+                        <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="চাঁপাইনবাবগঞ্জ">
+                          চাঁপাইনবাবগঞ্জ
+                        </MenuItem>
+                        <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
+                        <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
+                        <MenuItem value="জামালপুর">জামালপুর</MenuItem>
+                        <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
+                        <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
+                        <MenuItem value="যশোর">যশোর</MenuItem>
+                        <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
+                        <MenuItem value="শেরপুর">শেরপুর</MenuItem>
+                        <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
+                        <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
+                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                        <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
+                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                        <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
+                        <MenuItem value="রংপুর">রংপুর</MenuItem>
+                        <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
+                        <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
+                        <MenuItem value="নাটোর">নাটোর</MenuItem>
+                        <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
+                        <MenuItem value="নড়াইল">নড়াইল</MenuItem>
+                        <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
+                        <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
+                        <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
+                        <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
+                        <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
+                        <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
+                        <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
+                        <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
+                        <MenuItem value="সিলেট">সিলেট</MenuItem>
+                        <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
+                        <MenuItem value="পাবনা">পাবনা</MenuItem>
+                        <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
+                        <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
+                        <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
+                        <MenuItem value="ফেনী">ফেনী</MenuItem>
+                        <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
+                        <MenuItem value="ব্রাহ্মণবাড়িয়া">
+                          ব্রাহ্মণবাড়িয়া
+                        </MenuItem>
+                        <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
+                        <MenuItem value="বগুড়া">বগুড়া</MenuItem>
+                        <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
+                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                        <MenuItem value="বরগুনা">বরগুনা</MenuItem>
+                        <MenuItem value="ভোলা">ভোলা</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                        <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
+                        <MenuItem value="মাগুরা">মাগুরা</MenuItem>
+                        <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
+                        <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
+                        <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
+                        <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বিভাগ *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="parmanentDivision"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.parmanentDivision : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                        <MenuItem value="খুলনা">খুলনা</MenuItem>
+                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                        <MenuItem value="সিলেট">সিলেট</MenuItem>
+                        <MenuItem value="রংপুর">রংপুর</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    স্থায়ী ঠিকানা যে বিভাগের আওতাধীন
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বর্তমান ঠিকানা *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="presentDistrict"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.presentDistrict : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
+                        <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                        <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
+                        <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
+                        <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
+                        <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
+                        <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
+                        <MenuItem value="খুলনা">খুলনা</MenuItem>
+                        <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
+                        <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
+                        <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
+                        <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
+                        <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="চাঁপাইনবাবগঞ্জ">
+                          চাঁপাইনবাবগঞ্জ
+                        </MenuItem>
+                        <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
+                        <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
+                        <MenuItem value="জামালপুর">জামালপুর</MenuItem>
+                        <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
+                        <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
+                        <MenuItem value="যশোর">যশোর</MenuItem>
+                        <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
+                        <MenuItem value="শেরপুর">শেরপুর</MenuItem>
+                        <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
+                        <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
+                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                        <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
+                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                        <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
+                        <MenuItem value="রংপুর">রংপুর</MenuItem>
+                        <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
+                        <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
+                        <MenuItem value="নাটোর">নাটোর</MenuItem>
+                        <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
+                        <MenuItem value="নড়াইল">নড়াইল</MenuItem>
+                        <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
+                        <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
+                        <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
+                        <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
+                        <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
+                        <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
+                        <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
+                        <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
+                        <MenuItem value="সিলেট">সিলেট</MenuItem>
+                        <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
+                        <MenuItem value="পাবনা">পাবনা</MenuItem>
+                        <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
+                        <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
+                        <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
+                        <MenuItem value="ফেনী">ফেনী</MenuItem>
+                        <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
+                        <MenuItem value="ব্রাহ্মণবাড়িয়া">
+                          ব্রাহ্মণবাড়িয়া
+                        </MenuItem>
+                        <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
+                        <MenuItem value="বগুড়া">বগুড়া</MenuItem>
+                        <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
+                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                        <MenuItem value="বরগুনা">বরগুনা</MenuItem>
+                        <MenuItem value="ভোলা">ভোলা</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                        <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
+                        <MenuItem value="মাগুরা">মাগুরা</MenuItem>
+                        <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
+                        <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
+                        <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
+                        <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বিভাগ *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="presentDivision"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.presentDivision : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                        <MenuItem value="খুলনা">খুলনা</MenuItem>
+                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                        <MenuItem value="সিলেট">সিলেট</MenuItem>
+                        <MenuItem value="রংপুর">রংপুর</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    বর্তমান ঠিকানা যে বিভাগের আওতাধীন
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    জন্মসন (আসল) *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <Stack spacing={3}>
+                        <DesktopDatePicker
+                          inputFormat="MM/dd/yyyy"
+                          defaultValue={
+                            biodataProfile ? biodataProfile.dateOfBirth : ""
+                          }
+                          value={bioData.dateOfBirth}
+                          onChange={(newValue) =>
+                            handleTimeChange(newValue, "dateOfBirth")
+                          }
                           required
-                        >
-                          <MenuItem value={10}>---</MenuItem>
-                          <MenuItem value={20}>হ্যাঁ</MenuItem>
-                          <MenuItem value={30}>না</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </fieldset>
-                  <fieldset
-                    style={{
+                          name="dateOfBirth"
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    অবশ্যই সত্যটা দিবেন। সার্টিফিকেটের নয়।
+                  </h5>
+                </fieldset>
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    গাত্রবর্ণ
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="yourSkinColor"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.yourSkinColor : ""
+                        }
+                        onBlur={handleOnBlur}
+                      >
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="কালো">কালো</MenuItem>
+                        <MenuItem value="শ্যামলা">শ্যামলা</MenuItem>
+                        <MenuItem value="উজ্জ্বল শ্যামলা">
+                          উজ্জ্বল শ্যামলা
+                        </MenuItem>
+                        <MenuItem value="ফর্সা">ফর্সা</MenuItem>
+                        <MenuItem value="উজ্জ্বল ফর্সা">উজ্জ্বল ফর্সা</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    উচ্চতা
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="yourHeight"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.yourHeight : ""
+                        }
+                        onBlur={handleOnBlur}
+                      >
+                        <MenuItem value="৪'১''">৪'১''</MenuItem>
+                        <MenuItem value="৪'২''">৪'২''</MenuItem>
+                        <MenuItem value="৪'৩''">৪'৩''</MenuItem>
+                        <MenuItem value="৪'৪''">৪'৪''</MenuItem>
+                        <MenuItem value="৪'৫''">৪'৫''</MenuItem>
+                        <MenuItem value="৪'৬''">৪'৬''</MenuItem>
+                        <MenuItem value="৪'৭''">৪'৭''</MenuItem>
+                        <MenuItem value="৪'৮''">৪'৮''</MenuItem>
+                        <MenuItem value="৪'৯''">৪'৯''</MenuItem>
+                        <MenuItem value="৪'১০''">৪'১০''</MenuItem>
+                        <MenuItem value="৪'১১''">৪'১১''</MenuItem>
+                        <MenuItem value="৪'১২''">৪'১২''</MenuItem>
+                        <MenuItem value="৫'০''">৫'০''</MenuItem>
+                        <MenuItem value="৫'১''">৫'১''</MenuItem>
+                        <MenuItem value="৫'২''">৫'২''</MenuItem>
+                        <MenuItem value="৫'৩''">৫'৩''</MenuItem>
+                        <MenuItem value="৫'৪''">৫'৪''</MenuItem>
+                        <MenuItem value="৫'৫''">৫'৫''</MenuItem>
+                        <MenuItem value="৫'৬''">৫'৬''</MenuItem>
+                        <MenuItem value="৫'৭''">৫'৭''</MenuItem>
+                        <MenuItem value="৫'৮''">৫'৮''</MenuItem>
+                        <MenuItem value="৫'৯''">৫'৯''</MenuItem>
+                        <MenuItem value="৫'১০''">৫'১০''</MenuItem>
+                        <MenuItem value="৫'১১''">৫'১১''</MenuItem>
+                        <MenuItem value="৫'১২''">৫'১২''</MenuItem>
+                        <MenuItem value="৬'০''">৬'০''</MenuItem>
+                        <MenuItem value="৬'১''">৬'১''</MenuItem>
+                        <MenuItem value="৬'২''">৬'২''</MenuItem>
+                        <MenuItem value="৬'৩''">৬'৩''</MenuItem>
+                        <MenuItem value="৬'৪''">৬'৪''</MenuItem>
+                        <MenuItem value="৬'৫''">৬'৫''</MenuItem>
+                        <MenuItem value="৬'৬''">৬'৬''</MenuItem>
+                        <MenuItem value="৬'৭''">৬'৭''</MenuItem>
+                        <MenuItem value="৬'৮''">৬'৮''</MenuItem>
+                        <MenuItem value="৬'৯''">৬'৯''</MenuItem>
+                        <MenuItem value="৬'১০''">৬'১০''</MenuItem>
+                        <MenuItem value="৬'১১''">৬'১১''</MenuItem>
+                        <MenuItem value="৬'১২''">৬'১২''</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    ওজন
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="yourWeight"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.yourWeight : ""
+                        }
+                        onBlur={handleOnBlur}
+                      >
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="৩০ - ৩৫ কেজি">৩০ - ৩৫ কেজি</MenuItem>
+                        <MenuItem value="৩৬ - ৪০ কেজি">৩৬ - ৪০ কেজি</MenuItem>
+                        <MenuItem value="৪১ - ৪৫ কেজি">৪১ - ৪৫ কেজি</MenuItem>
+                        <MenuItem value="৪৬ - ৫০ কেজি">৪৬ - ৫০ কেজি</MenuItem>
+                        <MenuItem value="৫১ - ৬০ কেজি">৫১ - ৬০ কেজি</MenuItem>
+                        <MenuItem value="৬১ - ৬৫ কেজি">৬১ - ৬৫ কেজি</MenuItem>
+                        <MenuItem value="৬৬ - ৭০ কেজি">৬৬ - ৭০ কেজি</MenuItem>
+                        <MenuItem value="৭১ - ৭৫ কেজি">৭১ - ৭৫ কেজি</MenuItem>
+                        <MenuItem value="৭৬ - ৮০ কেজি">৭৬ - ৮০ কেজি</MenuItem>
+                        <MenuItem value="৮১ - ৮৫ কেজি">৮১ - ৮৫ কেজি</MenuItem>
+                        <MenuItem value="৮৬ - ৯০ কেজি">৮৬ - ৯০ কেজি</MenuItem>
+                        <MenuItem value="৯১ - ৯৫ কেজি">৯১ - ৯৫ কেজি</MenuItem>
+                        <MenuItem value="৯৬ - ১০০ কেজি">৯৬ - ১০০ কেজি</MenuItem>
+                        <MenuItem value="১০১ - ১০৫ কেজি">
+                          ১০১ - ১০৫ কেজি
+                        </MenuItem>
+                        <MenuItem value="১০৬ - ১১০ কেজি">
+                          ১০৬ - ১১০ কেজি
+                        </MenuItem>
+                        <MenuItem value="১১১ - ১১৫ কেজি">
+                          ১১১ - ১১৫ কেজি
+                        </MenuItem>
+                        <MenuItem value="১১৬ - ১২০ কেজি">
+                          ১১৬ - ১২০ কেজি
+                        </MenuItem>
+                        <MenuItem value="১২১ - ১২৫ কেজি">
+                          ১২১ - ১২৫ কেজি
+                        </MenuItem>
+                        <MenuItem value="১২৬ - ১৩০ কেজি">
+                          ১২৬ - ১৩০ কেজি
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    রক্তের গ্রুপ *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="yourBloodGroup"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.yourBloodGroup : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="A+">A+</MenuItem>
+                        <MenuItem value="A-">A-</MenuItem>
+                        <MenuItem value="B+">B+</MenuItem>
+                        <MenuItem value="B-">B-</MenuItem>
+                        <MenuItem value="O+">O+</MenuItem>
+                        <MenuItem value="O-">O-</MenuItem>
+                        <MenuItem value="AB+">AB+</MenuItem>
+                        <MenuItem value="AB-">AB-</MenuItem>
+                        <MenuItem value="জানা নেই">জানা নেই</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পেশা *
+                  </legend>
+                  <Box
+                    sx={{
                       width: "100%",
-                      border: "2px solid lightGray",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      marginBottom: "30px",
                     }}
                   >
-                    <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      দাওরায়ে হাদীস পাশ করেছেন?
-                    </legend>
-                    <Box sx={{ width: "100%" }}>
-                      <FormControl fullWidth>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={hadith}
-                          onChange={handleHadithChange}
-                          required
-                        >
-                          <MenuItem value={10}>---</MenuItem>
-                          <MenuItem value={20}>হ্যাঁ</MenuItem>
-                          <MenuItem value={30}>না</MenuItem>
-                          <MenuItem value={40}>না, এখনো পড়ছি</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </fieldset>
-
-                  {hadith == 20 && (
-                    <div>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          দাওরায়ে হাদীস পাসের সন
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <Stack spacing={3}>
-                              <DesktopDatePicker
-                                inputFormat="yyyy"
-                                value={value}
-                                onChange={handleTimeChange}
-                                renderInput={(params) => (
-                                  <TextField {...params} />
-                                )}
-                              />
-                            </Stack>
-                          </LocalizationProvider>
-                        </Box>
-                      </fieldset>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          দাওরায়ে হাদীসের নতিজা কি?
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={age}
-                              onChange={handleChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>মুমতায</MenuItem>
-                              <MenuItem value={30}>জায়্যিদ জিদ্দান</MenuItem>
-                              <MenuItem value={40}>জায়্যিদ</MenuItem>
-                              <MenuItem value={50}>মকবূল</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          আপনি কি তাখাস্সুস পড়েছেন?
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={takashos}
-                              onChange={handleTakashosChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>হ্যাঁ</MenuItem>
-                              <MenuItem value={30}>না</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
-                      {takashos == 20 && (
-                        <div>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              কোন বিষয়ে তাখাস্সুস পড়েছেন?
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              তাখাস্সুস পাসের সন
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # ছাত্র হলে লিখবেন ছাত্র
-                            </h5>
-                          </fieldset>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {hadith == 40 && (
-                    <div>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          দাওরায়ে হাদীস কোন বর্ষে পড়ছেন?
-                        </legend>
-                        <Box
-                          sx={{
-                            width: "100%",
-                          }}
-                        >
-                          <TextField required fullWidth id="fullWidth" />
-                        </Box>
-                      </fieldset>
-                    </div>
-                  )}
-
-                  <fieldset
-                    style={{
+                    <TextField
+                      name="yourProfession"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourProfession : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    সর্বোচ্চ ৩ শব্দে শুধু পদবী লিখবেন। পেশা সম্পর্কে বিস্তারিত
+                    লিখার জন্য সামনে প্রশ্ন আছে।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মাসিক আয়
+                  </legend>
+                  <Box
+                    sx={{
                       width: "100%",
-                      border: "2px solid lightGray",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      marginBottom: "30px",
                     }}
                   >
-                    <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      সর্বোচ্চ শিক্ষাগত যোগ্যতা
-                    </legend>
-                    <Box
-                      sx={{
+                    <TextField
+                      name="yourMonthIncome"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourMonthIncome : ""
+                      }
+                      onBlur={handleOnBlur}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    জানাতে অনিচ্ছুক হলে ঘরটি ফাঁকা রাখুন। জানাতে চাইলে এভাবে
+                    লিখবেনঃ ৩০ হাজার
+                  </h5>
+                </fieldset>
+
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>ঠিকানা</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    স্থায়ী ঠিকানা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="parmanentAddress"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.parmanentAddress : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
+                    মিরপুর-২,ঢাকা।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বর্তমান ঠিকানা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="presentAddress"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.presentAddress : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
+                    মিরপুর-২,ঢাকা।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোথায় বড় হয়েছেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="growingUpLife"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.growingUpLife : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>শিক্ষাগত যোগ্যতা</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোন মাধ্যমে পড়াশোনা করেছেন? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="studyMedium"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.studyMedium : ""
+                        }
+                        onChange={handleOnBlur}
+                        required
+                        displayEmpty
+                      >
+                        <MenuItem value="">
+                          <em>---</em>
+                        </MenuItem>
+                        <MenuItem value="মাদ্রাসা">মাদ্রাসা</MenuItem>
+                        <MenuItem value="জেনারেল">জেনারেল</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    আলিয়া / মাধ্যমিক / কারিগরি / ইংরেজি মাধ্যমে শিক্ষিতরা
+                    "জেনারেল" অপশন সিলেক্ট করুন।
+                  </h5>
+                </fieldset>
+
+                {bioData.studyMedium == "মাদ্রাসা" && (
+                  <div>
+                    <fieldset
+                      style={{
                         width: "100%",
+                        border: "2px solid lightGray",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        marginBottom: "30px",
                       }}
                     >
-                      <TextField multiline rows={4} fullWidth id="fullWidth" />
-                    </Box>
-                    <h5 style={{ color: "gray" }}>
-                      # শিক্ষার বিষয়, প্রতিষ্ঠানের নাম, পাসের সন ইত্যাদি
-                      বিস্তারিত লিখবেন।
-                    </h5>
-                  </fieldset>
-                </div>
-              )}
+                      <legend style={{ fontWeight: "bold", color: "gray" }}>
+                        আপনি কি হাফেজ?
+                      </legend>
+                      <Box sx={{ width: "100%" }}>
+                        <FormControl fullWidth>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="areYouHafez"
+                            defaultValue={
+                              biodataProfile ? biodataProfile.areYouHafez : ""
+                            }
+                            onBlur={handleOnBlur}
+                          >
+                            <MenuItem value="---">---</MenuItem>
+                            <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                            <MenuItem value="না">না</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </fieldset>
+                    <fieldset
+                      style={{
+                        width: "100%",
+                        border: "2px solid lightGray",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        marginBottom: "30px",
+                      }}
+                    >
+                      <legend style={{ fontWeight: "bold", color: "gray" }}>
+                        দাওরায়ে হাদীস পাশ করেছেন?
+                      </legend>
+                      <Box sx={{ width: "100%" }}>
+                        <FormControl fullWidth>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="areYouPassDawora"
+                            defaultValue={
+                              biodataProfile
+                                ? biodataProfile.areYouPassDawora
+                                : ""
+                            }
+                            onChange={handleOnBlur}
+                          >
+                            <MenuItem value="---">---</MenuItem>
+                            <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                            <MenuItem value="না">না</MenuItem>
+                            <MenuItem value="না, এখনো পড়ছি">
+                              না, এখনো পড়ছি
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </fieldset>
 
-              {study == 20 && (
-                <div>
-                  <fieldset
-                    style={{
+                    {bioData.areYouPassDawora == "হ্যাঁ" && (
+                      <div>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            দাওরায়ে হাদীস পাসের সন
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                              <Stack spacing={3}>
+                                <DesktopDatePicker
+                                  inputFormat="yyyy"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.dateofPassDawora
+                                      : ""
+                                  }
+                                  value={bioData.dateofPassDawora}
+                                  onChange={(newValue) =>
+                                    handleTimeChange(
+                                      newValue,
+                                      "dateofPassDawora"
+                                    )
+                                  }
+                                  name="dateofPassDawora"
+                                  renderInput={(params) => (
+                                    <TextField {...params} />
+                                  )}
+                                />
+                              </Stack>
+                            </LocalizationProvider>
+                          </Box>
+                        </fieldset>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            দাওরায়ে হাদীসের নতিজা কি?
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="natizaOfDawora"
+                                defaultValue={
+                                  biodataProfile
+                                    ? biodataProfile.natizaOfDawora
+                                    : ""
+                                }
+                                onBlur={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="মুমতায">মুমতায</MenuItem>
+                                <MenuItem value="জায়্যিদ জিদ্দান">
+                                  জায়্যিদ জিদ্দান
+                                </MenuItem>
+                                <MenuItem value="জায়্যিদ">জায়্যিদ</MenuItem>
+                                <MenuItem value="মকবূল">মকবূল</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            আপনি কি তাখাস্সুস পড়েছেন?
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="areYouStudyTakasshos"
+                                defaultValue={
+                                  biodataProfile
+                                    ? biodataProfile.areYouStudyTakasshos
+                                    : ""
+                                }
+                                onChange={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                                <MenuItem value="না">না</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+                        {bioData.areYouStudyTakasshos == "হ্যাঁ" && (
+                          <div>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                কোন বিষয়ে তাখাস্সুস পড়েছেন?
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="takasshosStudySub"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.takasshosStudySub
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                তাখাস্সুস পাসের সন
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="takasshosStudyDate"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.takasshosStudyDate
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                ছাত্র হলে লিখবেন ছাত্র
+                              </h5>
+                            </fieldset>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {bioData.areYouPassDawora == "না, এখনো পড়ছি" && (
+                      <div>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            দাওরায়ে হাদীস কোন বর্ষে পড়ছেন?
+                          </legend>
+                          <Box
+                            sx={{
+                              width: "100%",
+                            }}
+                          >
+                            <TextField
+                              name="studyingYearDawora"
+                              defaultValue={
+                                biodataProfile
+                                  ? biodataProfile.studyingYearDawora
+                                  : ""
+                              }
+                              onBlur={handleOnBlur}
+                              fullWidth
+                              id="fullWidth"
+                            />
+                          </Box>
+                        </fieldset>
+                      </div>
+                    )}
+
+                    <fieldset
+                      style={{
+                        width: "100%",
+                        border: "2px solid lightGray",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        marginBottom: "30px",
+                      }}
+                    >
+                      <legend style={{ fontWeight: "bold", color: "gray" }}>
+                        সর্বোচ্চ শিক্ষাগত যোগ্যতা
+                      </legend>
+                      <Box
+                        sx={{
+                          width: "100%",
+                        }}
+                      >
+                        <TextField
+                          name="maxStudyQualification"
+                          defaultValue={
+                            biodataProfile
+                              ? biodataProfile.maxStudyQualification
+                              : ""
+                          }
+                          onBlur={handleOnBlur}
+                          multiline
+                          rows={4}
+                          fullWidth
+                          id="fullWidth"
+                        />
+                      </Box>
+                      <h5 style={{ color: "gray" }}>
+                        শিক্ষার বিষয়, প্রতিষ্ঠানের নাম, পাসের সন ইত্যাদি
+                        বিস্তারিত লিখবেন।
+                      </h5>
+                    </fieldset>
+                  </div>
+                )}
+
+                {bioData.studyMedium == "জেনারেল" && (
+                  <div>
+                    <fieldset
+                      style={{
+                        width: "100%",
+                        border: "2px solid lightGray",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        marginBottom: "30px",
+                      }}
+                    >
+                      <legend style={{ fontWeight: "bold", color: "gray" }}>
+                        মাধ্যমিক (SSC) / সমমান পাশ করেছেন?
+                      </legend>
+                      <Box sx={{ width: "100%" }}>
+                        <FormControl fullWidth>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="areYouSscPass"
+                            defaultValue={
+                              biodataProfile ? biodataProfile.areYouSscPass : ""
+                            }
+                            onChange={handleOnBlur}
+                          >
+                            <MenuItem value="---">---</MenuItem>
+                            <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                            <MenuItem value="না">না</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </fieldset>
+
+                    {bioData.areYouSscPass == "হ্যাঁ" && (
+                      <div>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            মাধ্যমিক (SSC) / সমমান ফলাফল
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="sscResult"
+                                defaultValue={
+                                  biodataProfile ? biodataProfile.sscResult : ""
+                                }
+                                onBlur={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="Golden A+">Golden A+</MenuItem>
+                                <MenuItem value="A+">A+</MenuItem>
+                                <MenuItem value="A">A</MenuItem>
+                                <MenuItem value="A-">A-</MenuItem>
+                                <MenuItem value="B">B</MenuItem>
+                                <MenuItem value="B-">B-</MenuItem>
+                                <MenuItem value="C">C</MenuItem>
+                                <MenuItem value="C-">C-</MenuItem>
+                                <MenuItem value="D">D</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            মাধ্যমিক (SSC) / সমমান বিভাগ
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="sscGroup"
+                                defaultValue={
+                                  biodataProfile ? biodataProfile.sscGroup : ""
+                                }
+                                onBlur={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="বিজ্ঞান বিভাগ">
+                                  বিজ্ঞান বিভাগ
+                                </MenuItem>
+                                <MenuItem value="মানবিক বিভাগ">
+                                  মানবিক বিভাগ
+                                </MenuItem>
+                                <MenuItem value="ব্যবসা বিভাগ">
+                                  ব্যবসা বিভাগ
+                                </MenuItem>
+                                <MenuItem value="কারিগরি / ভোকেশনাল">
+                                  কারিগরি / ভোকেশনাল
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            মাধ্যমিক (SSC) / সমমান পাসের সন
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                              <Stack spacing={3}>
+                                <DesktopDatePicker
+                                  inputFormat="yyyy"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.dateofPassSsc
+                                      : ""
+                                  }
+                                  value={bioData.dateofPassSsc}
+                                  onChange={(newValue) =>
+                                    handleTimeChange(newValue, "dateofPassSsc")
+                                  }
+                                  name="dateofPassSsc"
+                                  renderInput={(params) => (
+                                    <TextField {...params} />
+                                  )}
+                                />
+                              </Stack>
+                            </LocalizationProvider>
+                          </Box>
+                        </fieldset>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            উচ্চ মাধ্যমিক (HSC) / সমমান পাশ করেছেন?
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="areYouHscPass"
+                                defaultValue={
+                                  biodataProfile
+                                    ? biodataProfile.areYouHscPass
+                                    : ""
+                                }
+                                onChange={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                                <MenuItem value="না">না</MenuItem>
+                                <MenuItem value="ডিপ্লোমা পড়েছি">
+                                  ডিপ্লোমা পড়েছি
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+
+                        {bioData.areYouHscPass == "হ্যাঁ" && (
+                          <div>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                উচ্চ মাধ্যমিক (HSC) / সমমান ফলাফল
+                              </legend>
+                              <Box sx={{ width: "100%" }}>
+                                <FormControl fullWidth>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="hscResult"
+                                    defaultValue={
+                                      biodataProfile
+                                        ? biodataProfile.hscResult
+                                        : ""
+                                    }
+                                    onBlur={handleOnBlur}
+                                  >
+                                    <MenuItem value="---">---</MenuItem>
+                                    <MenuItem value="Golden A+">
+                                      Golden A+
+                                    </MenuItem>
+                                    <MenuItem value="A+">A+</MenuItem>
+                                    <MenuItem value="A">A</MenuItem>
+                                    <MenuItem value="A-">A-</MenuItem>
+                                    <MenuItem value="B">B</MenuItem>
+                                    <MenuItem value="B-">B-</MenuItem>
+                                    <MenuItem value="C">C</MenuItem>
+                                    <MenuItem value="C-">C-</MenuItem>
+                                    <MenuItem value="D">D</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                উচ্চ মাধ্যমিক (HSC) / সমমানের বিভাগ
+                              </legend>
+                              <Box sx={{ width: "100%" }}>
+                                <FormControl fullWidth>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="hscGroup"
+                                    defaultValue={
+                                      biodataProfile
+                                        ? biodataProfile.hscGroup
+                                        : ""
+                                    }
+                                    onBlur={handleOnBlur}
+                                  >
+                                    <MenuItem value="---">---</MenuItem>
+                                    <MenuItem value="বিজ্ঞান বিভাগ">
+                                      বিজ্ঞান বিভাগ
+                                    </MenuItem>
+                                    <MenuItem value="মানবিক বিভাগ">
+                                      মানবিক বিভাগ
+                                    </MenuItem>
+                                    <MenuItem value="ব্যবসা বিভাগ">
+                                      ব্যবসা বিভাগ
+                                    </MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                উচ্চ মাধ্যমিক (HSC) / সমমান পাসের সন
+                              </legend>
+                              <Box sx={{ width: "100%" }}>
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDateFns}
+                                >
+                                  <Stack spacing={3}>
+                                    <DesktopDatePicker
+                                      inputFormat="yyyy"
+                                      defaultValue={
+                                        biodataProfile
+                                          ? biodataProfile.dateofPassHsc
+                                          : ""
+                                      }
+                                      value={bioData.dateofPassHsc}
+                                      onChange={(newValue) =>
+                                        handleTimeChange(
+                                          newValue,
+                                          "dateofPassHsc"
+                                        )
+                                      }
+                                      name="dateofPassHsc"
+                                      renderInput={(params) => (
+                                        <TextField {...params} />
+                                      )}
+                                    />
+                                  </Stack>
+                                </LocalizationProvider>
+                              </Box>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                স্নাতক / স্নাতক (সম্মান) / সমমান শিক্ষাগত
+                                যোগ্যতা
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="hounrsQualification"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.hounrsQualification
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  multiline
+                                  rows={4}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                উত্তরটা এভাবে দিতে পারেনঃ Bachelor of Science
+                                (B.Sc) in Electrical And Electronics Engineering
+                                (EEE)
+                              </h5>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                শিক্ষাপ্রতিষ্ঠানের নাম
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="hounrsInstituteName"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.hounrsInstituteName
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                যে প্রতিষ্ঠান থেকে স্নাতক করেছেন ।
+                              </h5>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                পাসের সন
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="hounrsPassDate"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.hounrsPassDate
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                ছাত্র হলে শিক্ষাবর্ষ লিখবেন।যেমনঃ তৃতীয় বর্ষ
+                              </h5>
+                            </fieldset>
+                          </div>
+                        )}
+
+                        {bioData.areYouHscPass == "না" && (
+                          <div>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                উচ্চ মাধ্যমিক (HSC) / সমমান কোন বর্ষে পড়ছেন ?
+                              </legend>
+                              <Box sx={{ width: "100%" }}>
+                                <FormControl fullWidth>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="msxHscStuding"
+                                    defaultValue={
+                                      biodataProfile
+                                        ? biodataProfile.msxHscStuding
+                                        : ""
+                                    }
+                                    onBlur={handleOnBlur}
+                                  >
+                                    <MenuItem value="---">---</MenuItem>
+                                    <MenuItem value="HSC দ্বিতীয় বর্ষ">
+                                      HSC দ্বিতীয় বর্ষ
+                                    </MenuItem>
+                                    <MenuItem value="HSC প্রথম বর্ষ">
+                                      HSC প্রথম বর্ষ
+                                    </MenuItem>
+                                    <MenuItem value="HSC রেজাল্ট দেয় নি এখনো">
+                                      HSC রেজাল্ট দেয় নি এখনো
+                                    </MenuItem>
+                                    <MenuItem value="SSC এর পর আর পড়াশোনা করা হয় নি">
+                                      SSC এর পর আর পড়াশোনা করা হয় নি
+                                    </MenuItem>
+                                    <MenuItem value=" HSC পরীক্ষা দিয়ে পাশ করতে পারি নি।">
+                                      HSC পরীক্ষা দিয়ে পাশ করতে পারি নি।
+                                    </MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                            </fieldset>
+                          </div>
+                        )}
+
+                        {bioData.areYouHscPass == "ডিপ্লোমা পড়েছি" && (
+                          <div>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                ডিপ্লোমা কোন বিষয়ে পড়েছেন?
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="diplomaStudySub"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.diplomaStudySub
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                এভাবে উত্তর দিতে পারেনঃ Diploma in Textile
+                                Engineering
+                              </h5>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                শিক্ষাপ্রতিষ্ঠানের নাম
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="diplomaInstituteName"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.diplomaInstituteName
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                যে প্রতিষ্ঠান থেকে ডিপ্লোমা পড়েছেন
+                              </h5>
+                            </fieldset>
+                            <fieldset
+                              style={{
+                                width: "100%",
+                                border: "2px solid lightGray",
+                                padding: "15px",
+                                borderRadius: "5px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              <legend
+                                style={{ fontWeight: "bold", color: "gray" }}
+                              >
+                                পাসের সন
+                              </legend>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  name="diplomaPassDate"
+                                  defaultValue={
+                                    biodataProfile
+                                      ? biodataProfile.diplomaPassDate
+                                      : ""
+                                  }
+                                  onBlur={handleOnBlur}
+                                  fullWidth
+                                  id="fullWidth"
+                                />
+                              </Box>
+                              <h5 style={{ color: "gray" }}>
+                                ছাত্র হলে বর্ষ লিখবেন। যেমনঃ ৩য় বর্ষ
+                              </h5>
+                            </fieldset>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {bioData.areYouSscPass == "না" && (
+                      <div>
+                        <fieldset
+                          style={{
+                            width: "100%",
+                            border: "2px solid lightGray",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            marginBottom: "30px",
+                          }}
+                        >
+                          <legend style={{ fontWeight: "bold", color: "gray" }}>
+                            কোন ক্লাস পর্যন্ত পড়েছেন?
+                          </legend>
+                          <Box sx={{ width: "100%" }}>
+                            <FormControl fullWidth>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="minClassStudy"
+                                defaultValue={
+                                  biodataProfile
+                                    ? biodataProfile.minClassStudy
+                                    : ""
+                                }
+                                onBlur={handleOnBlur}
+                              >
+                                <MenuItem value="---">---</MenuItem>
+                                <MenuItem value="১oম">১oম</MenuItem>
+                                <MenuItem value="৯ম">৯ম</MenuItem>
+                                <MenuItem value="৮ম">৮ম</MenuItem>
+                                <MenuItem value="৭ম">৭ম</MenuItem>
+                                <MenuItem value="৬ষ্ঠ">৬ষ্ঠ</MenuItem>
+                                <MenuItem value="৫ম">৫ম</MenuItem>
+                                <MenuItem value="৪র্থ">৪র্থ</MenuItem>
+                                <MenuItem value="৩য়">৩য়</MenuItem>
+                                <MenuItem value="২য়">২য়</MenuItem>
+                                <MenuItem value="১ম">১ম</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </fieldset>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    অন্যান্য শিক্ষাগত যোগ্যতা
+                  </legend>
+                  <Box
+                    sx={{
                       width: "100%",
-                      border: "2px solid lightGray",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      marginBottom: "30px",
                     }}
                   >
-                    <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      মাধ্যমিক (SSC) / সমমান পাশ করেছেন?
-                    </legend>
-                    <Box sx={{ width: "100%" }}>
-                      <FormControl fullWidth>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={ssc}
-                          onChange={handleSscChange}
-                          required
-                        >
-                          <MenuItem value={10}>---</MenuItem>
-                          <MenuItem value={20}>হ্যাঁ</MenuItem>
-                          <MenuItem value={30}>না</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </fieldset>
+                    <TextField
+                      name="otherEducationalQua"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.otherEducationalQua : ""
+                      }
+                      onBlur={handleOnBlur}
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    শিক্ষার বিষয়, প্রতিষ্ঠানের নাম, পাসের সন ইত্যাদি বিস্তারিত
+                    লিখবেন। কিছু না থাকলে ঘরটি ফাঁকা রাখবেন।
+                  </h5>
+                </fieldset>
 
-                  {ssc == 20 && (
-                    <div>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>পারিবারিক তথ্য</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পিতার নাম (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে পাচ্ছে
+                    না) *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="yourFatherName"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourFatherName : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    পিতার পূর্ণ নাম লিখবেন, নাম নেয়া হচ্ছে শুধুমাত্র
+                    ভেরিফিকেশনের জন্য। আপনার পিতার নাম বায়োডাটা পাবলিশ করার সময়
+                    প্রকাশ করা হবে না। অর্থাৎ আপনি এবং ওয়েবসাইট কতৃপক্ষ বাদে কেউ
+                    এই নাম দেখতে পাবে না।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মাতার নাম (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে পাচ্ছে
+                    না) *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="yourMotherName"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourMotherName : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    মাতার পূর্ণ নাম লিখবেন, নাম নেয়া হচ্ছে শুধুমাত্র
+                    ভেরিফিকেশনের জন্য। আপনার মাতার নাম বায়োডাটা পাবলিশ করার সময়
+                    প্রকাশ করা হবে না। অর্থাৎ আপনি এবং ওয়েবসাইট কতৃপক্ষ বাদে কেউ
+                    এই নাম দেখতে পাবে না।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পিতার পেশা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="YourFatherProfession"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.YourFatherProfession
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    মৃত হলে প্রথমে (মৃত) লিখার পর পেশা লিখবেন। যেমনঃ (মৃত)
+                    ব্যবসায়ী ছিলেন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মাতার পেশা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="YourMotherProfession"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.YourMotherProfession
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    মৃত হলে প্রথমে (মৃত) লিখার পর পেশা লিখবেন। যেমনঃ (মৃত)
+                    গৃহিনী ছিলেন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বোন কয়জন? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="numberOfSister"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.numberOfSister : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
                       >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          মাধ্যমিক (SSC) / সমমান ফলাফল
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={age}
-                              onChange={handleChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>Golden A+</MenuItem>
-                              <MenuItem value={30}>A+</MenuItem>
-                              <MenuItem value={40}>A</MenuItem>
-                              <MenuItem value={50}>A-</MenuItem>
-                              <MenuItem value={60}>B</MenuItem>
-                              <MenuItem value={70}>B-</MenuItem>
-                              <MenuItem value={80}>C</MenuItem>
-                              <MenuItem value={90}>C-</MenuItem>
-                              <MenuItem value={100}>D</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="বোন নেই">বোন নেই</MenuItem>
+                        <MenuItem value="৯">৯</MenuItem>
+                        <MenuItem value="৮">৮</MenuItem>
+                        <MenuItem value="৭">৭</MenuItem>
+                        <MenuItem value="৬">৬</MenuItem>
+                        <MenuItem value="৫">৫</MenuItem>
+                        <MenuItem value="৪">৪</MenuItem>
+                        <MenuItem value="৩">৩</MenuItem>
+                        <MenuItem value="২">২</MenuItem>
+                        <MenuItem value="১">১</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    ভাই কয়জন? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="numberOfBrother"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.numberOfBrother : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
                       >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          মাধ্যমিক (SSC) / সমমান বিভাগ
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={age}
-                              onChange={handleChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>বিজ্ঞান বিভাগ</MenuItem>
-                              <MenuItem value={30}>মানবিক বিভাগ</MenuItem>
-                              <MenuItem value={40}>ব্যবসা বিভাগ</MenuItem>
-                              <MenuItem value={50}>কারিগরি / ভোকেশনাল</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          মাধ্যমিক (SSC) / সমমান পাসের সন
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <Stack spacing={3}>
-                              <DesktopDatePicker
-                                inputFormat="yyyy"
-                                value={value}
-                                onChange={handleTimeChange}
-                                renderInput={(params) => (
-                                  <TextField {...params} />
-                                )}
-                              />
-                            </Stack>
-                          </LocalizationProvider>
-                        </Box>
-                      </fieldset>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
-                      >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          উচ্চ মাধ্যমিক (HSC) / সমমান পাশ করেছেন?
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={hsc}
-                              onChange={handleHscChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>হ্যাঁ</MenuItem>
-                              <MenuItem value={30}>না</MenuItem>
-                              <MenuItem value={40}>ডিপ্লোমা পড়েছি</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="ভাই নেই">ভাই নেই</MenuItem>
+                        <MenuItem value="৯">৯</MenuItem>
+                        <MenuItem value="৮">৮</MenuItem>
+                        <MenuItem value="৭">৭</MenuItem>
+                        <MenuItem value="৬">৬</MenuItem>
+                        <MenuItem value="৫">৫</MenuItem>
+                        <MenuItem value="৪">৪</MenuItem>
+                        <MenuItem value="৩">৩</MenuItem>
+                        <MenuItem value="২">২</MenuItem>
+                        <MenuItem value="১">১</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    চাচা মামাদের পেশা
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="professionOfOtherRelated"
+                      ddefaultValue={
+                        biodataProfile
+                          ? biodataProfile.professionOfOtherRelated
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    জানাতে অনিচ্ছুক হলে ঘরটি ফাঁকা রাখুন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পরিবারের অর্থনৈতিক ও সামাজিক অবস্থা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="economicSocialPosition"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.economicSocialPosition
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}># সংক্ষেপে বর্ণনা করুন।</h5>
+                </fieldset>
 
-                      {hsc == 20 && (
-                        <div>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              উচ্চ মাধ্যমিক (HSC) / সমমান ফলাফল
-                            </legend>
-                            <Box sx={{ width: "100%" }}>
-                              <FormControl fullWidth>
-                                <Select
-                                  labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
-                                  value={age}
-                                  onChange={handleChange}
-                                  required
-                                >
-                                  <MenuItem value={10}>---</MenuItem>
-                                  <MenuItem value={20}>Golden A+</MenuItem>
-                                  <MenuItem value={30}>A+</MenuItem>
-                                  <MenuItem value={40}>A</MenuItem>
-                                  <MenuItem value={50}>A-</MenuItem>
-                                  <MenuItem value={60}>B</MenuItem>
-                                  <MenuItem value={70}>B-</MenuItem>
-                                  <MenuItem value={80}>C</MenuItem>
-                                  <MenuItem value={90}>C-</MenuItem>
-                                  <MenuItem value={100}>D</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              উচ্চ মাধ্যমিক (HSC) / সমমানের বিভাগ
-                            </legend>
-                            <Box sx={{ width: "100%" }}>
-                              <FormControl fullWidth>
-                                <Select
-                                  labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
-                                  value={age}
-                                  onChange={handleChange}
-                                  required
-                                >
-                                  <MenuItem value={10}>---</MenuItem>
-                                  <MenuItem value={20}>বিজ্ঞান বিভাগ</MenuItem>
-                                  <MenuItem value={30}>মানবিক বিভাগ</MenuItem>
-                                  <MenuItem value={40}>ব্যবসা বিভাগ</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              উচ্চ মাধ্যমিক (HSC) / সমমান পাসের সন
-                            </legend>
-                            <Box sx={{ width: "100%" }}>
-                              <LocalizationProvider
-                                dateAdapter={AdapterDateFns}
-                              >
-                                <Stack spacing={3}>
-                                  <DesktopDatePicker
-                                    inputFormat="yyyy"
-                                    value={value}
-                                    onChange={handleTimeChange}
-                                    renderInput={(params) => (
-                                      <TextField {...params} />
-                                    )}
-                                  />
-                                </Stack>
-                              </LocalizationProvider>
-                            </Box>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              স্নাতক / স্নাতক (সম্মান) / সমমান শিক্ষাগত যোগ্যতা
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField
-                                multiline
-                                rows={4}
-                                fullWidth
-                                id="fullWidth"
-                              />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # উত্তরটা এভাবে দিতে পারেনঃ Bachelor of Science
-                              (B.Sc) in Electrical And Electronics Engineering
-                              (EEE)
-                            </h5>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              শিক্ষাপ্রতিষ্ঠানের নাম
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # যে প্রতিষ্ঠান থেকে স্নাতক করেছেন ।
-                            </h5>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              পাসের সন
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # ছাত্র হলে শিক্ষাবর্ষ লিখবেন।যেমনঃ তৃতীয় বর্ষ
-                            </h5>
-                          </fieldset>
-                        </div>
-                      )}
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>ব্যক্তিগত তথ্য</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয় ? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="areYouPrayerRegu"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.areYouPrayerRegu : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নিয়মিত নামায কত সময় যাবত পড়ছেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="whenPrayerRegu"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.whenPrayerRegu : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    অর্থাৎ কয় বছর/মাস যাবত ৫ ওয়াক্ত নামায শুরু করেছেন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মাহরাম/নন-মাহরাম মেনে চলেন কি ? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="areYouAbideByMahram"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.areYouAbideByMahram : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="areYouReadQuranPurly"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.areYouReadQuranPurly
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোন মাঝহাব অনুসরণ করেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="whichMazhabFollow"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.whichMazhabFollow : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোনো রাজনৈতিক দর্শন থাকলে লিখুন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="anyPoliticalIdology"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.anyPoliticalIdology : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="takeAnyEntertainment"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.takeAnyEntertainment
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মানসিক বা শারীরিক কোনো রোগ আছে কি? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="haveAnyDiseases"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.haveAnyDiseases : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="joinAnyIslamicWork"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.joinAnyIslamicWork : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>যেমনঃ তাবলীগ ইত্যাদি।</h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    আপনি কি কোনো পীরের মুরিদ বা অনুসারী ? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="haveAnyIslamicFollower"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.haveAnyIslamicFollower
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    যদি হয়ে থাকেন তাহলে পীরের নাম এবং তরিকার নাম লিখবেন।
+                  </h5>
+                </fieldset>
 
-                      {hsc == 30 && (
-                        <div>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              উচ্চ মাধ্যমিক (HSC) / সমমান কোন বর্ষে পড়ছেন ?
-                            </legend>
-                            <Box sx={{ width: "100%" }}>
-                              <FormControl fullWidth>
-                                <Select
-                                  labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
-                                  value={age}
-                                  onChange={handleChange}
-                                  required
-                                >
-                                  <MenuItem value={10}>---</MenuItem>
-                                  <MenuItem value={20}>
-                                    HSC দ্বিতীয় বর্ষ
-                                  </MenuItem>
-                                  <MenuItem value={30}>HSC প্রথম বর্ষ</MenuItem>
-                                  <MenuItem value={40}>
-                                    HSC রেজাল্ট দেয় নি এখনো
-                                  </MenuItem>
-                                  <MenuItem value={50}>
-                                    SSC এর পর আর পড়াশোনা করা হয় নি
-                                  </MenuItem>
-                                  <MenuItem value={60}>
-                                    HSC পরীক্ষা দিয়ে পাশ করতে পারি নি।
-                                  </MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                          </fieldset>
-                        </div>
-                      )}
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="beliveOfMazar"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.beliveOfMazar : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="favoriteIslamicBook"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.favoriteIslamicBook : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="favoriteIslamicSpeaker"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.favoriteIslamicSpeaker
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
 
-                      {hsc == 40 && (
-                        <div>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              ডিপ্লোমা কোন বিষয়ে পড়েছেন?
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # এভাবে উত্তর দিতে পারেনঃ Diploma in Textile
-                              Engineering
-                            </h5>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              শিক্ষাপ্রতিষ্ঠানের নাম
-                            </legend>
-                            <Box
-                              sx={{
-                                width: "100%",
-                              }}
-                            >
-                              <TextField required fullWidth id="fullWidth" />
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # যে প্রতিষ্ঠান থেকে ডিপ্লোমা পড়েছেন
-                            </h5>
-                          </fieldset>
-                          <fieldset
-                            style={{
-                              width: "100%",
-                              border: "2px solid lightGray",
-                              padding: "15px",
-                              borderRadius: "5px",
-                              marginBottom: "30px",
-                            }}
-                          >
-                            <legend
-                              style={{ fontWeight: "bold", color: "gray" }}
-                            >
-                              পাসের সন
-                            </legend>
-                            <Box sx={{ width: "100%" }}>
-                              <LocalizationProvider
-                                dateAdapter={AdapterDateFns}
-                              >
-                                <Stack spacing={3}>
-                                  <DesktopDatePicker
-                                    inputFormat="yyyy"
-                                    value={value}
-                                    onChange={handleTimeChange}
-                                    renderInput={(params) => (
-                                      <TextField {...params} />
-                                    )}
-                                  />
-                                </Stack>
-                              </LocalizationProvider>
-                            </Box>
-                            <h5 style={{ color: "gray" }}>
-                              # ছাত্র হলে বর্ষ লিখবেন। যেমনঃ ৩য় বর্ষ
-                            </h5>
-                          </fieldset>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বিশেষ দ্বীনি বা দুনিয়াবি যোগ্যতা (যদি থাকে)
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="anyIslamicEduQua"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.anyIslamicEduQua : ""
+                      }
+                      onBlur={handleOnBlur}
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নিজের সম্পর্কে কিছু লিখুন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="aboutYourSelf"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.aboutYourSelf : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    নিজের পছন্দ-অপছন্দ, শখ-ইচ্ছা, দ্বীনী-দুনিয়াবী ইত্যাদি বিষয়
+                    বিস্তারিত লিখতে হবে। কারণ এই লেখা পড়ে পাঠক আপনার সম্পর্কে
+                    সাধারণ ধারণা লাভ করবে।
+                  </h5>
+                </fieldset>
 
-                  {ssc == 30 && (
-                    <div>
-                      <fieldset
-                        style={{
-                          width: "100%",
-                          border: "2px solid lightGray",
-                          padding: "15px",
-                          borderRadius: "5px",
-                          marginBottom: "30px",
-                        }}
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>বিয়ে সংক্রান্ত তথ্য</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    অভিভাবক আপনার বিয়েতে রাজি কি না? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="agreeGuardian"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.agreeGuardian : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বিয়ে কেন করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি? *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="idologyOfMarit"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.idologyOfMarit : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>সংক্ষেপে বর্ণনা করুন।</h5>
+                </fieldset>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>অন্যান্য তথ্য</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বিশেষ কিছু যদি জানাতে চান
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="anyQuary"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.anyQuary : ""
+                      }
+                      onBlur={handleOnBlur}
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    আপনার কোনো শর্ত বা উপরে লিখার সুযোগ হয় নি এমন কিছু জানানোর
+                    থাকলে এই ঘরে লিখতে পারেন। যেমনঃ ছাত্র অবস্থায় বিয়ে করলে
+                    কিভাবে ভরণপোষণ করবেন বা সংসার চালাবেন, পারিবারিক বা
+                    ব্যক্তিগত কোনো সুবিধা বা অসুবিধা ইত্যাদি যে কোনো বিষয়ে যত
+                    ইচ্ছা লিখতে পারবেন। । যদি কিছুই না লিখতে চান, তাহলে ঘরটি
+                    ফাঁকা রাখবেন।
+                  </h5>
+                </fieldset>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>যেমন জীবনসঙ্গী আশা করেন</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বয়স *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="ageOfLifePartner"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.ageOfLifePartner : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    গাত্রবর্ণ *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="skinColorOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.skinColorOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নূন্যতম উচ্চতা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="minHeightOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.minHeightOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নূন্যতম শিক্ষাগত যোগ্যতা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="minEduQuaOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.minEduQuaOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    জেলা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="districtOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.districtOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বৈবাহিক অবস্থা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="maritalStatusOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.maritalStatusOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পেশা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="professionOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.professionOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    অর্থনৈতিক অবস্থা *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="economicOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.economicOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    পারিবারিক অবস্থা
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="FamilyStatusOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.FamilyStatusOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="characteristicsOfLifePartner"
+                      defaultValue={
+                        biodataProfile
+                          ? biodataProfile.characteristicsOfLifePartner
+                          : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      multiline
+                      rows={4}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    এই পয়েন্ট অনেক গুরুত্বপূর্ণ। সময় নিয়ে বিস্তারিত লিখুন। কোন
+                    বিশেষ শর্ত থাকলে তা-ও লিখতে পারেন।
+                  </h5>
+                </fieldset>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>কর্তৃপক্ষের জিজ্ঞাসা</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    biyamudarak.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক
+                    জানেন? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="agreeYourGurdean"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.agreeYourGurdean : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
                       >
-                        <legend style={{ fontWeight: "bold", color: "gray" }}>
-                          কোন ক্লাস পর্যন্ত পড়েছেন?
-                        </legend>
-                        <Box sx={{ width: "100%" }}>
-                          <FormControl fullWidth>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={age}
-                              onChange={handleChange}
-                              required
-                            >
-                              <MenuItem value={10}>---</MenuItem>
-                              <MenuItem value={20}>১oম</MenuItem>
-                              <MenuItem value={30}>৯ম</MenuItem>
-                              <MenuItem value={40}>৮ম</MenuItem>
-                              <MenuItem value={50}>৭ম</MenuItem>
-                              <MenuItem value={60}>৬ষ্ঠ</MenuItem>
-                              <MenuItem value={60}>৫ম</MenuItem>
-                              <MenuItem value={60}>৪র্থ</MenuItem>
-                              <MenuItem value={60}>৩য়</MenuItem>
-                              <MenuItem value={60}>২য়</MenuItem>
-                              <MenuItem value={60}>১ম</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </fieldset>
-                    </div>
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                        <MenuItem value="না">না</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="isAllInfoReal"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.isAllInfoReal : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                        <MenuItem value="না">না</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোনো মিথ্যা তথ্য দিয়ে থাকলে তার দুনিয়াবী ও আখিরাতের দায়ভার
+                    ওয়েবসাইট কর্তৃপক্ষ নিবে না। আপনি কি রাজি? *
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="ourNoLiability"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.ourNoLiability : ""
+                        }
+                        onBlur={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
+                        <MenuItem value="না">না</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>
+                <h3 style={{ marginLeft: "10px" }}>যোগাযোগ</h3>
+              </StepLabel>
+              <StepContent TransitionProps={{ unmountOnExit: false }}>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    অভিভাবকের নাম্বার *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="GurdianPhoneNumber"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.GurdianPhoneNumber : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    অবশ্যই ইংরেজীতে নাম্বার লিখবেন এভাবে 01700-000000। বিঃদ্রঃ
+                    নিজের নাম্বার দিলে ভেরিফিকেশনে এপ্রুভ হবে না। এই ব্যাপারে
+                    আমরা সর্বোচ্চ কঠোর। সব সময় খোলা থাকবে এমন নাম্বার লিখবেন।
+                    নাম্বার বন্ধ থাকার আশংকা থাকলে দুইটি নাম্বার লিখতে পারেন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    যার নাম্বার লিখেছেন *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="phoneNumberRelated"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.phoneNumberRelated : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    যে অভিভাবকের নাম্বার দিয়েছেন তার সাথে আপনার সম্পর্ক। এভাবে
+                    লিখবেনঃ বাবা
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বায়োডাটা গ্রহণের ই-মেইল এড্রেস *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      autoComplete="email"
+                      autoFocus
+                      name="contactEmail"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.contactEmail : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="email"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    এই ই-মেইলে অপরপক্ষ বায়োডাটার লিংক পাঠাতে পারে। তাই
+                    নির্ভুলভাবে লিখুন।
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    আপনার নাম্বার (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে
+                    পাচ্ছে না) *
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="yourPhoneNumber"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.yourPhoneNumber : ""
+                      }
+                      onBlur={handleOnBlur}
+                      required
+                      fullWidth
+                      id="email"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    ভেরিফিকেশন বা অন্য যে কোনো প্রয়োজনে ওয়েবসাইট কতৃপক্ষ থেকে
+                    আপনাকে কল দেয়ার প্রয়োজন হতে পারে। তাই আপনার নাম্বার আমাদের
+                    কাছে রাখা হচ্ছে। এই নাম্বার বায়োডাটাতে প্রকাশ করা হবে না।
+                    অর্থাৎ আপনি এবং কতৃপক্ষ বাদে অন্য কেউ দেখতে পাবে না।
+                  </h5>
+                </fieldset>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Continue
+                    </Button>
+                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+            {activeStep == 11 && (
+              <Box sx={{ my: 2 }}>
+                <div>
+                  <Button
+                    startIcon={<PreviewIcon />}
+                    onClick={handleBack}
+                    sx={{ mt: 1, mr: 1 }}
+                  >
+                    Review
+                  </Button>
+                </div>
+              </Box>
+            )}
+          </Stepper>
+        </Box>
+
+        {publishFail && (
+          <Alert sx={{ my: 2, fontSize: 18 }} severity="info">
+            Please fill all required Filed.... Click 'Review' option for back.
+          </Alert>
+        )}
+        {publishSuccess && (
+          <Alert sx={{ my: 2, fontSize: 18 }} severity="success">
+            Your Biodata successfully submited.
+          </Alert>
+        )}
+
+        {activeStep == 11 && (
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Button
+              style={{
+                backgroundColor: "blue",
+                borderRadius: "10px",
+                color: "white",
+                width: "100%",
+                padding: "10px",
+                fontWeight: "bold",
+                fontSize: "17px",
+              }}
+              onClick={() => setPublishFail(true)}
+              disabled={publishSuccess ? true : false}
+              type="submit"
+            >
+              {isLoding ? (
+                <Box sx={{ display: "flex" }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <div>
+                  {biodataProfile == null ? (
+                    <span> Publish</span>
+                  ) : (
+                    <span>Update</span>
                   )}
                 </div>
               )}
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  অন্যান্য শিক্ষাগত যোগ্যতা
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # শিক্ষার বিষয়, প্রতিষ্ঠানের নাম, পাসের সন ইত্যাদি বিস্তারিত
-                  লিখবেন। কিছু না থাকলে ঘরটি ফাঁকা রাখবেন।
-                </h5>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>পারিবারিক তথ্য</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পিতার নাম (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে পাচ্ছে না)
-                  *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # পিতার পূর্ণ নাম লিখবেন, নাম নেয়া হচ্ছে শুধুমাত্র
-                  ভেরিফিকেশনের জন্য। আপনার পিতার নাম বায়োডাটা পাবলিশ করার সময়
-                  প্রকাশ করা হবে না। অর্থাৎ আপনি এবং ওয়েবসাইট কতৃপক্ষ বাদে কেউ
-                  এই নাম দেখতে পাবে না।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মাতার নাম (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে পাচ্ছে না)
-                  *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # মাতার পূর্ণ নাম লিখবেন, নাম নেয়া হচ্ছে শুধুমাত্র
-                  ভেরিফিকেশনের জন্য। আপনার মাতার নাম বায়োডাটা পাবলিশ করার সময়
-                  প্রকাশ করা হবে না। অর্থাৎ আপনি এবং ওয়েবসাইট কতৃপক্ষ বাদে কেউ
-                  এই নাম দেখতে পাবে না।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পিতার পেশা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # মৃত হলে প্রথমে (মৃত) লিখার পর পেশা লিখবেন। যেমনঃ (মৃত)
-                  ব্যবসায়ী ছিলেন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মাতার পেশা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # মৃত হলে প্রথমে (মৃত) লিখার পর পেশা লিখবেন। যেমনঃ (মৃত)
-                  গৃহিনী ছিলেন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বোন কয়জন? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>বোন নেই</MenuItem>
-                      <MenuItem value={30}>৯</MenuItem>
-                      <MenuItem value={40}>৮</MenuItem>
-                      <MenuItem value={50}>৭</MenuItem>
-                      <MenuItem value={60}>৬</MenuItem>
-                      <MenuItem value={60}>৫</MenuItem>
-                      <MenuItem value={60}>৪</MenuItem>
-                      <MenuItem value={60}>৩</MenuItem>
-                      <MenuItem value={60}>২</MenuItem>
-                      <MenuItem value={60}>১</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  ভাই কয়জন? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>ভাই নেই</MenuItem>
-                      <MenuItem value={30}>৯</MenuItem>
-                      <MenuItem value={40}>৮</MenuItem>
-                      <MenuItem value={50}>৭</MenuItem>
-                      <MenuItem value={60}>৬</MenuItem>
-                      <MenuItem value={60}>৫</MenuItem>
-                      <MenuItem value={60}>৪</MenuItem>
-                      <MenuItem value={60}>৩</MenuItem>
-                      <MenuItem value={60}>২</MenuItem>
-                      <MenuItem value={60}>১</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  চাচা মামাদের পেশা
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # জানাতে অনিচ্ছুক হলে ঘরটি ফাঁকা রাখুন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পরিবারের অর্থনৈতিক ও সামাজিক অবস্থা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}># সংক্ষেপে বর্ণনা করুন।</h5>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>ব্যক্তিগত তথ্য</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয় ? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  নিয়মিত নামায কত সময় যাবত পড়ছেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  # অর্থাৎ কয় বছর/মাস যাবত ৫ ওয়াক্ত নামায শুরু করেছেন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মাহরাম/নন-মাহরাম মেনে চলেন কি ? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  কোন মাঝহাব অনুসরণ করেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  কোনো রাজনৈতিক দর্শন থাকলে লিখুন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মানসিক বা শারীরিক কোনো রোগ আছে কি? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>যেমনঃ তাবলীগ ইত্যাদি।</h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  আপনি কি কোনো পীরের মুরিদ বা অনুসারী ? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  যদি হয়ে থাকেন তাহলে পীরের নাম এবং তরিকার নাম লিখবেন।
-                </h5>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বিশেষ দ্বীনি বা দুনিয়াবি যোগ্যতা (যদি থাকে)
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  নিজের সম্পর্কে কিছু লিখুন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  নিজের পছন্দ-অপছন্দ, শখ-ইচ্ছা, দ্বীনী-দুনিয়াবী ইত্যাদি বিষয়
-                  বিস্তারিত লিখতে হবে। কারণ এই লেখা পড়ে পাঠক আপনার সম্পর্কে
-                  সাধারণ ধারণা লাভ করবে।
-                </h5>
-              </fieldset>
-
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>বিয়ে সংক্রান্ত তথ্য</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  অভিভাবক আপনার বিয়েতে রাজি কি না? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বিয়ে কেন করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি? *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>সংক্ষেপে বর্ণনা করুন।</h5>
-              </fieldset>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>অন্যান্য তথ্য</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বিশেষ কিছু যদি জানাতে চান
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  আপনার কোনো শর্ত বা উপরে লিখার সুযোগ হয় নি এমন কিছু জানানোর
-                  থাকলে এই ঘরে লিখতে পারেন। যেমনঃ ছাত্র অবস্থায় বিয়ে করলে কিভাবে
-                  ভরণপোষণ করবেন বা সংসার চালাবেন, পারিবারিক বা ব্যক্তিগত কোনো
-                  সুবিধা বা অসুবিধা ইত্যাদি যে কোনো বিষয়ে যত ইচ্ছা লিখতে পারবেন।
-                  । যদি কিছুই না লিখতে চান, তাহলে ঘরটি ফাঁকা রাখবেন।
-                </h5>
-              </fieldset>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>যেমন জীবনসঙ্গী আশা করেন</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বয়স *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  গাত্রবর্ণ *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  নূন্যতম উচ্চতা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  নূন্যতম শিক্ষাগত যোগ্যতা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  জেলা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বৈবাহিক অবস্থা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পেশা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  অর্থনৈতিক অবস্থা *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  পারিবারিক অবস্থা
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField multiline rows={4} fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  এই পয়েন্ট অনেক গুরুত্বপূর্ণ। সময় নিয়ে বিস্তারিত লিখুন। কোন
-                  বিশেষ শর্ত থাকলে তা-ও লিখতে পারেন।
-                </h5>
-              </fieldset>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>কর্তৃপক্ষের জিজ্ঞাসা</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  OrdhekDeen.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক
-                  জানেন? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>হ্যাঁ</MenuItem>
-                      <MenuItem value={30}>না</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>হ্যাঁ</MenuItem>
-                      <MenuItem value={30}>না</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  কোনো মিথ্যা তথ্য দিয়ে থাকলে তার দুনিয়াবী ও আখিরাতের দায়ভার
-                  ওয়েবসাইট কর্তৃপক্ষ নিবে না। আপনি কি রাজি? *
-                </legend>
-                <Box sx={{ width: "100%" }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MenuItem value={10}>---</MenuItem>
-                      <MenuItem value={20}>হ্যাঁ</MenuItem>
-                      <MenuItem value={30}>না</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </fieldset>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>
-              <h3 style={{ marginLeft: "10px" }}>যোগাযোগ</h3>
-            </StepLabel>
-            <StepContent>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  অভিভাবকের নাম্বার *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  অবশ্যই ইংরেজীতে নাম্বার লিখবেন এভাবে 01700-000000। বিঃদ্রঃ
-                  নিজের নাম্বার দিলে ভেরিফিকেশনে এপ্রুভ হবে না। এই ব্যাপারে আমরা
-                  সর্বোচ্চ কঠোর। সব সময় খোলা থাকবে এমন নাম্বার লিখবেন। নাম্বার
-                  বন্ধ থাকার আশংকা থাকলে দুইটি নাম্বার লিখতে পারেন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  যার নাম্বার লিখেছেন *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  যে অভিভাবকের নাম্বার দিয়েছেন তার সাথে আপনার সম্পর্ক। এভাবে
-                  লিখবেনঃ বাবা
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  বায়োডাটা গ্রহণের ই-মেইল এড্রেস *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  এই ই-মেইলে অপরপক্ষ বায়োডাটার লিংক পাঠাতে পারে। তাই নির্ভুলভাবে
-                  লিখুন।
-                </h5>
-              </fieldset>
-              <fieldset
-                style={{
-                  width: "100%",
-                  border: "2px solid lightGray",
-                  padding: "15px",
-                  borderRadius: "5px",
-                  marginBottom: "30px",
-                }}
-              >
-                <legend style={{ fontWeight: "bold", color: "gray" }}>
-                  আপনার নাম্বার (শুধুমাত্র আপনি ও কতৃপক্ষ বাদে কেউ দেখতে পাচ্ছে
-                  না) *
-                </legend>
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField required fullWidth id="fullWidth" />
-                </Box>
-                <h5 style={{ color: "gray" }}>
-                  ভেরিফিকেশন বা অন্য যে কোনো প্রয়োজনে ওয়েবসাইট কতৃপক্ষ থেকে
-                  আপনাকে কল দেয়ার প্রয়োজন হতে পারে। তাই আপনার নাম্বার আমাদের
-                  কাছে রাখা হচ্ছে। এই নাম্বার বায়োডাটাতে প্রকাশ করা হবে না।
-                  অর্থাৎ আপনি এবং কতৃপক্ষ বাদে অন্য কেউ দেখতে পাবে না।
-                </h5>
-              </fieldset>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Publish
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-        </Stepper>
-      </Box>
+            </Button>
+          </div>
+        )}
+      </form>
     </div>
   );
 };

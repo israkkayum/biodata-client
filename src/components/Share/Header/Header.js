@@ -17,6 +17,7 @@ import useAuth from "../../../hooks/useAuth";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
 import male from "../../../images/male.png";
+import female from "../../../images/female.png";
 
 // const pages = [
 //   "হোম",
@@ -44,6 +45,7 @@ const settings = [
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [profile, setProfile] = React.useState({});
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -53,7 +55,15 @@ const Header = () => {
     setAnchorElNav(null);
   };
 
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
+
+  React.useEffect(() => {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProfile(data);
+      });
+  }, [user.email]);
 
   return (
     <div>
@@ -174,7 +184,14 @@ const Header = () => {
 
             {user.email ? (
               <NavLink to="/profile">
-                <Avatar alt="Remy Sharp" src={male} />
+                <Avatar
+                  alt="Remy Sharp"
+                  src={
+                    profile && profile.biodataType == "পাত্রীর বায়োডাটা"
+                      ? female
+                      : male
+                  }
+                />
               </NavLink>
             ) : (
               <div>

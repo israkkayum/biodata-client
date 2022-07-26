@@ -9,7 +9,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 
 import male from "../../../images/male.png";
-import { Avatar } from "@mui/material";
+import female from "../../../images/female.png";
+import { Avatar, Link } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,6 +19,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import useAuth from "../../../hooks/useAuth";
 import MyProfile from "../MyProfile/MyProfile";
 import EditBiodata from "../EditBiodata/EditBiodata";
+import { Outlet } from "react-router";
+import MyBiodata from "../MyBiodata/MyBiodata";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,6 +59,7 @@ const Profile = () => {
   const { logout, user } = useAuth();
   const [value, setValue] = React.useState(0);
   const [profile, setProfile] = useState({});
+  const [biodataProfile, setbiodataProfile] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -67,7 +71,15 @@ const Profile = () => {
       .then((data) => {
         setProfile(data);
       });
-  }, []);
+  }, [user.email]);
+
+  useEffect(() => {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setbiodataProfile(data);
+      });
+  }, [user.email]);
 
   return (
     <div>
@@ -95,7 +107,12 @@ const Profile = () => {
                 >
                   <Avatar
                     alt="Remy Sharp"
-                    src={male}
+                    src={
+                      biodataProfile &&
+                      biodataProfile.biodataType == "পাত্রীর বায়োডাটা"
+                        ? female
+                        : male
+                    }
                     sx={{
                       width: 125,
                       height: 125,
@@ -159,9 +176,10 @@ const Profile = () => {
                       }}
                       icon={<FingerprintIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
-                      label=" My Biodata"
+                      label="My Biodata"
                       {...a11yProps(1)}
                     />
+
                     <Tab
                       style={{
                         fontWeight: "bold",
@@ -174,7 +192,11 @@ const Profile = () => {
                       }}
                       icon={<EditIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
-                      label=" Edit Biodata"
+                      label={
+                        biodataProfile == null
+                          ? " Create Biodata"
+                          : "Edit Biodata"
+                      }
                       {...a11yProps(2)}
                     />
                     <Tab
@@ -228,13 +250,43 @@ const Profile = () => {
             >
               <Paper elevation={3}>
                 <TabPanel value={value} index={0}>
-                  <MyProfile profile={profile}></MyProfile>
+                  <MyProfile
+                    key={Profile.email}
+                    profile={profile}
+                    biodataProfile={biodataProfile}
+                  ></MyProfile>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  Item Two
+                  {biodataProfile ? (
+                    <MyBiodata
+                      key={biodataProfile.email}
+                      biodataProfile={biodataProfile}
+                      handleChange={handleChange}
+                    ></MyBiodata>
+                  ) : (
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      <Tabs onChange={() => handleChange(2, 2)}>
+                        <Tab
+                          sx={{
+                            color: "white",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            backgroundColor: "blue",
+                            borderRadius: "5px",
+                          }}
+                          {...a11yProps(2)}
+                          label="Create Biodata"
+                        />
+                      </Tabs>
+                    </Box>
+                  )}
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <EditBiodata></EditBiodata>
+                  <EditBiodata
+                    key={Profile.email}
+                    biodataProfile={biodataProfile}
+                    profile={profile}
+                  ></EditBiodata>
                 </TabPanel>
               </Paper>
             </Box>

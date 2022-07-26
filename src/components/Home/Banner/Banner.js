@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SearchIcon from "@mui/icons-material/Search";
+import { NavLink } from "react-router-dom";
 
 const Banner = () => {
   const [gender, setGender] = React.useState("");
@@ -180,9 +181,11 @@ const Banner = () => {
                 direction="row"
                 spacing={2}
               >
-                <Button variant="outlined" startIcon={<SearchIcon />}>
-                  বায়োডাটা খুঁজুন
-                </Button>
+                <NavLink to="/biodatas" style={{ textDecoration: "none" }}>
+                  <Button variant="outlined" startIcon={<SearchIcon />}>
+                    বায়োডাটা খুঁজুন
+                  </Button>
+                </NavLink>
               </Stack>
             </div>
           </Paper>

@@ -1,8 +1,60 @@
-import { Button, Container, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 
 const Contact = () => {
+  const [feedback, setFeedback] = useState({});
+  const [success, setSuccess] = React.useState(false);
+  const [failure, setFailure] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleOnChange = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = { ...feedback };
+    newInfo[field] = value;
+    setFeedback(newInfo);
+  };
+
+  const handleFeedbackSubmit = (e) => {
+    setIsLoading(true);
+
+    // collect data
+    const allfeedbackdata = {
+      ...feedback,
+    };
+
+    fetch("https://biodata-server.herokuapp.com/feedback", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(allfeedbackdata),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          setSuccess(true);
+          setFailure(false);
+          setIsLoading(false);
+        } else {
+          setSuccess(false);
+          setFailure(true);
+          setIsLoading(false);
+        }
+      });
+
+    e.target.reset();
+
+    e.preventDefault();
+  };
+
   return (
     <div>
       <Box
@@ -30,33 +82,87 @@ const Contact = () => {
             আপনার যে কোন জিজ্ঞাসা নিম্নোক্ত ফর্মে পূরণ করে আমাদের কাছে পাঠিয়ে
             দিন। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করবো ইন শা আল্লাহ।
           </p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box
-              sx={{
-                width: 500,
-                maxWidth: "100%",
+          <form onSubmit={handleFeedbackSubmit}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
               }}
             >
-              <TextField sx={{ my: 3 }} fullWidth label="নাম" id="name" />
-              <TextField fullWidth label="ইমেইল" id="email" />
-              <TextField sx={{ my: 3 }} fullWidth label="বিষয়" id="subject" />
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                label="আপনার বার্তা"
-                id="details"
-              />
-              <Button sx={{ my: 3 }} variant="contained">
-                পাঠান
-              </Button>
-            </Box>
-          </div>
+              <Box
+                sx={{
+                  width: 500,
+                  maxWidth: "100%",
+                }}
+              >
+                <Box>
+                  {success && (
+                    <Alert severity="success">Successfuly Submitted !!! </Alert>
+                  )}
+                  {failure && (
+                    <Alert severity="error">
+                      Sorry, Submit Failure !!! Please try again ...{" "}
+                    </Alert>
+                  )}
+                </Box>
+
+                <TextField
+                  sx={{ my: 3 }}
+                  fullWidth
+                  label="নাম"
+                  id="name"
+                  name="name"
+                  type="name"
+                  required
+                  onChange={handleOnChange}
+                />
+                <TextField
+                  fullWidth
+                  label="ইমেইল"
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  onChange={handleOnChange}
+                />
+                <TextField
+                  sx={{ my: 3 }}
+                  fullWidth
+                  label="বিষয়"
+                  id="subject"
+                  name="subject"
+                  required
+                  onChange={handleOnChange}
+                />
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={6}
+                  label="আপনার বার্তা"
+                  id="details"
+                  name="details"
+                  required
+                  onChange={handleOnChange}
+                />
+                <Box sx={{ textAlign: "center", pb: 3 }}>
+                  <Button
+                    sx={{ mt: 3, backgroundColor: "blue", width: "100%" }}
+                    variant="contained"
+                    type="submit"
+                    disabled={success ? true : false}
+                  >
+                    {isLoading ? (
+                      <Box sx={{ display: "flex" }}>
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      <span>Submit</span>
+                    )}
+                  </Button>
+                </Box>
+              </Box>
+            </div>
+          </form>
         </div>
       </Container>
     </div>

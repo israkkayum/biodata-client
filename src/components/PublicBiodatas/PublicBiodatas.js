@@ -1,0 +1,239 @@
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import { Container } from "@mui/system";
+import PublicBiodata from "../PublicBiodata/PublicBiodata";
+import Skeletons from "../Share/Skeletons/Skeletons";
+
+const PublicBiodatas = () => {
+  const [publicBiodatas, setPublicBiodatas] = useState([]);
+
+  useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/biodatas")
+      .then((res) => res.json())
+      .then((data) => {
+        setPublicBiodatas(data);
+      });
+  }, []);
+
+  return (
+    <div>
+      <Box
+        style={{
+          width: "100%",
+          height: "auto",
+          backgroundColor: "blue",
+          marginBottom: "50px",
+          color: "white",
+          textAlign: "center",
+          paddingTop: "50px",
+        }}
+      >
+        <Box
+          sx={{
+            paddingTop: "10px",
+            paddingBottom: "50px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+            "& > :not(style)": {
+              m: 1,
+              width: "auto",
+              height: "auto",
+              backgroundColor: "blue",
+            },
+          }}
+        >
+          <Paper elevation={3}>
+            <div style={{ textAlign: "center", padding: "30px" }}>
+              <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                <InputLabel
+                  sx={{ color: "white" }}
+                  id="demo-simple-select-helper-label"
+                >
+                  আমি খুঁজছি
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  label="আমি খুঁজছি"
+                  sx={{ color: "white" }}
+                >
+                  <MenuItem value="সকল বায়োডাটা">সকল বায়োডাটা</MenuItem>
+                  <MenuItem value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</MenuItem>
+                  <MenuItem value="পাত্রীর বায়োডাটা">পাত্রীর বায়োডাটা</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                <InputLabel
+                  sx={{ color: "white" }}
+                  id="demo-simple-select-helper-label"
+                >
+                  বৈবাহিক অবস্থা
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  label="বৈবাহিক অবস্থা"
+                  sx={{ color: "white" }}
+                >
+                  <MenuItem value="সকল">সকল</MenuItem>
+                  <MenuItem value="অবিবাহিত">অবিবাহিত</MenuItem>
+                  <MenuItem value="বিবাহিত">বিবাহিত</MenuItem>
+                  <MenuItem value="ডিভোর্সড">ডিভোর্সড</MenuItem>
+                  <MenuItem value="বিধবা">বিধবা</MenuItem>
+                  <MenuItem value="বিপত্নীক">বিপত্নীক</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                <InputLabel
+                  sx={{ color: "white" }}
+                  id="demo-simple-select-helper-label"
+                >
+                  জেলা
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  label="জেলা"
+                  sx={{ color: "white" }}
+                >
+                  <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
+                  <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                  <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
+                  <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
+                  <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
+                  <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
+                  <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
+                  <MenuItem value="খুলনা">খুলনা</MenuItem>
+                  <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
+                  <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
+                  <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
+                  <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
+                  <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
+                  <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                  <MenuItem value="চাঁপাইনবাবগঞ্জ">চাঁপাইনবাবগঞ্জ</MenuItem>
+                  <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
+                  <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
+                  <MenuItem value="জামালপুর">জামালপুর</MenuItem>
+                  <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
+                  <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
+                  <MenuItem value="যশোর">যশোর</MenuItem>
+                  <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
+                  <MenuItem value="শেরপুর">শেরপুর</MenuItem>
+                  <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
+                  <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
+                  <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                  <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
+                  <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                  <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
+                  <MenuItem value="রংপুর">রংপুর</MenuItem>
+                  <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
+                  <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
+                  <MenuItem value="নাটোর">নাটোর</MenuItem>
+                  <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
+                  <MenuItem value="নড়াইল">নড়াইল</MenuItem>
+                  <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
+                  <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
+                  <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
+                  <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
+                  <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
+                  <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
+                  <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
+                  <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
+                  <MenuItem value="সিলেট">সিলেট</MenuItem>
+                  <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
+                  <MenuItem value="পাবনা">পাবনা</MenuItem>
+                  <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
+                  <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
+                  <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
+                  <MenuItem value="ফেনী">ফেনী</MenuItem>
+                  <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
+                  <MenuItem value="ব্রাহ্মণবাড়িয়া">ব্রাহ্মণবাড়িয়া</MenuItem>
+                  <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
+                  <MenuItem value="বগুড়া">বগুড়া</MenuItem>
+                  <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
+                  <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                  <MenuItem value="বরগুনা">বরগুনা</MenuItem>
+                  <MenuItem value="ভোলা">ভোলা</MenuItem>
+                  <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                  <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
+                  <MenuItem value="মাগুরা">মাগুরা</MenuItem>
+                  <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
+                  <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
+                  <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
+                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                sx={{
+                  m: 1,
+                  minWidth: 120,
+                  input: { color: "white" },
+                  label: { color: "white" },
+                }}
+                fullWidth
+                label="বায়োডাটা নং"
+                id="fullWidth"
+              />
+              <Stack
+                sx={{
+                  m: 1,
+                  minWidth: 120,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                direction="row"
+                spacing={2}
+              >
+                <NavLink to="/biodatas" style={{ textDecoration: "none" }}>
+                  <Button
+                    sx={{ color: "white" }}
+                    variant="outlined"
+                    startIcon={<SearchIcon />}
+                  >
+                    বায়োডাটা খুঁজুন
+                  </Button>
+                </NavLink>
+              </Stack>
+            </div>
+          </Paper>
+        </Box>
+      </Box>
+      <Container maxWidth="lg" sx={{ pb: 10 }}>
+        <h1 style={{ textAlign: "center", paddingBottom: "50px" }}>
+          বায়োডাটা সমূহ
+        </h1>
+        {publicBiodatas ? (
+          <Grid container spacing={4}>
+            {publicBiodatas.map((publicBiodata) => (
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <PublicBiodata
+                  key={publicBiodata.email}
+                  publicBiodata={publicBiodata}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Skeletons></Skeletons>
+        )}
+      </Container>
+    </div>
+  );
+};
+
+export default PublicBiodatas;

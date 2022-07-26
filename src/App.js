@@ -15,6 +15,9 @@ import Register from "./components/Security/Register/Register";
 import AuthProvider from "./contexts/AuthProvider/AuthProvider";
 import PrivateRoute from "./components/Security/PrivateRoute/PrivateRoute";
 import Profile from "./components/Profile/Profile/Profile";
+import PublicBiodatas from "./components/PublicBiodatas/PublicBiodatas";
+import SingleBiodata from "./components/SingleBiodata/SingleBiodata/SingleBiodata";
+import ContactRequest from "./components/ContactRequest/ContactRequest";
 
 function App() {
   render(
@@ -29,11 +32,24 @@ function App() {
           <Route path="/contact" element={<Contact></Contact>} />
           <Route path="/login" element={<Login></Login>} />
           <Route path="/register" element={<Register></Register>} />
+          <Route path="/biodatas" element={<PublicBiodatas></PublicBiodatas>} />
+          <Route
+            path="biodatas/:biodatasId"
+            element={<SingleBiodata></SingleBiodata>}
+          />
           <Route
             path="/profile"
             element={
               <PrivateRoute>
                 <Profile></Profile>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/contact-request"
+            element={
+              <PrivateRoute>
+                <ContactRequest></ContactRequest>
               </PrivateRoute>
             }
           />
