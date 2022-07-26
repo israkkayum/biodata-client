@@ -19,8 +19,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import useAuth from "../../../hooks/useAuth";
 import MyProfile from "../MyProfile/MyProfile";
 import EditBiodata from "../EditBiodata/EditBiodata";
-import { Outlet } from "react-router";
 import MyBiodata from "../MyBiodata/MyBiodata";
+import HideDeleteData from "../HideDeleteData/HideDeleteData";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,6 +60,7 @@ const Profile = () => {
   const [value, setValue] = React.useState(0);
   const [profile, setProfile] = useState({});
   const [biodataProfile, setbiodataProfile] = useState({});
+  const [disabled, setDisabled] = useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,6 +81,48 @@ const Profile = () => {
         setbiodataProfile(data);
       });
   }, [user.email]);
+
+  const handlePrivateStatus = (id) => {
+    const status = { status: "private" };
+
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(status),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        window.location.reload();
+      });
+  };
+
+  const handlePublicStatus = (id) => {
+    const status = { status: "public" };
+
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(status),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        window.location.reload();
+      });
+  };
+
+  const handleRemoveBiodata = (id) => {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        window.location.reload();
+      });
+  };
 
   return (
     <div>
@@ -148,6 +191,8 @@ const Profile = () => {
                     //   },
                     // }}
                   >
+                    {/* My profile  */}
+
                     <Tab
                       style={{
                         fontWeight: "bold",
@@ -164,6 +209,8 @@ const Profile = () => {
                       label=" Profile"
                     />
 
+                    {/* My Biodata */}
+
                     <Tab
                       style={{
                         fontWeight: "bold",
@@ -179,6 +226,8 @@ const Profile = () => {
                       label="My Biodata"
                       {...a11yProps(1)}
                     />
+
+                    {/* Create / edit  */}
 
                     <Tab
                       style={{
@@ -199,6 +248,9 @@ const Profile = () => {
                       }
                       {...a11yProps(2)}
                     />
+
+                    {/* Hide / Delete  */}
+
                     <Tab
                       style={{
                         fontWeight: "bold",
@@ -215,6 +267,9 @@ const Profile = () => {
                       label=" Delete / Hide Biodata"
                       {...a11yProps(3)}
                     />
+
+                    {/* Logout  */}
+
                     <Tab
                       style={{
                         fontWeight: "bold",
@@ -249,6 +304,8 @@ const Profile = () => {
               }}
             >
               <Paper elevation={3}>
+                {/* My Profile */}
+
                 <TabPanel value={value} index={0}>
                   <MyProfile
                     key={Profile.email}
@@ -256,6 +313,9 @@ const Profile = () => {
                     biodataProfile={biodataProfile}
                   ></MyProfile>
                 </TabPanel>
+
+                {/* My Biodata */}
+
                 <TabPanel value={value} index={1}>
                   {biodataProfile ? (
                     <MyBiodata
@@ -281,12 +341,46 @@ const Profile = () => {
                     </Box>
                   )}
                 </TabPanel>
+
+                {/* Edit Biodata */}
+
                 <TabPanel value={value} index={2}>
                   <EditBiodata
                     key={Profile.email}
                     biodataProfile={biodataProfile}
                     profile={profile}
                   ></EditBiodata>
+                </TabPanel>
+
+                {/* Hide / Delete Biodata */}
+
+                <TabPanel value={value} index={3}>
+                  {biodataProfile ? (
+                    <HideDeleteData
+                      disabled={disabled}
+                      setDisabled={setDisabled}
+                      handlePrivateStatus={handlePrivateStatus}
+                      handlePublicStatus={handlePublicStatus}
+                      handleRemoveBiodata={handleRemoveBiodata}
+                      biodataProfile={biodataProfile}
+                    ></HideDeleteData>
+                  ) : (
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      <Tabs onChange={() => handleChange(2, 2)}>
+                        <Tab
+                          sx={{
+                            color: "white",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            backgroundColor: "blue",
+                            borderRadius: "5px",
+                          }}
+                          {...a11yProps(2)}
+                          label="Create Biodata"
+                        />
+                      </Tabs>
+                    </Box>
+                  )}
                 </TabPanel>
               </Paper>
             </Box>

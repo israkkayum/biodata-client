@@ -58,6 +58,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
       ...bioData,
       email: user.email,
       biodataNumber: profile.biodataNumber,
+      status: "public",
     };
     // send to the server
 
