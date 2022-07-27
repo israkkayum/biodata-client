@@ -39,41 +39,50 @@ function Media(props: MediaProps) {
   const { loading = false } = props;
 
   return (
-    <Grid container wrap="wrap">
-      {(loading ? Array.from(new Array(3)) : data).map((item, index) => (
-        <Box key={index} sx={{ width: "100%", marginRight: 0.5, my: 3 }}>
-          {item ? (
-            <img
-              style={{ width: "100%", height: 500 }}
-              alt={item.title}
-              src={item.src}
-            />
-          ) : (
-            <Skeleton variant="rectangular" width="100%" height={250} />
-          )}
-          {item ? (
-            <Box sx={{ pr: 2 }}>
-              <Typography gutterBottom variant="body2">
-                {item.title}
-              </Typography>
-              <Typography
-                display="block"
-                variant="caption"
-                color="text.secondary"
-              >
-                {item.channel}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {`${item.views} • ${item.createdAt}`}
-              </Typography>
-            </Box>
-          ) : (
-            <Box sx={{ pt: 0.5 }}>
-              <Skeleton />
-              <Skeleton width="60%" />
-            </Box>
-          )}
-        </Box>
+    <Grid container spacing={4}>
+      {(loading ? Array.from(new Array(6)) : data).map((item, index) => (
+        <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+          <Box
+            key={index}
+            sx={{
+              width: "100%",
+              marginRight: 0.5,
+              my: 3,
+            }}
+          >
+            {item ? (
+              <img
+                style={{ width: "100%", height: 500 }}
+                alt={item.title}
+                src={item.src}
+              />
+            ) : (
+              <Skeleton variant="rectangular" width="100%" height={250} />
+            )}
+            {item ? (
+              <Box sx={{ pr: 2 }}>
+                <Typography gutterBottom variant="body2">
+                  {item.title}
+                </Typography>
+                <Typography
+                  display="block"
+                  variant="caption"
+                  color="text.secondary"
+                >
+                  {item.channel}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {`${item.views} • ${item.createdAt}`}
+                </Typography>
+              </Box>
+            ) : (
+              <Box sx={{ pt: 0.5 }}>
+                <Skeleton />
+                <Skeleton width="60%" />
+              </Box>
+            )}
+          </Box>
+        </Grid>
       ))}
     </Grid>
   );
