@@ -22,7 +22,7 @@ const SingleBiodata = () => {
   return (
     <div>
       <Container maxWidth="lg" sx={{ py: 10 }}>
-        {biodataProfile ? (
+        {biodataProfile._id ? (
           <Grid container spacing={4}>
             <Grid item xs={12} sm={12} md={4}>
               <SingleBiodataPart1

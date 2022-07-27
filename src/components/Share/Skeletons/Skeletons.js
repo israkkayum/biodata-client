@@ -39,7 +39,7 @@ function Media(props: MediaProps) {
   const { loading = false } = props;
 
   return (
-    <Grid container wrap="nowrap">
+    <Grid container wrap="wrap">
       {(loading ? Array.from(new Array(3)) : data).map((item, index) => (
         <Box key={index} sx={{ width: "100%", marginRight: 0.5, my: 3 }}>
           {item ? (

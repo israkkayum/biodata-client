@@ -217,7 +217,7 @@ const PublicBiodatas = () => {
         <h1 style={{ textAlign: "center", paddingBottom: "50px" }}>
           বায়োডাটা সমূহ
         </h1>
-        {publicBiodatas ? (
+        {publicBiodatas.length != 0 ? (
           <Grid container spacing={4}>
             {publicBiodatas.map((publicBiodata) => (
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
