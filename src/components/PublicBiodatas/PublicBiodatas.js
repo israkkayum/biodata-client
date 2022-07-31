@@ -219,14 +219,17 @@ const PublicBiodatas = () => {
         </h1>
         {publicBiodatas.length != 0 ? (
           <Grid container spacing={4}>
-            {publicBiodatas.map((publicBiodata) => (
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                <PublicBiodata
-                  key={publicBiodata.email}
-                  publicBiodata={publicBiodata}
-                />
-              </Grid>
-            ))}
+            {publicBiodatas.reverse().map(
+              (publicBiodata) =>
+                publicBiodata.status == "public" && (
+                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                    <PublicBiodata
+                      key={publicBiodata.email}
+                      publicBiodata={publicBiodata}
+                    />
+                  </Grid>
+                )
+            )}
           </Grid>
         ) : (
           <Skeletons></Skeletons>
