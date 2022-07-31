@@ -5,12 +5,15 @@ import {
   Box,
   Button,
   Divider,
+  Link,
   Paper,
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import ReplyIcon from "@mui/icons-material/Reply";
+import { NavLink } from "react-router-dom";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -258,6 +261,21 @@ const HideDeleteData = (props) => {
             Delete Biodata
           </Button>
         </div>
+      </Box>
+      <Box sx={{ mt: 5 }}>
+        <Alert sx={{ fontSize: "17px", fontWeight: "bold" }} severity="info">
+          Your biodata is now {status}.
+        </Alert>
+      </Box>
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Link
+          style={{ textDecoration: "none" }}
+          href={`https://biodata-eb04c.web.app/biodatas/${_id}`}
+        >
+          <Button variant="outlined" startIcon={<ReplyIcon />}>
+            view
+          </Button>
+        </Link>
       </Box>
     </div>
   );
