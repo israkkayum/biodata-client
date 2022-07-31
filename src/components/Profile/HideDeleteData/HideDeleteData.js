@@ -270,7 +270,8 @@ const HideDeleteData = (props) => {
       <Box sx={{ mt: 3, textAlign: "center" }}>
         <Link
           style={{ textDecoration: "none" }}
-          href={`https://biodata-eb04c.web.app/biodatas/${_id}`}
+          target="_blank"
+          href={`/biodatas/${_id}`}
         >
           <Button variant="outlined" startIcon={<ReplyIcon />}>
             view
