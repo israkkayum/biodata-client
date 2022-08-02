@@ -55,7 +55,7 @@ const Header = () => {
     setAnchorElNav(null);
   };
 
-  const { user } = useAuth();
+  const { user, admin } = useAuth();
 
   React.useEffect(() => {
     fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)

@@ -18,6 +18,8 @@ import Profile from "./components/Profile/Profile/Profile";
 import PublicBiodatas from "./components/PublicBiodatas/PublicBiodatas";
 import SingleBiodata from "./components/SingleBiodata/SingleBiodata/SingleBiodata";
 import ContactRequest from "./components/ContactRequest/ContactRequest";
+import AdminRoute from "./components/Security/AdminRoute/AdminRoute";
+import DashboardHome from "./components/Dashboard/DahboardHome/DashboardHome";
 
 function App() {
   render(
@@ -50,6 +52,16 @@ function App() {
             element={
               <PrivateRoute>
                 <ContactRequest></ContactRequest>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <AdminRoute>
+                  <DashboardHome></DashboardHome>
+                </AdminRoute>
               </PrivateRoute>
             }
           />

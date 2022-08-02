@@ -24,7 +24,6 @@ const useFirebase = () => {
   const [authError, setAuthError] = useState("");
   const [authInfo, setAuthInfo] = useState("");
   const [admin, setAdmin] = useState(false);
-  // const [isHave, setIsHave] = useState(false);
   const isHave = useRef(false);
 
   const auth = getAuth();
@@ -194,11 +193,13 @@ const useFirebase = () => {
       .then((data) => setGetuser(data));
   }, []);
 
-  // useEffect(() => {
-  //   fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setAdmin(data.admin));
-  // }, [user.email]);
+  useEffect(() => {
+    fetch(`https://biodata-server.herokuapp.com/users/admin/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+  }, [user.email]);
 
   const saveUser = (email, displayName, biodataNumber, method) => {
     const user = { email, displayName, biodataNumber };

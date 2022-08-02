@@ -1,0 +1,128 @@
+[debug] [2022-07-31T06:17:10.418Z] ----------------------------------------------------------------------
+[debug] [2022-07-31T06:17:10.419Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2022-07-31T06:17:10.419Z] CLI Version:   10.4.0
+[debug] [2022-07-31T06:17:10.419Z] Platform:      darwin
+[debug] [2022-07-31T06:17:10.419Z] Node Version:  v16.13.1
+[debug] [2022-07-31T06:17:10.420Z] Time:          Sun Jul 31 2022 12:17:10 GMT+0600 (Bangladesh Standard Time)
+[debug] [2022-07-31T06:17:10.420Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-07-31T06:17:10.463Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-07-31T06:17:10.463Z] > authorizing via signed-in user (israk.kayum@gmail.com)
+[debug] [2022-07-31T06:17:10.463Z] [iam] checking project biodata-eb04c for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-07-31T06:17:10.464Z] > refreshing access token with scopes: []
+[debug] [2022-07-31T06:17:10.464Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-07-31T06:17:23.957Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","date":"Sun, 31 Jul 2022 06:17:23 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-07-31T06:17:24.006Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/biodata-eb04c:testIamPermissions [none]
+[debug] [2022-07-31T06:17:24.006Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/biodata-eb04c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-07-31T06:17:26.142Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/biodata-eb04c:testIamPermissions 200
+[debug] [2022-07-31T06:17:26.142Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/biodata-eb04c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-07-31T06:17:26.144Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c [none]
+[debug] [2022-07-31T06:17:27.288Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c 200
+[debug] [2022-07-31T06:17:27.288Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c {"projectId":"biodata-eb04c","projectNumber":"331437120065","displayName":"biodata","name":"projects/biodata-eb04c","resources":{"hostingSite":"biodata-eb04c"},"state":"ACTIVE","etag":"1_355e3e07-ff8e-4db6-a741-9a045213349b"}
+[info] 
+[info] === Deploying to 'biodata-eb04c'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-07-31T06:17:27.291Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c [none]
+[debug] [2022-07-31T06:17:29.508Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c 200
+[debug] [2022-07-31T06:17:29.508Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/biodata-eb04c {"projectId":"biodata-eb04c","projectNumber":"331437120065","displayName":"biodata","name":"projects/biodata-eb04c","resources":{"hostingSite":"biodata-eb04c"},"state":"ACTIVE","etag":"1_355e3e07-ff8e-4db6-a741-9a045213349b"}
+[debug] [2022-07-31T06:17:29.512Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions [none]
+[debug] [2022-07-31T06:17:29.512Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-07-31T06:17:31.965Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions 200
+[debug] [2022-07-31T06:17:31.966Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions {"name":"projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93","status":"CREATED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[biodata-eb04c]: beginning deploy... 
+[info] i  hosting[biodata-eb04c]: found 26 files in build 
+[debug] [2022-07-31T06:17:32.356Z] [hosting] hash cache [YnVpbGQ] stored for 26 files
+[debug] [2022-07-31T06:17:32.356Z] [hosting][hash queue][FINAL] {"max":368,"min":16,"avg":42.34615384615385,"active":0,"complete":26,"success":26,"errored":0,"retried":0,"total":26,"elapsed":374}
+[debug] [2022-07-31T06:17:32.357Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93:populateFiles [none]
+[debug] [2022-07-31T06:17:32.357Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93:populateFiles {"files":{"/asset-manifest.json":"063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e","/index.html":"11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6","/precache-manifest.8520abd40d33e99eda803b5cd34182bd.js":"e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb","/favicon.ico":"b72f7455f00e4e58792d2bca892abb068e2213838c0316d6b7a0d6d16acd1955","/logo512.png":"191fc21360b4ccfb1cda11a1efb97f489ed22672ca83f4064316802bbfdd750e","/service-worker.js":"8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389","/robots.txt":"391d14b3c2f8c9143a27a28c7399585142228d4d1bdbe2c87ac946de411fa9a2","/static/css/main.926881ed.chunk.css":"192a20d01aca6f9bb4cc191086bc6791845d253cd32358d13d2ee17a4a096c64","/logo192.png":"caff018b7f1e8fd481eb1c50d75b0ef236bcd5078b1d15c8bb348453fee30293","/manifest.json":"341d52628782f8ac9290bbfc43298afccb47b7cbfcee146ae30cf0f46bc30900","/static/css/main.926881ed.chunk.css.map":"edc140f81ab35958aaae7276b28cedc10d89b1b68140d677970063b19cc0f32d","/static/js/1.b69cec9b.chunk.js":"9b20b98d6831b2d2bd65a5b69d4224c5d8ce01d7b447d46981ef2b38f54b7a65","/static/js/1.b69cec9b.chunk.js.map":"58e7ad48004c9e2a90e8395e08a36ea93d7c8c3534878656a5dc79a45d8c82b8","/static/js/runtime~main.8bf45503.js.map":"6513efa451995fb591487ca342fe8088d92f57a86a743bbf34ee384e1ce0b64c","/static/js/runtime~main.8bf45503.js":"0496daf9979306a11037ae53d4f632a95d077154675814413f1dc2fdba8f1210","/static/media/bkash.7fcbc475.webp":"07004c8df161c0d2cbf63cd6004096e2ac091984405b4fa506a532db16790de1","/static/media/nagad.e4aed791.webp":"ad6a4da616f426cde0cc2b5a61b8b52a0d167276ce1fc3abfe049a98519ae493","/static/media/notfound.725405c8.svg":"9dfd3b3ecacf14a8e21078399fc9675ea530ec9f80479fe1b58b4e12f4b31c65","/static/media/rocket.0952069f.webp":"8c4e06d093d4956db3243e125086b9c716eb21c5ff894fb4cb0715c8835b286e","/static/media/female-removebg.62c99924.png":"4c9d6da3ba4b3775e26a738e86ef9f3ce91f891f8907806bfba7670247ea813a","/static/media/male-removebg.3ab04827.png":"f30527006a0be267ff77bca08fe6bbeaa80fe37b6232fcf5cc1a151824ec764f","/static/js/main.179e0d0e.chunk.js.map":"74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c","/static/js/main.179e0d0e.chunk.js":"0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4","/static/js/2.9da6f615.chunk.js":"5b7fd2f0c33d423b34aef412003469b49f1df7b749cdf4e1d7562f945d3b6852","/static/media/banner.3e08f111.jpg":"cdac4cc787fddcda708673cde7f5ec82ff1fb992d8fb945da48981fc5b864fb9","/static/js/2.9da6f615.chunk.js.map":"a69c7d4977ac21d6b2397e0b76acc9ac69f02f69189328cf71d1bdc8354003ed"}}
+[debug] [2022-07-31T06:17:34.419Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93:populateFiles 200
+[debug] [2022-07-31T06:17:34.419Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93:populateFiles {"uploadRequiredHashes":["8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389","11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6","0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4","063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e","74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c","e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files"}
+[debug] [2022-07-31T06:17:34.423Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 [none]
+[debug] [2022-07-31T06:17:34.423Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 [stream]
+[debug] [2022-07-31T06:17:34.425Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 [none]
+[debug] [2022-07-31T06:17:34.425Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 [stream]
+[debug] [2022-07-31T06:17:34.426Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 [none]
+[debug] [2022-07-31T06:17:34.426Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 [stream]
+[debug] [2022-07-31T06:17:34.427Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e [none]
+[debug] [2022-07-31T06:17:34.427Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e [stream]
+[debug] [2022-07-31T06:17:34.429Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c [none]
+[debug] [2022-07-31T06:17:34.429Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c [stream]
+[debug] [2022-07-31T06:17:34.430Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb [none]
+[debug] [2022-07-31T06:17:34.430Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb [stream]
+[debug] [2022-07-31T06:17:34.432Z] [hosting][populate queue][FINAL] {"max":2068,"min":2068,"avg":2068,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":2077}
+[debug] [2022-07-31T06:17:34.432Z] [hosting] uploads queued: 6
+[debug] [2022-07-31T06:18:04.824Z] [uploadQueue] Retrying task 8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389
+[debug] [2022-07-31T06:18:04.827Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 [none]
+[debug] [2022-07-31T06:18:04.827Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 [stream]
+[debug] [2022-07-31T06:18:04.830Z] [uploadQueue] Retrying task 11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6
+[debug] [2022-07-31T06:18:04.830Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 [none]
+[debug] [2022-07-31T06:18:04.830Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 [stream]
+[debug] [2022-07-31T06:18:04.834Z] [uploadQueue] Retrying task 0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4
+[debug] [2022-07-31T06:18:04.834Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 [none]
+[debug] [2022-07-31T06:18:04.834Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 [stream]
+[debug] [2022-07-31T06:18:04.836Z] [uploadQueue] Retrying task 063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e
+[debug] [2022-07-31T06:18:04.836Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e [none]
+[debug] [2022-07-31T06:18:04.836Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e [stream]
+[debug] [2022-07-31T06:18:04.837Z] [uploadQueue] Retrying task 74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c
+[debug] [2022-07-31T06:18:04.837Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c [none]
+[debug] [2022-07-31T06:18:04.837Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c [stream]
+[debug] [2022-07-31T06:18:04.838Z] [uploadQueue] Retrying task e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb
+[debug] [2022-07-31T06:18:04.839Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb [none]
+[debug] [2022-07-31T06:18:04.839Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb [stream]
+[debug] [2022-07-31T06:18:09.118Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 200
+[debug] [2022-07-31T06:18:09.119Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/11d69e41ccee6da468a95d3343b24615b1e23e0cb1ed1a4fedf0b238798636d6 [stream]
+[debug] [2022-07-31T06:18:10.147Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e 200
+[debug] [2022-07-31T06:18:10.147Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/063466777f84406f1ba69d69974d78fc73eadae740cdc30216bcadbcb330962e [stream]
+[debug] [2022-07-31T06:18:10.284Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 200
+[debug] [2022-07-31T06:18:10.285Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/8cee80825e6ae039ac92138d0581e4517590d5889a56aeb19eff44a3dc374389 [stream]
+[debug] [2022-07-31T06:18:10.293Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 200
+[debug] [2022-07-31T06:18:10.293Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/0f27466651f640a219ee164f75eb305468bcf9c377330f2b8f20644c1c83fab4 [stream]
+[debug] [2022-07-31T06:18:10.316Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb 200
+[debug] [2022-07-31T06:18:10.316Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/e9e0d1d8f8ae82f4c5aadd8ca8dc468761e6bedd2acf79bcc5c60beaaf0202eb [stream]
+[debug] [2022-07-31T06:18:10.467Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c 200
+[debug] [2022-07-31T06:18:10.468Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/biodata-eb04c/versions/b7cbd39fe259ff93/files/74826fd5471743e949e9d154fa133b881150a8afa0bad8c1b364da53e87c0e0c [stream]
+[debug] [2022-07-31T06:18:10.468Z] [hosting][upload queue][FINAL] {"max":5631,"min":4289,"avg":5271.666666666667,"active":0,"complete":6,"success":6,"errored":0,"retried":6,"total":6,"elapsed":36049}
+[info] ✔  hosting[biodata-eb04c]: file upload complete 
+[debug] [2022-07-31T06:18:10.469Z] [hosting] deploy completed after 38502ms
+[debug] [2022-07-31T06:18:10.474Z] [
+  {
+    "config": {
+      "public": "build",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "site": "biodata-eb04c"
+    },
+    "site": "biodata-eb04c",
+    "version": "projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93"
+  }
+]
+[info] i  hosting[biodata-eb04c]: finalizing version... 
+[debug] [2022-07-31T06:18:10.475Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93 updateMask=status
+[debug] [2022-07-31T06:18:10.475Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93 {"status":"FINALIZED"}
+[debug] [2022-07-31T06:18:12.437Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93 200
+[debug] [2022-07-31T06:18:12.438Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93 {"name":"projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-07-31T06:17:31.660552Z","createUser":{"email":"israk.kayum@gmail.com"},"finalizeTime":"2022-07-31T06:18:12.408150Z","finalizeUser":{"email":"israk.kayum@gmail.com"}}
+[debug] [2022-07-31T06:18:12.438Z] [hosting] finalized version for biodata-eb04c:[object Object]
+[info] ✔  hosting[biodata-eb04c]: version finalized 
+[info] i  hosting[biodata-eb04c]: releasing new version... 
+[debug] [2022-07-31T06:18:12.439Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/releases versionName=projects%2F331437120065%2Fsites%2Fbiodata-eb04c%2Fversions%2Fb7cbd39fe259ff93
+[debug] [2022-07-31T06:18:12.439Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/releases {"message":null}
+[debug] [2022-07-31T06:18:14.448Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/releases 200
+[debug] [2022-07-31T06:18:14.449Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/331437120065/sites/biodata-eb04c/releases {"name":"projects/331437120065/sites/biodata-eb04c/releases/1659248293857452","version":{"name":"projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-07-31T06:17:31.660552Z","createUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"},"finalizeTime":"2022-07-31T06:18:12.408150Z","finalizeUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"}},"type":"DEPLOY","releaseTime":"2022-07-31T06:18:13.857452712Z","releaseUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"}}
+[debug] [2022-07-31T06:18:14.450Z] [hosting] release: {"name":"projects/331437120065/sites/biodata-eb04c/releases/1659248293857452","version":{"name":"projects/331437120065/sites/biodata-eb04c/versions/b7cbd39fe259ff93","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-07-31T06:17:31.660552Z","createUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"},"finalizeTime":"2022-07-31T06:18:12.408150Z","finalizeUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"}},"type":"DEPLOY","releaseTime":"2022-07-31T06:18:13.857452712Z","releaseUser":{"email":"israk.kayum@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a-/AFdZucp0-dNC7n15QFzxiKv_YJXVPSHB64fL12uexSLx"}}
+[info] ✔  hosting[biodata-eb04c]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/biodata-eb04c/overview
+[info] Hosting URL: https://biodata-eb04c.web.app
