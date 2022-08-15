@@ -18,6 +18,7 @@ import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
+import logo from "../../../images/logo.png";
 
 // const pages = [
 //   "হোম",

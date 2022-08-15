@@ -8,7 +8,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -113,17 +112,7 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-const AllBiodatas = () => {
-  const [biodatas, setBiodatas] = React.useState([]);
-
-  React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/biodatas")
-      .then((res) => res.json())
-      .then((data) => {
-        setBiodatas(data);
-      });
-  }, []);
-
+const AllBiodatas = ({ biodatas, setBiodatas }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 

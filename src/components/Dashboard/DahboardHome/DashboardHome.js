@@ -19,6 +19,8 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import RingVolumeIcon from "@mui/icons-material/RingVolume";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import AllBiodatas from "../AllBiodatas/AllBiodatas";
+import ManageBiodatas from "../ManageBiodatas/ManageBiodatas";
+import MakeAdmin from "../MakeAdmin/MakeAdmin";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +56,25 @@ function a11yProps(index) {
 }
 
 const DashboardHome = () => {
+  const [biodatas, setBiodatas] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/biodatas")
+      .then((res) => res.json())
+      .then((data) => {
+        setBiodatas(data);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  }, []);
+
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -218,16 +239,26 @@ const DashboardHome = () => {
                 {/* All biodatas */}
 
                 <TabPanel value={value} index={0}>
-                  <AllBiodatas></AllBiodatas>
+                  <AllBiodatas
+                    biodatas={biodatas}
+                    setBiodatas={setBiodatas}
+                  ></AllBiodatas>
                 </TabPanel>
 
-                {/* My Biodata */}
+                {/* Manage Biodatas */}
 
-                <TabPanel value={value} index={1}></TabPanel>
+                <TabPanel value={value} index={1}>
+                  <ManageBiodatas
+                    biodatas={biodatas}
+                    setBiodatas={setBiodatas}
+                  ></ManageBiodatas>
+                </TabPanel>
 
-                {/* Edit Biodata */}
+                {/* Make Admin */}
 
-                <TabPanel value={value} index={2}></TabPanel>
+                <TabPanel value={value} index={2}>
+                  <MakeAdmin users={users}></MakeAdmin>
+                </TabPanel>
 
                 {/* Hide / Delete Biodata */}
 

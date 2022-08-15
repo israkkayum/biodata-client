@@ -1,0 +1,1051 @@
+import * as React from "react";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Paper,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+} from "@mui/material";
+
+import EditIcon from "@mui/icons-material/Edit";
+import { styled } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#F0F0F0",
+    color: "blue",
+    fontSize: 20,
+    fontWeight: "bold",
+    borderTop: "3px solid blue",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    // fontWeight: "bold",
+    lineHeight: 1.5,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+const ManageBiodata = ({ email }) => {
+  const [biodataProfile, setbiodataProfile] = React.useState({});
+
+  React.useEffect(() => {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setbiodataProfile(data);
+      });
+  }, []);
+
+  return (
+    <div>
+      {biodataProfile.yourName ? (
+        <div>
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    সাধারণ তথ্য
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    সম্পূর্ণ নাম
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourName}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বায়োডাটার ধরন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.biodataType}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বৈবাহিক অবস্থা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.maritalStatus}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    স্থায়ী ঠিকানা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.parmanentDistrict}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বিভাগ (স্থায়ী ঠিকানা যে বিভাগের আওতাধীন)
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.parmanentDivision}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বর্তমান ঠিকানা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.presentDistrict}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বিভাগ (বর্তমান ঠিকানা যে বিভাগের আওতাধীন)
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.presentDivision}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    জন্মসন (আসল)
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.dateOfBirth}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.yourSkinColor && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      গাত্রবর্ণ
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.yourSkinColor}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                {biodataProfile.yourHeight && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      উচ্চতা
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.yourHeight}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                {biodataProfile.yourWeight && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      ওজন
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.yourWeight}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    রক্তের গ্রুপ
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourBloodGroup}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    পেশা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourProfession}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.yourMonthIncome && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      মাসিক আয়
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.yourMonthIncome}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    ঠিকানা
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    স্থায়ী ঠিকানা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.parmanentAddress}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বর্তমান ঠিকানা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.presentAddress}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    কোথায় বড় হয়েছেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.growingUpLife}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    শিক্ষাগত যোগ্যতা
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    কোন মাধ্যমে পড়াশোনা করেছেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.studyMedium}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouHafez && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        আপনি কি হাফেজ?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.areYouHafez}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        দাওরায়ে হাদীস পাশ করেছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.areYouPassDawora}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "হ্যাঁ" &&
+                  biodataProfile.dateofPassDawora && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        দাওরায়ে হাদীস পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.dateofPassDawora
+                          .toString()
+                          .slice(7, 15)}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "হ্যাঁ" &&
+                  biodataProfile.natizaOfDawora && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        দাওরায়ে হাদীসের নতিজা কি?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.natizaOfDawora}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "হ্যাঁ" &&
+                  biodataProfile.areYouStudyTakasshos && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        আপনি কি তাখাস্সুস পড়েছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.areYouStudyTakasshos}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "হ্যাঁ" &&
+                  biodataProfile.areYouStudyTakasshos == "হ্যাঁ" &&
+                  biodataProfile.takasshosStudySub && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        কোন বিষয়ে তাখাস্সুস পড়েছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.takasshosStudySub}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "হ্যাঁ" &&
+                  biodataProfile.areYouStudyTakasshos == "হ্যাঁ" &&
+                  biodataProfile.takasshosStudyDate && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        তাখাস্সুস পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.takasshosStudyDate}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.areYouPassDawora == "না, এখনো পড়ছি" &&
+                  biodataProfile.studyingYearDawora && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        দাওরায়ে হাদীস কোন বর্ষে পড়ছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.studyingYearDawora}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "মাদ্রাসা" &&
+                  biodataProfile.maxStudyQualification && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        সর্বোচ্চ শিক্ষাগত যোগ্যতা
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.maxStudyQualification}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        মাধ্যমিক (SSC) / সমমান পাশ করেছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.areYouSscPass}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.sscResult && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        মাধ্যমিক (SSC) / সমমান ফলাফল
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.sscResult}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.sscGroup && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        মাধ্যমিক (SSC) / সমমান বিভাগ
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.sscGroup}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.dateofPassSsc && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        মাধ্যমিক (SSC) / সমমান পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.dateofPassSsc.toString().slice(7, 15)}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        উচ্চ মাধ্যমিক (HSC) / সমমান পাশ করেছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.areYouHscPass}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.hscResult && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        উচ্চ মাধ্যমিক (HSC) / সমমান ফলাফল
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.hscResult}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.hscGroup && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        উচ্চ মাধ্যমিক (HSC) / সমমানের বিভাগ
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.hscGroup}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.dateofPassHsc && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        উচ্চ মাধ্যমিক (HSC) / সমমান পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.dateofPassHsc.toString().slice(7, 15)}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.hounrsQualification && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        স্নাতক / স্নাতক (সম্মান) / সমমান শিক্ষাগত যোগ্যতা
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.hounrsQualification}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.hounrsQualification &&
+                  biodataProfile.hounrsInstituteName && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        শিক্ষাপ্রতিষ্ঠানের নাম
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.hounrsInstituteName}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "হ্যাঁ" &&
+                  biodataProfile.hounrsQualification &&
+                  biodataProfile.hounrsPassDate && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        স্নাতক / স্নাতক (সম্মান) / সমমান পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.hounrsPassDate}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "না" &&
+                  biodataProfile.msxHscStuding && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        উচ্চ মাধ্যমিক (HSC) / সমমান কোন বর্ষে পড়ছেন ?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.msxHscStuding}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "ডিপ্লোমা পড়েছি" &&
+                  biodataProfile.diplomaStudySub && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        ডিপ্লোমা কোন বিষয়ে পড়েছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.diplomaStudySub}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "ডিপ্লোমা পড়েছি" &&
+                  biodataProfile.diplomaStudySub &&
+                  biodataProfile.diplomaInstituteName && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        ডিপ্লোমা শিক্ষাপ্রতিষ্ঠানের নাম
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.diplomaInstituteName}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "হ্যাঁ" &&
+                  biodataProfile.areYouHscPass == "ডিপ্লোমা পড়েছি" &&
+                  biodataProfile.diplomaStudySub &&
+                  biodataProfile.diplomaPassDate && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        ডিপ্লোমা পাসের সন
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.diplomaPassDate}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.studyMedium == "জেনারেল" &&
+                  biodataProfile.areYouSscPass == "না" &&
+                  biodataProfile.minClassStudy && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        কোন ক্লাস পর্যন্ত পড়েছেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.minClassStudy}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.otherEducationalQua && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      অন্যান্য শিক্ষাগত যোগ্যতা
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.otherEducationalQua}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    পারিবারিক তথ্য
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    পিতার নাম
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourFatherName}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    মাতার নাম
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourMotherName}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    পিতার পেশা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.YourFatherProfession}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    মাতার পেশা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.YourMotherProfession}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বোন কয়জন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.numberOfSister}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    ভাই কয়জন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.numberOfBrother}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.professionOfOtherRelated && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      চাচা মামাদের পেশা
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.professionOfOtherRelated}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    পরিবারের অর্থনৈতিক ও সামাজিক অবস্থা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.economicSocialPosition}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    ব্যক্তিগত তথ্য
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয়
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.areYouPrayerRegu}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    নিয়মিত নামায কত সময় যাবত পড়ছেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.whenPrayerRegu}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    মাহরাম/নন-মাহরাম মেনে চলেন কি
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.areYouAbideByMahram}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.areYouReadQuranPurly}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    কোন মাঝহাব অনুসরণ করেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.whichMazhabFollow}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    রাজনৈতিক দর্শন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.anyPoliticalIdology}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.takeAnyEntertainment}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    মানসিক বা শারীরিক কোনো রোগ আছে কি
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.haveAnyDiseases}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.joinAnyIslamicWork}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    আপনি কি কোনো পীরের মুরিদ বা অনুসারী
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.haveAnyIslamicFollower}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.beliveOfMazar}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.favoriteIslamicBook}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    আপনার পছন্দের অন্তত ৩ জন আলেমের নাম
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.favoriteIslamicSpeaker}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.anyIslamicEduQua && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      বিশেষ দ্বীনি বা দুনিয়াবি যোগ্যতা
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.anyIslamicEduQua}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    নিজের সম্পর্কে কিছু লিখুন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.aboutYourSelf}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    বিয়ে সংক্রান্ত তথ্য
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    অভিভাবক আপনার বিয়েতে রাজি কি না?
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.agreeGuardian}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বিয়ে কেন করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি?
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.idologyOfMarit}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    অন্যান্য তথ্য
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {biodataProfile.anyQuary && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      বিশেষ কিছু যদি জানাতে চান
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.anyQuary}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    যেমন জীবনসঙ্গী আশা করেন
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বয়স
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.ageOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    গাত্রবর্ণ
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.skinColorOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    নূন্যতম উচ্চতা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.minHeightOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    নূন্যতম শিক্ষাগত যোগ্যতা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.minEduQuaOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    জেলা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.districtOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বৈবাহিক অবস্থা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.maritalStatusOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    পেশা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.professionOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    অর্থনৈতিক অবস্থা
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.economicOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.FamilyStatusOfLifePartner && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      পারিবারিক অবস্থা
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.FamilyStatusOfLifePartner}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.characteristicsOfLifePartner}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    কর্তৃপক্ষের জিজ্ঞাসা
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    biyamudarak.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক
+                    জানেন?
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.agreeYourGurdean}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য?
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.isAllInfoReal}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    কোনো মিথ্যা তথ্য দিয়ে থাকলে তার দুনিয়াবী ও আখিরাতের দায়ভার
+                    ওয়েবসাইট কর্তৃপক্ষ নিবে না। আপনি কি রাজি?
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.ourNoLiability}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" colSpan={2}>
+                    যোগাযোগ
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    অভিভাবকের নাম্বার
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.GurdianPhoneNumber}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    যার নাম্বার লিখেছেন
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.phoneNumberRelated}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বায়োডাটা গ্রহণের ই-মেইল এড্রেস
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.contactEmail}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    আপনার নাম্বার
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.yourPhoneNumber}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            "& > :not(style)": {
+              m: 1,
+              width: 128,
+              height: 128,
+            },
+          }}
+        >
+          <Paper
+            elevation={1}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress />
+          </Paper>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export default ManageBiodata;
