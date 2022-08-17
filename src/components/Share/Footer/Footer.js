@@ -17,7 +17,7 @@ const Footer = () => {
           }}
         >
           <div>
-            <h4>© 2021 - 2022 biyamudarak.com.</h4>
+            <h4>© 2021 - 2022 bibahomubarok.com.</h4>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h4 style={{ marginRight: "30px" }}>Our Facebook Page</h4>

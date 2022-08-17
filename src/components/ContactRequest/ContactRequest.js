@@ -153,7 +153,7 @@ const ContactRequest = () => {
   const handleOnChange = (e) => {
     const field = e.target.name;
     const value = e.target.value;
-    const newInfo = { ...request };
+    const newInfo = { ...request, method: expanded };
     newInfo[field] = value;
     setRequest(newInfo);
   };
@@ -358,8 +358,8 @@ const ContactRequest = () => {
 
                   <Accordion
                     sx={{ mb: 2 }}
-                    expanded={expanded === "panel1"}
-                    onChange={handleChange("panel1")}
+                    expanded={expanded === "bkash"}
+                    onChange={handleChange("bkash")}
                   >
                     <AccordionSummary
                       expandIcon={
@@ -374,7 +374,7 @@ const ContactRequest = () => {
                       <Typography>BKash</Typography>
                     </AccordionSummary>
                     <Divider />
-                    {expanded == "panel1" && (
+                    {expanded == "bkash" && (
                       <AccordionDetails sx={{ pt: 1 }}>
                         <h4 style={{ lineHeight: "2", fontWeight: "inherit" }}>
                           নিম্ন উল্লিখিত BKash (Personal) নাম্বারে{" "}
@@ -393,7 +393,7 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="bkashPhoneNumber"
+                          name="paymentNumber"
                           onChange={handleOnChange}
                         />
                         <TextField
@@ -402,7 +402,7 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="bkashTransactionNumber"
+                          name="transactionNumber"
                           onChange={handleOnChange}
                         />
                       </AccordionDetails>
@@ -411,8 +411,8 @@ const ContactRequest = () => {
 
                   <Accordion
                     sx={{ mb: 2 }}
-                    expanded={expanded === "panel2"}
-                    onChange={handleChange("panel2")}
+                    expanded={expanded === "rocket"}
+                    onChange={handleChange("rocket")}
                   >
                     <AccordionSummary
                       expandIcon={
@@ -426,7 +426,7 @@ const ContactRequest = () => {
                     >
                       <Typography>Rocket</Typography>
                     </AccordionSummary>
-                    {expanded == "panel2" && (
+                    {expanded == "rocket" && (
                       <AccordionDetails sx={{ pt: 1 }}>
                         <h4 style={{ lineHeight: "2", fontWeight: "inherit" }}>
                           নিম্ন উল্লিখিত Rocket (Personal) নাম্বারে{" "}
@@ -445,7 +445,7 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="rocketPhoneNumber"
+                          name="paymentNumber"
                           onChange={handleOnChange}
                         />
                         <TextField
@@ -454,15 +454,15 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="rocketTransactionNumber"
+                          name="transactionNumber"
                           onChange={handleOnChange}
                         />
                       </AccordionDetails>
                     )}
                   </Accordion>
                   <Accordion
-                    expanded={expanded === "panel3"}
-                    onChange={handleChange("panel3")}
+                    expanded={expanded === "nagad"}
+                    onChange={handleChange("nagad")}
                   >
                     <AccordionSummary
                       expandIcon={
@@ -495,7 +495,7 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="nagadPhoneNumber"
+                          name="paymentNumber"
                           onChange={handleOnChange}
                         />
                         <TextField
@@ -504,7 +504,7 @@ const ContactRequest = () => {
                           required
                           id="fullWidth"
                           sx={{ mb: 3 }}
-                          name="nagadTransactionNumber"
+                          name="transactionNumber"
                           onChange={handleOnChange}
                         />
                       </AccordionDetails>

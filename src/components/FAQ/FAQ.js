@@ -12,6 +12,9 @@ const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
+  margin: "10px",
+  padding: "10px",
+  border: 0,
   "&:not(:last-child)": {
     borderBottom: 0,
   },
@@ -24,7 +27,7 @@ const AccordionSummary = styled((props) => (
   <MuiAccordionSummary
     expandIcon={
       <ArrowForwardIosSharpIcon
-        sx={{ fontSize: "0.9rem", color: "blue", fontWeight: "bold" }}
+        sx={{ fontSize: "0.9rem", color: "gray", fontWeight: "bold" }}
       />
     }
     {...props}
@@ -41,14 +44,16 @@ const AccordionSummary = styled((props) => (
   "& .MuiAccordionSummary-content": {
     marginLeft: theme.spacing(1),
   },
-  color: "blue",
+  color: "gray",
+  padding: "10px",
+  borderRadius: 5,
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
-  borderTop: "1px solid rgba(0, 0, 0, .125)",
+  border: "0px solid rgba(0, 0, 0, .125)",
   padding: "25px",
-  lineHeight: "2",
+  lineHeight: 3,
 }));
 
 const FAQ = () => {
@@ -88,7 +93,7 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 আমরা এখন পর্যন্ত কারো কাছ থেকে টাকা নিচ্ছি না।
               </Typography>
             </AccordionDetails>
@@ -106,9 +111,8 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                না, এই ওয়েবসাইট সবার জন্য নয়, এই ওয়েবসাইট শুধুমাত্র দ্বীনদার
-                মুসলিমদের জন্য।
+              <Typography style={{ lineHeight: 2 }}>
+                হ্যাঁ, এই ওয়েবসাইট সবার জন্য উন্মুক্ত |
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -125,21 +129,18 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 <p style={{ fontWeight: "bold" }}>
                   আমাদের ওয়েবসাইটে বায়োডাটা তৈরি করতে হলে নূন্যতম আবশ্যকতা
                   নিম্নরূপ-
                 </p>
-                <p style={{ fontWeight: "bold" }}>পুরুষ-</p>
 
-                <p>১/ ৫ ওয়াক্ত নামাযী হতে হবে।</p>
-                <p>২/ ওয়াজিব দাড়ি সুন্নতি পদ্ধতিতে বড় থাকতে হবে।</p>
-                <p>৩/ টাখনুর উপর কাপড় পরতে হবে।</p>
-
-                <p style={{ fontWeight: "bold" }}>নারী-</p>
-
-                <p>১/ ৫ ওয়াক্ত নামাযী হতে হবে।</p>
-                <p>২/ “নিকাব” সহ ফরজ পর্দানশীন হতে হবে।</p>
+                <p>১/ সঠিক তথ্য দিতে হবে।</p>
+                <p>
+                  ২/ যোগাযোগের জন্য নিজের নাম্বার দেওয়া যাবেনা । অবিভাবক অথবা
+                  আপনার শুভাকাঙ্ক্ষী (বিয়ের কথাবার্তা চালাতে পারবে এমনজন) এর
+                  নাম্বার দিতে হবে।
+                </p>
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -156,7 +157,7 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 <p>
                   আমরা বিভিন্ন কারণে বায়োডাটা এপ্রুভ করি না। তার মাঝে কয়েকটি
                   কারণ উল্লেখ করা হলো।
@@ -166,26 +167,19 @@ const FAQ = () => {
                   দেন।
                 </p>
                 <p>২/ অভিভাবকের নাম্বারের ঘরে নিজের নাম্বার লিখে রাখেন।</p>
-                <p>৩/ ৫ ওয়াক্ত নামাযী না হোন।</p>
+
+                <p>৩/ বায়োডাটাতে কোনো মিথ্যা তথ্য দিয়ে থাকলে।</p>
                 <p>
-                  ৪/ ওয়াজিব দাঁড়ি সুন্নতি পদ্ধতীতে বড় না থাকে। (পুরুষদের জন্য)
-                </p>
-                <p>৫/ টাখনুর উপর কাপড় না পরেন। (পুরুষদের জন্য)</p>
-                <p>৬/ নিকাব সহ ফরজ পর্দা/বোরকা না পরেন। (নারীদের জন্য)</p>
-                <p>৭/ হিজাব পরেন কিন্ত নিকাব পরেন না। (নারীদের জন্য)</p>
-                <p>৮/ বায়োডাটাতে কোনো মিথ্যা তথ্য দিয়ে থাকলে।</p>
-                <p>
-                  ৯/ প্রশ্নের উত্তর স্পষ্ট ভাবে না দিয়ে অন্য ভাবে দিলে। যেমনঃ
+                  ৪/ প্রশ্নের উত্তর স্পষ্ট ভাবে না দিয়ে অন্য ভাবে দিলে। যেমনঃ
                   শুধু “আলহামদুলিল্লাহ” বা “হুম” ইত্যাদি লিখেন অনেকেই, অথচ এটি
                   দ্বারা হ্যাঁ/না স্পষ্টভাবে বোঝা যায় না ।
                 </p>
-                <p>১০/ দ্বীনদার মুসলিম না হয়ে থাকলে।</p>
                 <p>
-                  ১১/ কোনো গুরুত্বপূর্ণ প্রশ্নের উত্তর না দিয়ে ফাঁকা রেখে দিলে।
+                  ৫/ কোনো গুরুত্বপূর্ণ প্রশ্নের উত্তর না দিয়ে ফাঁকা রেখে দিলে।
                   যেমনঃ অনেকেই “কতৃপক্ষের জিজ্ঞাসা” উত্তর না দিয়েই পাবলিশ করেন।
                 </p>
                 <p>
-                  ১২/ আলিয়া মাদ্রাসা শিক্ষিতদের জেনারেল সিলেক্ট করতে বলার পরেও
+                  ৬/ আলিয়া মাদ্রাসা শিক্ষিতদের জেনারেল সিলেক্ট করতে বলার পরেও
                   কেউ যদি মাদ্রাসা সিলেক্ট করেন তাহলেও এপ্রুভ হয় না।
                 </p>
               </Typography>
@@ -205,55 +199,16 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                হ্যাঁ পারবেন। যে ঘরে ভুল তথ্য দেয়ার জন্য আপনার বায়োডাটা নট
-                এপ্রুভ করা হয়েছে, সেই ঘরে সঠিক তথ্য দিয়ে Save Changes ক্লিক করে
-                Publish Biodata করবেন তাহলে এপ্রুভ করা হবে ইন শা আল্লাহ। তবে
-                উপরের প্রশ্নের উত্তরে উল্লিখিত বিশেষ শর্ত না থাকার কারণে যদি
-                বায়োডাটা নট এপ্রুভ হয় তাহলে আর এপ্রুভ হবে না।
+              <Typography style={{ lineHeight: 2 }}>
+                হ্যাঁ পারবেন । যে ঘরে ভুল তথ্য দেয়ার জন্য আপনার বায়োডাটা নট
+                এপ্রুভ করা হয়েছে, সেই ঘরে সঠিক তথ্য দিয়ে Update ক্লিক করবেন
+                তাহলে এপ্রুভ করা হবে ইন শা আল্লাহ। তবে উপরের প্রশ্নের উত্তরে
+                উল্লিখিত বিশেষ শর্ত না থাকার কারণে যদি বায়োডাটা নট এপ্রুভ হয়
+                তাহলে আর এপ্রুভ হবে না।
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion
-            expanded={expanded === "panel6"}
-            onChange={handleChange("panel6")}
-          >
-            <AccordionSummary
-              aria-controls="panel3d-content"
-              id="panel3d-header"
-            >
-              <Typography style={{ fontWeight: "bold" }}>
-                আমি ৫ ওয়াক্ত নামাযী, কিন্ত আমি সুন্নতী দাঁড়ি রাখি নি, আমি
-                বায়োডাটা আপলোড করতে পারবো?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                না, আপনি বায়োডাটা আপলোড করলে এপ্রুভ করা হবে না। যাদের ওয়াজিব
-                দাড়ি আছে শুধুমাত্র তাদের বায়োডাটা এপ্রুভ করা হবে।
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel7"}
-            onChange={handleChange("panel7")}
-          >
-            <AccordionSummary
-              aria-controls="panel3d-content"
-              id="panel3d-header"
-            >
-              <Typography style={{ fontWeight: "bold" }}>
-                আমি ৫ ওয়াক্ত নামাযী, আমি বোরকা ও হিজাব পরি তবে নিকাব করি না। আমি
-                বায়োডাটা আপলোড করতে পারবো?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                না, আপনি বায়োডাটা আপলোড করলে এপ্রুভ করা হবে না। যারা নিকাব সহ
-                বোরকা পরেন শুধুমাত্র তাদের বায়োডাটা এপ্রুভ করা হয়।
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+
           <Accordion
             expanded={expanded === "panel8"}
             onChange={handleChange("panel8")}
@@ -268,7 +223,7 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 না। আপনি পাত্র/পাত্রী যেই হোন না কেন, আমাদের ওয়েবসাইটে বায়োডাটা
                 তৈরি করতে হলে অবশ্যই অভিভাবকের অনুমতি নিয়ে জমা দিতে হবে। অন্যথায়
                 বায়োডাটা এপ্রুভ করা হবে না।
@@ -289,7 +244,7 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 হ্যাঁ, পারবেন। তবে অবশ্যই আপনার অভিভাবকের অনুমতি নিয়ে বায়োডাটা
                 তৈরি করতে হবে।
               </Typography>
@@ -309,9 +264,9 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 হ্যাঁ, আপনার যখন ইচ্ছা তখন বায়োডাটা ডিলিট করতে পারবেন। বায়োডাটা
-                ডিলিট করতে ই-মেইল এর মাধ্যমে যোগাযোগ করুন।
+                ডিলিট করতে প্রোফাইলে প্রবেশ করে ডিলিট অপশন ক্লিক করুন।
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -328,7 +283,7 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 আমাদের বায়োডাটা ফর্মে অনেক ব্যক্তিগত প্রশ্ন আছে, যেগুলোর উত্তর
                 একমাত্র পাত্র-পাত্রী নিজেই ভাল জানেন। পরিবারের অন্য কেউ যদি
                 ফর্মটি তৈরি করে দেন তাহলে সেই প্রশ্নগুলোর উত্তর বাহ্যিকভাবে সত্য
@@ -352,11 +307,31 @@ const FAQ = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
+              <Typography style={{ lineHeight: 2 }}>
                 এক্ষেত্রে বাংলা টাইপ করতে জানেন এমন একজনকে পাশে বসিয়ে আপনি
                 উত্তরগুলো বলে দিবেন, টাইপ জানা ব্যক্তি লিখে ফর্মটি তৈরি করবেন।
                 অবশ্যই উত্তরগুলো আপনার হতে হবে। নয়ত ত্রুটিযুক্ত উত্তর হবে, যা
                 পাঠকের সাথে প্রতারণার শামিল ও ওয়েবসাইটের রুলস পরিপন্থী।
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            expanded={expanded === "panel13"}
+            onChange={handleChange("panel13")}
+          >
+            <AccordionSummary
+              aria-controls="panel3d-content"
+              id="panel3d-header"
+            >
+              <Typography style={{ fontWeight: "bold" }}>
+                দ্বীনদার পাত্র-পাত্রীর জন্যে কী করণীয় ?
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography style={{ lineHeight: 2 }}>
+                এই গ্রুপটা ধর্ম, বর্ণ, নির্বিশেষে সকলের জন্যে উন্মুক্ত । তবে
+                যারা দ্বীনদার পাত্র-পাত্রী খোঁজ করবেন তাদের জন্যে বায়োডাটার
+                আলাদা ফরম থাকবে।সেটি অবশ্যই পূরণ করবেন ।
               </Typography>
             </AccordionDetails>
           </Accordion>
