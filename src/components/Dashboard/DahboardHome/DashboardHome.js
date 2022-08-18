@@ -21,6 +21,7 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import AllBiodatas from "../AllBiodatas/AllBiodatas";
 import ManageBiodatas from "../ManageBiodatas/ManageBiodatas";
 import MakeAdmin from "../MakeAdmin/MakeAdmin";
+import PaymentList from "../PaymentList/PaymentList";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,6 +59,7 @@ function a11yProps(index) {
 const DashboardHome = () => {
   const [biodatas, setBiodatas] = React.useState([]);
   const [users, setUsers] = React.useState([]);
+  const [payment, setPayment] = React.useState([]);
 
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/biodatas")
@@ -72,6 +74,14 @@ const DashboardHome = () => {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/paymentList")
+      .then((res) => res.json())
+      .then((data) => {
+        setPayment(data);
       });
   }, []);
 
@@ -260,9 +270,11 @@ const DashboardHome = () => {
                   <MakeAdmin users={users}></MakeAdmin>
                 </TabPanel>
 
-                {/* Hide / Delete Biodata */}
+                {/* Contact Request */}
 
-                <TabPanel value={value} index={3}></TabPanel>
+                <TabPanel value={value} index={3}>
+                  <PaymentList payment={payment}></PaymentList>
+                </TabPanel>
               </Paper>
             </Box>
           </Grid>

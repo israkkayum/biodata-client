@@ -104,9 +104,9 @@ const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
-  "&:not(:last-child)": {
-    borderBottom: 0,
-  },
+
+  borderBottom: 0,
+
   "&:before": {
     display: "none",
   },
@@ -476,7 +476,7 @@ const ContactRequest = () => {
                     >
                       <Typography>Nagad</Typography>
                     </AccordionSummary>
-                    {expanded == "panel3" && (
+                    {expanded == "nagad" && (
                       <AccordionDetails sx={{ pt: 1 }}>
                         <h4 style={{ lineHeight: "2", fontWeight: "inherit" }}>
                           নিম্ন উল্লিখিত Nagad (Personal) নাম্বারে{" "}

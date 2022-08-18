@@ -80,7 +80,7 @@ const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
   border: "none",
-  margin: 5,
+  margin: 10,
   "&:not(:child)": {
     border: "none",
     margin: 5,
@@ -97,6 +97,7 @@ const AccordionSummary = styled((props) => (
     {...props}
   />
 ))(({ theme }) => ({
+  borderRadius: 5,
   backgroundColor:
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, .05)"
@@ -109,12 +110,15 @@ const AccordionSummary = styled((props) => (
     marginLeft: theme.spacing(1),
     display: "flex",
     justifyContent: "space-around",
+    padding: 5,
   },
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
-  borderTop: "1px solid rgba(0, 0, 0, .125)",
+  borderLeft: "1px solid rgba(0, 0, 0, .125)",
+  borderRight: "1px solid rgba(0, 0, 0, .125)",
+  borderBottom: "1px solid rgba(0, 0, 0, .125)",
 }));
 
 const ManageBiodatas = ({ biodatas, setBiodatas }) => {
