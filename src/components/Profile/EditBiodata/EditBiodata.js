@@ -59,6 +59,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
       email: user.email,
       biodataNumber: profile.biodataNumber,
       status: "public",
+      adminStatus: "Pending",
     };
     // send to the server
 

@@ -14,13 +14,35 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { Chip } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Chip,
+  Divider,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import ManageBiodata from "../ManageBiodata/ManageBiodata";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+  "& .MuiDialog-container": {
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+}));
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
@@ -121,9 +143,15 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderBottom: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const ManageBiodatas = ({ biodatas, setBiodatas }) => {
+const ManageBiodatas = (props) => {
+  const { biodatas, setBiodatas } = props;
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [open, setOpen] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
+  const [id, setId] = React.useState("");
 
   const [expanded, setExpanded] = React.useState("");
 
@@ -140,12 +168,127 @@ const ManageBiodatas = ({ biodatas, setBiodatas }) => {
     setPage(0);
   };
 
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setId(id);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - biodatas.length) : 0;
 
   return (
     <div>
+      {/* admin status modal  */}
+
+      <div>
+        <BootstrapDialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          {biodatas.adminStatus == "private" ? (
+            <DialogContent dividers>
+              <Alert severity="warning" sx={{ lineHeight: "1.5", mb: 2 }}>
+                <AlertTitle>Warning</AlertTitle>
+                Are you sure, you want to public your biodata. If you do it,
+                your biodata and all information will see anyone !
+                <p>
+                  For confirm please type this <strong>'PUBLIC'</strong> word.
+                </p>
+              </Alert>
+              <Divider sx={{ mb: 2 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Type 'PUBLIC'"
+                  id="fullWidth"
+                  onChange={(e) => {
+                    if (e.target.value == "PUBLIC") {
+                      setDisabled(false);
+                    } else {
+                      setDisabled(true);
+                    }
+                  }}
+                />
+
+                <Button
+                  sx={{
+                    backgroundColor: "blue",
+                    px: 4,
+                    py: 2,
+                    ml: -0.3,
+                    borderRadius: "0px 5px 5px 0px",
+                  }}
+                  variant="contained"
+                  disabled={disabled}
+                  onClick={() => props.handleAdminStatus(id, "Unaccept")}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            </DialogContent>
+          ) : (
+            <DialogContent dividers>
+              <Alert severity="warning" sx={{ lineHeight: "1.5", mb: 2 }}>
+                <AlertTitle>Warning</AlertTitle>
+                Are you sure, you want to hide your biodata. If you do it, your
+                biodata and all information will not see anyone !
+                <p>
+                  For confirm please type this <strong>'HIDE'</strong> word.
+                </p>
+              </Alert>
+              <Divider sx={{ mb: 2 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Type 'HIDE'"
+                  id="fullWidth"
+                  onChange={(e) => {
+                    if (e.target.value == "HIDE") {
+                      setDisabled(false);
+                    } else {
+                      setDisabled(true);
+                    }
+                  }}
+                />
+                <Button
+                  sx={{
+                    backgroundColor: "blue",
+                    px: 4,
+                    py: 2,
+                    ml: -0.3,
+                    borderRadius: "0px 5px 5px 0px",
+                  }}
+                  variant="contained"
+                  disabled={disabled}
+                  onClick={() => props.handleAdminStatus(id, "Unaccept")}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            </DialogContent>
+          )}
+        </BootstrapDialog>
+      </div>
+
+      {/* ------------- */}
+
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar />
@@ -206,6 +349,16 @@ const ManageBiodatas = ({ biodatas, setBiodatas }) => {
                           </Typography>
                           <Typography>
                             <Chip
+                              label="Unaccept"
+                              sx={{
+                                backgroundColor: "green",
+                                color: "white",
+                                mr: 2,
+                              }}
+                              size="small"
+                              onClick={() => handleClickOpen(row._id)}
+                            />
+                            <Chip
                               label="Accept"
                               sx={{
                                 backgroundColor: "green",
@@ -213,6 +366,7 @@ const ManageBiodatas = ({ biodatas, setBiodatas }) => {
                                 mr: 2,
                               }}
                               size="small"
+                              onClick={() => handleClickOpen(row._id)}
                             />
                             <Chip
                               label="Remove"

@@ -22,6 +22,7 @@ import AllBiodatas from "../AllBiodatas/AllBiodatas";
 import ManageBiodatas from "../ManageBiodatas/ManageBiodatas";
 import MakeAdmin from "../MakeAdmin/MakeAdmin";
 import PaymentList from "../PaymentList/PaymentList";
+import Feedback from "../Feedback/Feedback";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,6 +61,7 @@ const DashboardHome = () => {
   const [biodatas, setBiodatas] = React.useState([]);
   const [users, setUsers] = React.useState([]);
   const [payment, setPayment] = React.useState([]);
+  const [feedback, setFeedback] = React.useState([]);
 
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/biodatas")
@@ -84,6 +86,28 @@ const DashboardHome = () => {
         setPayment(data);
       });
   }, []);
+
+  React.useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/feedback")
+      .then((res) => res.json())
+      .then((data) => {
+        setFeedback(data);
+      });
+  }, []);
+
+  const handleAdminStatus = (id, status) => {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/admin/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(status),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // window.location.reload();
+      });
+  };
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -261,6 +285,7 @@ const DashboardHome = () => {
                   <ManageBiodatas
                     biodatas={biodatas}
                     setBiodatas={setBiodatas}
+                    handleAdminStatus={handleAdminStatus}
                   ></ManageBiodatas>
                 </TabPanel>
 
@@ -274,6 +299,12 @@ const DashboardHome = () => {
 
                 <TabPanel value={value} index={3}>
                   <PaymentList payment={payment}></PaymentList>
+                </TabPanel>
+
+                {/* Feedback */}
+
+                <TabPanel value={value} index={4}>
+                  <Feedback feedback={feedback}></Feedback>
                 </TabPanel>
               </Paper>
             </Box>
