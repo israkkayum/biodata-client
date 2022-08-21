@@ -27,7 +27,8 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
   };
 
   return (
-    biodataProfile.status == "public" && (
+    biodataProfile.status == "public" &&
+    biodataProfile.adminStatus == "Accepted" && (
       <div>
         <Card>
           <CardActionArea>

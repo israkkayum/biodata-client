@@ -43,7 +43,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const SingleBiodataPart2 = ({ biodataProfile }) => {
   return (
-    biodataProfile.status == "public" && (
+    biodataProfile.status == "public" &&
+    biodataProfile.adminStatus == "Accepted" && (
       <div>
         <Paper elevation={3} sx={{ p: 3 }}>
           <TableContainer component={Paper}>

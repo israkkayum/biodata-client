@@ -10,10 +10,33 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { Button, Chip, Divider, TextField } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Chip,
+  CircularProgress,
+  Divider,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+  "& .MuiDialog-container": {
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+}));
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -82,78 +105,234 @@ const EnhancedTableToolbar = (props) => {
 };
 
 const MakeAdmin = ({ users }) => {
+  const [email, setEmail] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
+  const [failure, setfailure] = React.useState(false);
+  const [isLoadding, setisLoadding] = React.useState(false);
+
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
+  const [id, setId] = React.useState("");
+
+  const handleOnBlur = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleAdminSubmit = (e) => {
+    setisLoadding(true);
+
+    const user = { email };
+    fetch("https://biodata-server.herokuapp.com/users/admin", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount) {
+          setSuccess(true);
+          setisLoadding(false);
+          setfailure(false);
+          e.target.reset();
+        } else {
+          setfailure(true);
+          setisLoadding(false);
+          setSuccess(false);
+          e.target.reset();
+        }
+      });
+
+    e.preventDefault();
+  };
+
+  const handleAdminRemove = (id) => {
+    const user = { id };
+
+    fetch("https://biodata-server.herokuapp.com/users/admin/remove", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount) {
+          window.location.reload();
+        }
+      });
+  };
+
+  const handleDeleteOpen = (id) => {
+    setOpenDelete(true);
+    setId(id);
+  };
+
+  const handleClose = () => {
+    setOpenDelete(false);
+  };
+
   return (
     <div>
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar />
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={"medium"}
-            >
-              <TableBody>
-                <Box sx={{ width: "100%", my: 3 }}>
-                  <Stack spacing={1}>
-                    {users.map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
+      {/* --------- */}
 
-                      return (
-                        <div>
-                          {row.role == "admin" && (
-                            <div>
-                              <Item
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "space-around",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Typography>{row.displayName}</Typography>
-                                <Typography>{row.email}</Typography>
-                                <Typography>{row.biodataNumber}</Typography>
-                                <Chip
-                                  label="Remove"
-                                  sx={{
-                                    backgroundColor: "red",
-                                    color: "white",
-                                    mr: 2,
-                                  }}
-                                  size="small"
-                                />
-                              </Item>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </Stack>
-                </Box>
-
-                <Stack
-                  spacing={1}
-                  direction="row"
-                  sx={{
-                    p: 5,
+      <div>
+        <BootstrapDialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={openDelete}
+        >
+          <DialogContent dividers>
+            <Alert severity="warning" sx={{ lineHeight: "1.5", mb: 2 }}>
+              <AlertTitle>Warning</AlertTitle>
+              Are you sure, you want to Remove this admin. If you do it, this
+              admin will be remove from admin list !
+              <p>
+                For confirm please type <strong>'Secrete'</strong> word.
+              </p>
+            </Alert>
+            <Divider sx={{ mb: 2 }} />
+            {isLoadding ? (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Type Secrete Word"
+                  id="fullWidth"
+                  onChange={(e) => {
+                    if (e.target.value == "sabbir") {
+                      setDisabled(false);
+                    } else {
+                      setDisabled(true);
+                    }
                   }}
+                />
+                <Button
+                  sx={{
+                    backgroundColor: "blue",
+                    px: 4,
+                    py: 2,
+                    ml: -0.3,
+                    borderRadius: "0px 5px 5px 0px",
+                  }}
+                  variant="contained"
+                  disabled={disabled}
+                  onClick={() => handleAdminRemove(id)}
                 >
-                  <TextField
-                    sx={{ width: "70%" }}
-                    label="Type Email"
-                    id="fullWidth"
-                    required
-                    type="email"
-                  />
-                  <Button sx={{ px: 5, width: "30%" }} variant="outlined">
-                    Make Admin
-                  </Button>
-                </Stack>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Box>
+                  Confirm
+                </Button>
+              </Box>
+            )}
+          </DialogContent>
+        </BootstrapDialog>
+      </div>
+
+      {/* ------------ */}
+
+      <form onSubmit={handleAdminSubmit}>
+        <Box sx={{ width: "100%" }}>
+          <Paper sx={{ width: "100%", mb: 2 }}>
+            <EnhancedTableToolbar />
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={"medium"}
+              >
+                <TableBody>
+                  <Box sx={{ width: "100%", my: 3 }}>
+                    <Stack spacing={1}>
+                      {users.map((row, index) => {
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <div>
+                            {row.role == "admin" && (
+                              <div>
+                                <Item
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent: "space-around",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Typography>{row.displayName}</Typography>
+                                  <Typography>{row.email}</Typography>
+                                  <Typography>{row.biodataNumber}</Typography>
+                                  <Chip
+                                    label="Remove"
+                                    sx={{
+                                      backgroundColor: "red",
+                                      color: "white",
+                                      mr: 2,
+                                    }}
+                                    size="small"
+                                    onClick={() => handleDeleteOpen(row.email)}
+                                  />
+                                </Item>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+                  <Box sx={{ m: 5 }}>
+                    {success && (
+                      <Alert severity="success">Made Admin successfully!</Alert>
+                    )}
+                    {failure && (
+                      <Alert severity="warning">
+                        Sorry!! The User Not Found
+                      </Alert>
+                    )}
+                  </Box>
+                  <Stack
+                    spacing={1}
+                    direction="row"
+                    sx={{
+                      p: 5,
+                    }}
+                  >
+                    <TextField
+                      sx={{ width: "70%" }}
+                      label="Type Email"
+                      id="fullWidth"
+                      required
+                      type="email"
+                      onBlur={handleOnBlur}
+                    />
+                    {isLoadding ? (
+                      <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      <Button
+                        type="submit"
+                        sx={{ px: 5, width: "30%" }}
+                        variant="outlined"
+                      >
+                        Make Admin
+                      </Button>
+                    )}
+                  </Stack>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Box>
+      </form>
     </div>
   );
 };

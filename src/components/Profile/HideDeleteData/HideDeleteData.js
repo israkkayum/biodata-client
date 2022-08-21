@@ -33,7 +33,7 @@ const HideDeleteData = (props) => {
   const [openDelete, setOpenDelete] = React.useState(false);
 
   const { disabled, setDisabled } = props;
-  const { _id, status } = props.biodataProfile;
+  const { _id, status, adminStatus } = props.biodataProfile;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -226,26 +226,29 @@ const HideDeleteData = (props) => {
           textAlign: "center",
         }}
       >
-        <div>
-          <Button
-            onClick={handleClickOpen}
-            sx={{
-              backgroundColor: "blue",
-              mb: { xs: 3, md: 0 },
-              px: 5,
-              py: 2,
-              fontSize: "17px",
-              fontWeight: "bold",
-            }}
-            variant="contained"
-          >
-            {status == "private" ? (
-              <span>Public Biodata</span>
-            ) : (
-              <span>Hide Biodata</span>
-            )}
-          </Button>
-        </div>
+        {adminStatus == "Accepted" && (
+          <div>
+            <Button
+              disabled={adminStatus == "Accepted" ? false : true}
+              onClick={handleClickOpen}
+              sx={{
+                backgroundColor: "blue",
+                mb: { xs: 3, md: 0 },
+                px: 5,
+                py: 2,
+                fontSize: "17px",
+                fontWeight: "bold",
+              }}
+              variant="contained"
+            >
+              {status == "private" ? (
+                <span>Public Biodata</span>
+              ) : (
+                <span>Hide Biodata</span>
+              )}
+            </Button>
+          </div>
+        )}
         <div>
           <Button
             sx={{
@@ -262,22 +265,47 @@ const HideDeleteData = (props) => {
           </Button>
         </div>
       </Box>
-      <Box sx={{ mt: 5 }}>
-        <Alert sx={{ fontSize: "17px", fontWeight: "bold" }} severity="info">
-          Your biodata is now {status}.
-        </Alert>
-      </Box>
-      <Box sx={{ mt: 3, textAlign: "center" }}>
-        <Link
-          style={{ textDecoration: "none" }}
-          target="_blank"
-          href={`/biodatas/${_id}`}
-        >
-          <Button variant="outlined" startIcon={<ReplyIcon />}>
-            view
-          </Button>
-        </Link>
-      </Box>
+      {adminStatus == "Accepted" ? (
+        <Box sx={{ mt: 5 }}>
+          <Alert sx={{ fontSize: "17px", fontWeight: "bold" }} severity="info">
+            Your biodata is now {status}.
+          </Alert>
+        </Box>
+      ) : (
+        <Box sx={{ mt: 5 }}>
+          {adminStatus == "Pending" ? (
+            <Alert
+              sx={{ fontSize: "17px", fontWeight: "bold" }}
+              severity="info"
+            >
+              Your biodata is {adminStatus}. It can take up to 48 hours to
+              verify your biodata. Check back again later to finish adding
+              biodata.
+            </Alert>
+          ) : (
+            <Alert
+              sx={{ fontSize: "17px", fontWeight: "bold" }}
+              severity="error"
+            >
+              Your biodata is {adminStatus}. Please provide your correct data
+              and submit again.
+            </Alert>
+          )}
+        </Box>
+      )}
+      {adminStatus == "Accepted" && (
+        <Box sx={{ mt: 3, textAlign: "center" }}>
+          <Link
+            style={{ textDecoration: "none" }}
+            target="_blank"
+            href={`/biodatas/${_id}`}
+          >
+            <Button variant="outlined" startIcon={<ReplyIcon />}>
+              view
+            </Button>
+          </Link>
+        </Box>
+      )}
     </div>
   );
 };

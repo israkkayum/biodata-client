@@ -14,7 +14,17 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { Chip, Stack } from "@mui/material";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Chip,
+  CircularProgress,
+  Divider,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
@@ -22,6 +32,21 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+  "& .MuiDialog-container": {
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+}));
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -139,6 +164,12 @@ const PaymentList = ({ payment }) => {
 
   const [expanded, setExpanded] = React.useState(false);
 
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [openSend, setOpenSend] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
+  const [id, setId] = React.useState("");
+  const [isLoadding, setisLoadding] = React.useState(false);
+
   const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -152,12 +183,188 @@ const PaymentList = ({ payment }) => {
     setPage(0);
   };
 
+  const handleDeleteOpen = (id) => {
+    setOpenDelete(true);
+    setId(id);
+  };
+  const handleSendOpen = (id) => {
+    setOpenSend(true);
+    setId(id);
+  };
+
+  const handleClose = () => {
+    setOpenDelete(false);
+    setOpenSend(false);
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - payment.length) : 0;
 
+  const handleOrderRemove = (id) => {
+    setisLoadding(true);
+
+    fetch(`https://biodata-server.herokuapp.com/paymentList/remove/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setisLoadding(false);
+        window.location.reload();
+      });
+  };
+
+  const handleOrderShift = (id) => {
+    setisLoadding(true);
+
+    const status = { status: "Shifted" };
+
+    fetch(`https://biodata-server.herokuapp.com/paymentList/shifted/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(status),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setisLoadding(false);
+        window.location.reload();
+      });
+  };
+
   return (
     <div>
+      {/* --------- */}
+
+      {/* Delete payment list  */}
+
+      <div>
+        <BootstrapDialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={openDelete}
+        >
+          <DialogContent dividers>
+            <Alert severity="warning" sx={{ lineHeight: "1.5", mb: 2 }}>
+              <AlertTitle>Warning</AlertTitle>
+              Are you sure, you want to Remove this record. If you do it, this
+              record will be delete !
+              <p>
+                For confirm please type this <strong>'DELETE'</strong> word.
+              </p>
+            </Alert>
+            <Divider sx={{ mb: 2 }} />
+            {isLoadding ? (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Type 'DELETE'"
+                  id="fullWidth"
+                  onChange={(e) => {
+                    if (e.target.value == "DELETE") {
+                      setDisabled(false);
+                    } else {
+                      setDisabled(true);
+                    }
+                  }}
+                />
+                <Button
+                  sx={{
+                    backgroundColor: "blue",
+                    px: 4,
+                    py: 2,
+                    ml: -0.3,
+                    borderRadius: "0px 5px 5px 0px",
+                  }}
+                  variant="contained"
+                  disabled={disabled}
+                  onClick={() => handleOrderRemove(id)}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            )}
+          </DialogContent>
+        </BootstrapDialog>
+      </div>
+
+      {/* ------------ */}
+      {/* --------- */}
+
+      {/* shift payment list  */}
+
+      <div>
+        <BootstrapDialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={openSend}
+        >
+          <DialogContent dividers>
+            <Alert severity="warning" sx={{ lineHeight: "1.5", mb: 2 }}>
+              <AlertTitle>Warning</AlertTitle>
+              Are you sure, you shifted this order !
+              <p>
+                For confirm please type this <strong>'SHIFTED'</strong> word.
+              </p>
+            </Alert>
+            <Divider sx={{ mb: 2 }} />
+            {isLoadding ? (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="Type 'SHIFTED'"
+                  id="fullWidth"
+                  onChange={(e) => {
+                    if (e.target.value == "SHIFTED") {
+                      setDisabled(false);
+                    } else {
+                      setDisabled(true);
+                    }
+                  }}
+                />
+                <Button
+                  sx={{
+                    backgroundColor: "blue",
+                    px: 4,
+                    py: 2,
+                    ml: -0.3,
+                    borderRadius: "0px 5px 5px 0px",
+                  }}
+                  variant="contained"
+                  disabled={disabled}
+                  onClick={() => handleOrderShift(id)}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            )}
+          </DialogContent>
+        </BootstrapDialog>
+      </div>
+
+      {/* ------------ */}
+
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar />
@@ -182,18 +389,24 @@ const PaymentList = ({ payment }) => {
                           aria-controls="panel1d-content"
                           id="panel1d-header"
                         >
-                          <Box sx={{ color: "action.active" }}>
-                            <StyledBadge
-                              overlap="circular"
-                              anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              variant="dot"
-                            >
-                              <MailIcon />
-                            </StyledBadge>
-                          </Box>
+                          {row.status == "Shifted" ? (
+                            <MarkEmailReadIcon
+                              sx={{ color: "green" }}
+                            ></MarkEmailReadIcon>
+                          ) : (
+                            <Box sx={{ color: "action.active" }}>
+                              <StyledBadge
+                                overlap="circular"
+                                anchorOrigin={{
+                                  vertical: "top",
+                                  horizontal: "left",
+                                }}
+                                variant="dot"
+                              >
+                                <MailIcon />
+                              </StyledBadge>
+                            </Box>
+                          )}
 
                           <Typography
                             component="th"
@@ -209,15 +422,29 @@ const PaymentList = ({ payment }) => {
                           <Typography>{row.phoneNumber}</Typography>
 
                           <Typography>
-                            <Chip
-                              label="Send"
-                              sx={{
-                                backgroundColor: "green",
-                                color: "white",
-                                mr: 2,
-                              }}
-                              size="small"
-                            />
+                            {row.status == "Shifted" ? (
+                              <Chip
+                                label="SHIFTED"
+                                sx={{
+                                  backgroundColor: "green",
+                                  color: "white",
+                                  mr: 2,
+                                }}
+                                size="small"
+                                disabled
+                              />
+                            ) : (
+                              <Chip
+                                label="Send"
+                                sx={{
+                                  backgroundColor: "green",
+                                  color: "white",
+                                  mr: 2,
+                                }}
+                                size="small"
+                                onClick={() => handleSendOpen(row._id)}
+                              />
+                            )}
                             <Chip
                               label="Remove"
                               sx={{
@@ -225,6 +452,7 @@ const PaymentList = ({ payment }) => {
                                 color: "white",
                               }}
                               size="small"
+                              onClick={() => handleDeleteOpen(row._id)}
                             />
                           </Typography>
                         </AccordionSummary>

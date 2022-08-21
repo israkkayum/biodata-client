@@ -25,7 +25,8 @@ const SingleBiodata = () => {
       <Container maxWidth="lg" sx={{ py: 10 }}>
         {biodataProfile._id ? (
           <div>
-            {biodataProfile.status == "public" ? (
+            {biodataProfile.status == "public" &&
+            biodataProfile.adminStatus == "Accepted" ? (
               <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={4}>
                   <SingleBiodataPart1

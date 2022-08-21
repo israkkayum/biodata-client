@@ -62,6 +62,7 @@ const DashboardHome = () => {
   const [users, setUsers] = React.useState([]);
   const [payment, setPayment] = React.useState([]);
   const [feedback, setFeedback] = React.useState([]);
+  const [isLoadding, setIsLoadding] = useState(false);
 
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/biodatas")
@@ -95,7 +96,11 @@ const DashboardHome = () => {
       });
   }, []);
 
-  const handleAdminStatus = (id, status) => {
+  const handleAdminStatus = (id, adminStatus) => {
+    setIsLoadding(true);
+
+    const status = { adminStatus: adminStatus };
+
     fetch(`https://biodata-server.herokuapp.com/biodatas/admin/${id}`, {
       method: "PUT",
       headers: {
@@ -105,7 +110,21 @@ const DashboardHome = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // window.location.reload();
+        setIsLoadding(false);
+        window.location.reload();
+      });
+  };
+
+  const handleRemoveBiodata = (id) => {
+    setIsLoadding(true);
+
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoadding(false);
+        window.location.reload();
       });
   };
 
@@ -284,8 +303,9 @@ const DashboardHome = () => {
                 <TabPanel value={value} index={1}>
                   <ManageBiodatas
                     biodatas={biodatas}
-                    setBiodatas={setBiodatas}
+                    isLoadding={isLoadding}
                     handleAdminStatus={handleAdminStatus}
+                    handleRemoveBiodata={handleRemoveBiodata}
                   ></ManageBiodatas>
                 </TabPanel>
 

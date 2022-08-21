@@ -169,16 +169,24 @@ const AllBiodatas = ({ biodatas, setBiodatas }) => {
                         </TableCell>
                         <TableCell align="left">{row.biodataNumber}</TableCell>
                         <TableCell align="left">
-                          {row.isApprove == "yes" ? (
+                          {row.adminStatus == "Accepted" && (
                             <Chip
-                              label="Approve"
+                              label={row.adminStatus}
                               sx={{ backgroundColor: "green", color: "white" }}
                               size="small"
                             />
-                          ) : (
+                          )}
+                          {row.adminStatus == "Unaccepted" && (
                             <Chip
+                              label={row.adminStatus}
+                              sx={{ backgroundColor: "red", color: "white" }}
+                              size="small"
+                            />
+                          )}
+                          {row.adminStatus == "Pending" && (
+                            <Chip
+                              label={row.adminStatus}
                               sx={{ backgroundColor: "blue", color: "white" }}
-                              label="Pending"
                               size="small"
                             />
                           )}

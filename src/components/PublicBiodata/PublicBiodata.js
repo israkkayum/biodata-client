@@ -18,7 +18,8 @@ import { NavLink } from "react-router-dom";
 
 const PublicBiodata = ({ publicBiodata }) => {
   return (
-    publicBiodata.status == "public" && (
+    publicBiodata.status == "public" &&
+    publicBiodata.adminStatus == "Accepted" && (
       <div>
         <Card>
           <CardActionArea>
