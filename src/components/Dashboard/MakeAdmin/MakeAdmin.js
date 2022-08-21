@@ -252,40 +252,35 @@ const MakeAdmin = ({ users }) => {
               >
                 <TableBody>
                   <Box sx={{ width: "100%", my: 3 }}>
-                    <Stack spacing={1}>
-                      {users.map((row, index) => {
-                        const labelId = `enhanced-table-checkbox-${index}`;
-
-                        return (
-                          <div>
-                            {row.role == "admin" && (
-                              <div>
-                                <Item
+                    <Stack spacing={2}>
+                      {users.map(
+                        (row) =>
+                          row.role == "admin" && (
+                            <div>
+                              <Item
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "space-around",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography>{row.displayName}</Typography>
+                                <Typography>{row.email}</Typography>
+                                <Typography>{row.biodataNumber}</Typography>
+                                <Chip
+                                  label="Remove"
                                   sx={{
-                                    display: "flex",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
+                                    backgroundColor: "red",
+                                    color: "white",
+                                    mr: 2,
                                   }}
-                                >
-                                  <Typography>{row.displayName}</Typography>
-                                  <Typography>{row.email}</Typography>
-                                  <Typography>{row.biodataNumber}</Typography>
-                                  <Chip
-                                    label="Remove"
-                                    sx={{
-                                      backgroundColor: "red",
-                                      color: "white",
-                                      mr: 2,
-                                    }}
-                                    size="small"
-                                    onClick={() => handleDeleteOpen(row.email)}
-                                  />
-                                </Item>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                                  size="small"
+                                  onClick={() => handleDeleteOpen(row.email)}
+                                />
+                              </Item>
+                            </div>
+                          )
+                      )}
                     </Stack>
                   </Box>
                   <Box sx={{ m: 5 }}>
