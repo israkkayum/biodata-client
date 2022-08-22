@@ -28,6 +28,7 @@ const Contact = () => {
     // collect data
     const allfeedbackdata = {
       ...feedback,
+      date: new Date().toDateString(),
     };
 
     fetch("https://biodata-server.herokuapp.com/feedback", {

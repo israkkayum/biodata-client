@@ -494,12 +494,12 @@ const PaymentList = ({ payment }) => {
                                       <TableCell>Payment Number</TableCell>
                                       <TableCell>{row.paymentNumber}</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    {/* <TableRow>
                                       <TableCell>Transaction ID</TableCell>
                                       <TableCell>
                                         {row.transactionNumber}
                                       </TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
                                   </TableBody>
                                 </Table>
                               </Item>

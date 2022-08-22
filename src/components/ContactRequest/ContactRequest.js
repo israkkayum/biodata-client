@@ -187,6 +187,7 @@ const ContactRequest = () => {
     // collect data
     const allrequestdata = {
       ...request,
+      date: new Date().toDateString(),
     };
 
     fetch("https://biodata-server.herokuapp.com/contactRequest", {
@@ -385,18 +386,21 @@ const ContactRequest = () => {
                           করুন।
                         </h4>
                         <h4 sx={{ pt: 1, pb: 3, fontWeight: "inherit" }}>
-                          BKash Personal Number : <mark>01993627****</mark>
+                          BKash Personal Number : <mark>01830356192</mark>
                         </h4>
                         <TextField
                           fullWidth
                           label="Your Bkash Number"
                           required
                           id="fullWidth"
-                          sx={{ mb: 3 }}
+                          sx={{ mb: 1 }}
                           name="paymentNumber"
                           onChange={handleOnChange}
                         />
-                        <TextField
+                        <FormHelperText sx={{ mb: 0 }}>
+                          যে নাম্বার থেকে আপনি টাকা পাঠিয়েছেন
+                        </FormHelperText>
+                        {/* <TextField
                           fullWidth
                           label="Transaction ID"
                           required
@@ -404,7 +408,7 @@ const ContactRequest = () => {
                           sx={{ mb: 3 }}
                           name="transactionNumber"
                           onChange={handleOnChange}
-                        />
+                        /> */}
                       </AccordionDetails>
                     )}
                   </Accordion>
@@ -437,18 +441,21 @@ const ContactRequest = () => {
                           করুন।
                         </h4>
                         <h4 sx={{ pt: 1, pb: 3, fontWeight: "inherit" }}>
-                          Rocket Personal Number : <mark>01993627****</mark>
+                          Rocket Personal Number : <mark>01830356192</mark>
                         </h4>
                         <TextField
                           fullWidth
                           label="Your Rocket Number"
                           required
                           id="fullWidth"
-                          sx={{ mb: 3 }}
+                          sx={{ mb: 1 }}
                           name="paymentNumber"
                           onChange={handleOnChange}
                         />
-                        <TextField
+                        <FormHelperText sx={{ mb: 0 }}>
+                          যে নাম্বার থেকে আপনি টাকা পাঠিয়েছেন
+                        </FormHelperText>
+                        {/* <TextField
                           fullWidth
                           label="Transaction ID"
                           required
@@ -456,7 +463,7 @@ const ContactRequest = () => {
                           sx={{ mb: 3 }}
                           name="transactionNumber"
                           onChange={handleOnChange}
-                        />
+                        /> */}
                       </AccordionDetails>
                     )}
                   </Accordion>
@@ -487,18 +494,21 @@ const ContactRequest = () => {
                           করুন।
                         </h4>
                         <h4 sx={{ pt: 1, pb: 3, fontWeight: "inherit" }}>
-                          Nagad Personal Number : <mark>01993627****</mark>
+                          Nagad Personal Number : <mark>01830356192</mark>
                         </h4>
                         <TextField
                           fullWidth
                           label="Your Nagad Number"
                           required
                           id="fullWidth"
-                          sx={{ mb: 3 }}
+                          sx={{ mb: 1 }}
                           name="paymentNumber"
                           onChange={handleOnChange}
                         />
-                        <TextField
+                        <FormHelperText sx={{ mb: 0 }}>
+                          যে নাম্বার থেকে আপনি টাকা পাঠিয়েছেন
+                        </FormHelperText>
+                        {/* <TextField
                           fullWidth
                           label="Transaction ID"
                           required
@@ -506,7 +516,7 @@ const ContactRequest = () => {
                           sx={{ mb: 3 }}
                           name="transactionNumber"
                           onChange={handleOnChange}
-                        />
+                        /> */}
                       </AccordionDetails>
                     )}
                   </Accordion>

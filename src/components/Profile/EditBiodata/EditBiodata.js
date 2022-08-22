@@ -60,6 +60,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
       biodataNumber: profile.biodataNumber,
       status: "public",
       adminStatus: "Pending",
+      date: new Date().toDateString(),
     };
     // send to the server
 
@@ -199,10 +200,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         defaultValue={
                           biodataProfile ? biodataProfile.biodataType : ""
                         }
-                        onBlur={handleOnBlur}
+                        onChange={handleOnBlur}
                         required
                       >
-                        <MenuItem value="সকল বায়োডাটা">সকল বায়োডাটা</MenuItem>
                         <MenuItem value="পাত্রের বায়োডাটা">
                           পাত্রের বায়োডাটা
                         </MenuItem>
@@ -237,7 +237,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         onBlur={handleOnBlur}
                         required
                       >
-                        <MenuItem value="সকল">সকল</MenuItem>
                         <MenuItem value="অবিবাহিত">অবিবাহিত</MenuItem>
                         <MenuItem value="বিবাহিত">বিবাহিত</MenuItem>
                         <MenuItem value="ডিভোর্সড">ডিভোর্সড</MenuItem>
@@ -257,105 +256,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    স্থায়ী ঠিকানা *
-                  </legend>
-                  <Box sx={{ width: "100%" }}>
-                    <FormControl fullWidth>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="parmanentDistrict"
-                        defaultValue={
-                          biodataProfile ? biodataProfile.parmanentDistrict : ""
-                        }
-                        onBlur={handleOnBlur}
-                        required
-                      >
-                        <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
-                        <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
-                        <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
-                        <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
-                        <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
-                        <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
-                        <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
-                        <MenuItem value="খুলনা">খুলনা</MenuItem>
-                        <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
-                        <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
-                        <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
-                        <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
-                        <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
-                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
-                        <MenuItem value="চাঁপাইনবাবগঞ্জ">
-                          চাঁপাইনবাবগঞ্জ
-                        </MenuItem>
-                        <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
-                        <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
-                        <MenuItem value="জামালপুর">জামালপুর</MenuItem>
-                        <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
-                        <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
-                        <MenuItem value="যশোর">যশোর</MenuItem>
-                        <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
-                        <MenuItem value="শেরপুর">শেরপুর</MenuItem>
-                        <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
-                        <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
-                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
-                        <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
-                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
-                        <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
-                        <MenuItem value="রংপুর">রংপুর</MenuItem>
-                        <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
-                        <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
-                        <MenuItem value="নাটোর">নাটোর</MenuItem>
-                        <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
-                        <MenuItem value="নড়াইল">নড়াইল</MenuItem>
-                        <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
-                        <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
-                        <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
-                        <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
-                        <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
-                        <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
-                        <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
-                        <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
-                        <MenuItem value="সিলেট">সিলেট</MenuItem>
-                        <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
-                        <MenuItem value="পাবনা">পাবনা</MenuItem>
-                        <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
-                        <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
-                        <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
-                        <MenuItem value="ফেনী">ফেনী</MenuItem>
-                        <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
-                        <MenuItem value="ব্রাহ্মণবাড়িয়া">
-                          ব্রাহ্মণবাড়িয়া
-                        </MenuItem>
-                        <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
-                        <MenuItem value="বগুড়া">বগুড়া</MenuItem>
-                        <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
-                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
-                        <MenuItem value="বরগুনা">বরগুনা</MenuItem>
-                        <MenuItem value="ভোলা">ভোলা</MenuItem>
-                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
-                        <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
-                        <MenuItem value="মাগুরা">মাগুরা</MenuItem>
-                        <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
-                        <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
-                        <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
-                        <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </fieldset>
-
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    বিভাগ *
+                    স্থায়ী ঠিকানা (বিভাগ) *
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
@@ -369,9 +270,8 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         onBlur={handleOnBlur}
                         required
                       >
-                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
-                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
                         <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
                         <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
                         <MenuItem value="খুলনা">খুলনা</MenuItem>
                         <MenuItem value="বরিশাল">বরিশাল</MenuItem>
@@ -380,9 +280,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                       </Select>
                     </FormControl>
                   </Box>
-                  <h5 style={{ color: "gray" }}>
-                    স্থায়ী ঠিকানা যে বিভাগের আওতাধীন
-                  </h5>
                 </fieldset>
                 <fieldset
                   style={{
@@ -394,21 +291,21 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    বর্তমান ঠিকানা *
+                    স্থায়ী ঠিকানা (জেলা)*
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        name="presentDistrict"
+                        name="parmanentDistrict"
                         defaultValue={
-                          biodataProfile ? biodataProfile.presentDistrict : ""
+                          biodataProfile ? biodataProfile.parmanentDistrict : ""
                         }
-                        onBlur={handleOnBlur}
+                        onChange={handleOnBlur}
                         required
                       >
-                        <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                         <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
                         <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
                         <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
@@ -421,7 +318,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
                         <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
                         <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
-                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                         <MenuItem value="চাঁপাইনবাবগঞ্জ">
                           চাঁপাইনবাবগঞ্জ
                         </MenuItem>
@@ -482,6 +378,56 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   </Box>
                 </fieldset>
 
+                {bioData.parmanentDistrict == "চট্টগ্রাম" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      স্থায়ী ঠিকানা (উপজেলা)*
+                    </legend>
+                    <Box sx={{ width: "100%" }}>
+                      <FormControl fullWidth>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="parmanentSubDistrict"
+                          defaultValue={
+                            biodataProfile
+                              ? biodataProfile.parmanentSubDistrict
+                              : ""
+                          }
+                          onBlur={handleOnBlur}
+                          required
+                        >
+                          <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
+                          <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
+                          <MenuItem value="রাউজান">রাউজান</MenuItem>
+                          <MenuItem value="চট্টগ্রাম সদর(শহর)">
+                            চট্টগ্রাম সদর(শহর)
+                          </MenuItem>
+                          <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
+                          <MenuItem value="পটিয়া">পটিয়া</MenuItem>
+                          <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
+                          <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
+                          <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
+                          <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
+                          <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
+                          <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
+                          <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
+                          <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
+                          <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
+                          <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </fieldset>
+                )}
                 <fieldset
                   style={{
                     width: "100%",
@@ -492,7 +438,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    বিভাগ *
+                    বর্তমান ঠিকানা (বিভাগ)*
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
@@ -506,9 +452,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         onBlur={handleOnBlur}
                         required
                       >
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                         <MenuItem value="ঢাকা">ঢাকা</MenuItem>
                         <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
-                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                         <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
                         <MenuItem value="খুলনা">খুলনা</MenuItem>
                         <MenuItem value="বরিশাল">বরিশাল</MenuItem>
@@ -517,10 +463,153 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                       </Select>
                     </FormControl>
                   </Box>
-                  <h5 style={{ color: "gray" }}>
-                    বর্তমান ঠিকানা যে বিভাগের আওতাধীন
-                  </h5>
                 </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    বর্তমান ঠিকানা (জেলা)*
+                  </legend>
+                  <Box sx={{ width: "100%" }}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="presentDistrict"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.presentDistrict : ""
+                        }
+                        onChange={handleOnBlur}
+                        required
+                      >
+                        <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                        <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                        <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
+                        <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
+                        <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
+                        <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
+                        <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
+                        <MenuItem value="খুলনা">খুলনা</MenuItem>
+                        <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
+                        <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
+                        <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
+                        <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
+                        <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
+                        <MenuItem value="চাঁপাইনবাবগঞ্জ">
+                          চাঁপাইনবাবগঞ্জ
+                        </MenuItem>
+                        <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
+                        <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
+                        <MenuItem value="জামালপুর">জামালপুর</MenuItem>
+                        <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
+                        <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
+                        <MenuItem value="যশোর">যশোর</MenuItem>
+                        <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
+                        <MenuItem value="শেরপুর">শেরপুর</MenuItem>
+                        <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
+                        <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
+                        <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                        <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
+                        <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                        <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
+                        <MenuItem value="রংপুর">রংপুর</MenuItem>
+                        <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
+                        <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
+                        <MenuItem value="নাটোর">নাটোর</MenuItem>
+                        <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
+                        <MenuItem value="নড়াইল">নড়াইল</MenuItem>
+                        <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
+                        <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
+                        <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
+                        <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
+                        <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
+                        <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
+                        <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
+                        <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
+                        <MenuItem value="সিলেট">সিলেট</MenuItem>
+                        <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
+                        <MenuItem value="পাবনা">পাবনা</MenuItem>
+                        <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
+                        <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
+                        <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
+                        <MenuItem value="ফেনী">ফেনী</MenuItem>
+                        <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
+                        <MenuItem value="ব্রাহ্মণবাড়িয়া">
+                          ব্রাহ্মণবাড়িয়া
+                        </MenuItem>
+                        <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
+                        <MenuItem value="বগুড়া">বগুড়া</MenuItem>
+                        <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
+                        <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                        <MenuItem value="বরগুনা">বরগুনা</MenuItem>
+                        <MenuItem value="ভোলা">ভোলা</MenuItem>
+                        <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                        <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
+                        <MenuItem value="মাগুরা">মাগুরা</MenuItem>
+                        <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
+                        <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
+                        <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
+                        <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </fieldset>
+                {bioData.presentDistrict == "চট্টগ্রাম" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বর্তমান ঠিকানা (উপজেলা)*
+                    </legend>
+                    <Box sx={{ width: "100%" }}>
+                      <FormControl fullWidth>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="presentSubDistrict"
+                          defaultValue={
+                            biodataProfile
+                              ? biodataProfile.presentSubDistrict
+                              : ""
+                          }
+                          onBlur={handleOnBlur}
+                          required
+                        >
+                          <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
+                          <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
+                          <MenuItem value="রাউজান">রাউজান</MenuItem>
+                          <MenuItem value="চট্টগ্রাম সদর(শহর)">
+                            চট্টগ্রাম সদর(শহর)
+                          </MenuItem>
+                          <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
+                          <MenuItem value="পটিয়া">পটিয়া</MenuItem>
+                          <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
+                          <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
+                          <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
+                          <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
+                          <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
+                          <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
+                          <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
+                          <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
+                          <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
+                          <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </fieldset>
+                )}
                 <fieldset
                   style={{
                     width: "100%",
@@ -727,7 +816,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    রক্তের গ্রুপ *
+                    রক্তের গ্রুপ
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
@@ -739,7 +828,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                           biodataProfile ? biodataProfile.yourBloodGroup : ""
                         }
                         onBlur={handleOnBlur}
-                        required
                       >
                         <MenuItem value="A+">A+</MenuItem>
                         <MenuItem value="A-">A-</MenuItem>
@@ -871,8 +959,8 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     />
                   </Box>
                   <h5 style={{ color: "gray" }}>
-                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
-                    মিরপুর-২,ঢাকা।
+                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ দৌলতপুর,
+                    ফটিকছড়ি।
                   </h5>
                 </fieldset>
                 <fieldset
@@ -904,8 +992,8 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     />
                   </Box>
                   <h5 style={{ color: "gray" }}>
-                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ
-                    মিরপুর-২,ঢাকা।
+                    বাসার নাম্বার না দিয়ে এলাকা সহ ঠিকানা লিখুন। যেমনঃ দৌলতপুর,
+                    ফটিকছড়ি।
                   </h5>
                 </fieldset>
                 <fieldset
@@ -2335,128 +2423,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয় ? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="areYouPrayerRegu"
-                      defaultValue={
-                        biodataProfile ? biodataProfile.areYouPrayerRegu : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    নিয়মিত নামায কত সময় যাবত পড়ছেন? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="whenPrayerRegu"
-                      defaultValue={
-                        biodataProfile ? biodataProfile.whenPrayerRegu : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                  <h5 style={{ color: "gray" }}>
-                    অর্থাৎ কয় বছর/মাস যাবত ৫ ওয়াক্ত নামায শুরু করেছেন।
-                  </h5>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    মাহরাম/নন-মাহরাম মেনে চলেন কি ? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="areYouAbideByMahram"
-                      defaultValue={
-                        biodataProfile ? biodataProfile.areYouAbideByMahram : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="areYouReadQuranPurly"
-                      defaultValue={
-                        biodataProfile
-                          ? biodataProfile.areYouReadQuranPurly
-                          : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    কোন মাঝহাব অনুসরণ করেন? *
+                    আপনার মাঝহাব বা আকীদা কী?
                   </legend>
                   <Box
                     sx={{
@@ -2469,7 +2436,37 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         biodataProfile ? biodataProfile.whichMazhabFollow : ""
                       }
                       onBlur={handleOnBlur}
-                      required
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  <h5 style={{ color: "gray" }}>
+                    হানাফী-সুন্নী বা অন্য আকীদা হলে সেটি উল্লেখ করবেন |
+                  </h5>
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    নিয়মিত প্রার্থনা করেন তো?
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="areYouPrayerRegu"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.areYouPrayerRegu : ""
+                      }
+                      onBlur={handleOnBlur}
                       fullWidth
                       id="fullWidth"
                     />
@@ -2485,7 +2482,49 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    কোনো রাজনৈতিক দর্শন থাকলে লিখুন *
+                    আপনার ধর্মীয় দৃষ্টিভঙ্গী উল্লেখ করুন
+                  </legend>
+                  <Box
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <TextField
+                      name="religiousIdo"
+                      defaultValue={
+                        biodataProfile ? biodataProfile.religiousIdo : ""
+                      }
+                      onBlur={handleOnBlur}
+                      fullWidth
+                      id="fullWidth"
+                    />
+                  </Box>
+                  {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                    <h5 style={{ color: "gray" }}>
+                      যারা দ্বীনদার তারা টাখনুর উপর কাপড় পরিধান করেন কিনা,
+                      সুন্নতি দাড়ি আছে কিনা,নাটক/সিনেমা/গান দেখেন বা শোনেন কিনা
+                      সেসব উল্লেখ করবেন। আর অন্যেরা চাইলে এটা ফাঁকা রাখুন |
+                    </h5>
+                  )}
+                  {bioData.biodataType == "পাত্রীর বায়োডাটা" && (
+                    <h5 style={{ color: "gray" }}>
+                      যারা দ্বীনদার তারা পর্দা করেন কিনা,মাহরাম-নন মাহরাম মেনে
+                      চলেন কিনা, নাটক/সিনেমা/গান দেখেন বা শোনেন কিনা সেসব উল্লেখ
+                      করবেন। আর অন্যেরা চাইলে এটা ফাঁকা রাখুন |
+                    </h5>
+                  )}
+                </fieldset>
+                <fieldset
+                  style={{
+                    width: "100%",
+                    border: "2px solid lightGray",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    marginBottom: "30px",
+                  }}
+                >
+                  <legend style={{ fontWeight: "bold", color: "gray" }}>
+                    কোনো রাজনৈতিক দর্শন থাকলে লিখুন
                   </legend>
                   <Box
                     sx={{
@@ -2498,38 +2537,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                         biodataProfile ? biodataProfile.anyPoliticalIdology : ""
                       }
                       onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="takeAnyEntertainment"
-                      defaultValue={
-                        biodataProfile
-                          ? biodataProfile.takeAnyEntertainment
-                          : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
                       fullWidth
                       id="fullWidth"
                     />
@@ -2574,7 +2581,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? *
+                    আপনার প্রিয় শখ কী? *
                   </legend>
                   <Box
                     sx={{
@@ -2582,9 +2589,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     }}
                   >
                     <TextField
-                      name="joinAnyIslamicWork"
+                      name="yourFavoriteHobby"
                       defaultValue={
-                        biodataProfile ? biodataProfile.joinAnyIslamicWork : ""
+                        biodataProfile ? biodataProfile.yourFavoriteHobby : ""
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2592,41 +2599,6 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                       id="fullWidth"
                     />
                   </Box>
-                  <h5 style={{ color: "gray" }}>যেমনঃ তাবলীগ ইত্যাদি।</h5>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    আপনি কি কোনো পীরের মুরিদ বা অনুসারী ? *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="haveAnyIslamicFollower"
-                      defaultValue={
-                        biodataProfile
-                          ? biodataProfile.haveAnyIslamicFollower
-                          : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                  <h5 style={{ color: "gray" }}>
-                    যদি হয়ে থাকেন তাহলে পীরের নাম এবং তরিকার নাম লিখবেন।
-                  </h5>
                 </fieldset>
 
                 <fieldset
@@ -2639,7 +2611,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? *
+                    আপনার পছন্দের তিনজন আদর্শ মানুষের নাম লিখুন *
                   </legend>
                   <Box
                     sx={{
@@ -2647,69 +2619,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     }}
                   >
                     <TextField
-                      name="beliveOfMazar"
+                      name="favoriteMan"
                       defaultValue={
-                        biodataProfile ? biodataProfile.beliveOfMazar : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="favoriteIslamicBook"
-                      defaultValue={
-                        biodataProfile ? biodataProfile.favoriteIslamicBook : ""
-                      }
-                      onBlur={handleOnBlur}
-                      required
-                      fullWidth
-                      id="fullWidth"
-                    />
-                  </Box>
-                </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন *
-                  </legend>
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    <TextField
-                      name="favoriteIslamicSpeaker"
-                      defaultValue={
-                        biodataProfile
-                          ? biodataProfile.favoriteIslamicSpeaker
-                          : ""
+                        biodataProfile ? biodataProfile.favoriteMan : ""
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2737,9 +2649,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     }}
                   >
                     <TextField
-                      name="anyIslamicEduQua"
+                      name="anyExtraQua"
                       defaultValue={
-                        biodataProfile ? biodataProfile.anyIslamicEduQua : ""
+                        biodataProfile ? biodataProfile.anyExtraQua : ""
                       }
                       onBlur={handleOnBlur}
                       multiline
@@ -2868,6 +2780,217 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   </Box>
                   <h5 style={{ color: "gray" }}>সংক্ষেপে বর্ণনা করুন।</h5>
                 </fieldset>
+                {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর স্ত্রীর পর্দার ব্যবস্থা রাখতে পারবেন?
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterwWifeWear"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterwWifeWear : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর স্ত্রীকে পড়াশোনা করতে দিতে চান?
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterwWifeStudy"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterwWifeStudy : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর স্ত্রীকে চাকরী করতে দিতে চান?
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterwWifeWork"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterwWifeWork : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর স্ত্রীকে কোথায় নিয়ে থাকবেন?
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterwWifeHome"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterwWifeHome : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রের বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক
+                      বা উপহার বা অর্থ আশা করবেন কি না?
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterwWifeDower"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterwWifeDower : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রীর বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর পড়াশোনা চালিয়ে যেতে চান? (ছাত্রী হলে)
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterYourStudy"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterYourStudy : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
+                {bioData.biodataType == "পাত্রীর বায়োডাটা" && (
+                  <fieldset
+                    style={{
+                      width: "100%",
+                      border: "2px solid lightGray",
+                      padding: "15px",
+                      borderRadius: "5px",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <legend style={{ fontWeight: "bold", color: "gray" }}>
+                      বিয়ের পর চাকরি চালিয়ে যেতে চান? (চাকরিজীবী হলে)
+                    </legend>
+                    <Box
+                      sx={{
+                        width: "100%",
+                      }}
+                    >
+                      <TextField
+                        name="afterYourJob"
+                        defaultValue={
+                          biodataProfile ? biodataProfile.afterYourJob : ""
+                        }
+                        onBlur={handleOnBlur}
+                        fullWidth
+                        id="fullWidth"
+                      />
+                    </Box>
+                  </fieldset>
+                )}
                 <Box sx={{ my: 2 }}>
                   <div>
                     <Button
@@ -3292,7 +3415,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    biyamudarak.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক
+                    bibahomubarok.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক
                     জানেন? *
                   </legend>
                   <Box sx={{ width: "100%" }}>
@@ -3314,37 +3437,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     </FormControl>
                   </Box>
                 </fieldset>
-                <fieldset
-                  style={{
-                    width: "100%",
-                    border: "2px solid lightGray",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    marginBottom: "30px",
-                  }}
-                >
-                  <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য? *
-                  </legend>
-                  <Box sx={{ width: "100%" }}>
-                    <FormControl fullWidth>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="isAllInfoReal"
-                        defaultValue={
-                          biodataProfile ? biodataProfile.isAllInfoReal : ""
-                        }
-                        onBlur={handleOnBlur}
-                        required
-                      >
-                        <MenuItem value="---">---</MenuItem>
-                        <MenuItem value="হ্যাঁ">হ্যাঁ</MenuItem>
-                        <MenuItem value="না">না</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </fieldset>
+
                 <fieldset
                   style={{
                     width: "100%",

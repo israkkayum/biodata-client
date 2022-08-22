@@ -109,15 +109,7 @@ const MyBiodata = (props) => {
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    স্থায়ী ঠিকানা
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.parmanentDistrict}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    বিভাগ (স্থায়ী ঠিকানা যে বিভাগের আওতাধীন)
+                    স্থায়ী ঠিকানা (বিভাগ)
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.parmanentDivision}
@@ -125,20 +117,48 @@ const MyBiodata = (props) => {
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    বর্তমান ঠিকানা
+                    স্থায়ী ঠিকানা (জেলা)
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {biodataProfile.presentDistrict}
+                    {biodataProfile.parmanentDistrict}
                   </StyledTableCell>
                 </StyledTableRow>
+                {biodataProfile.parmanentDistrict == "চট্টগ্রাম" && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      স্থায়ী ঠিকানা (উপজেলা)
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.parmanentSubDistrict}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    বিভাগ (বর্তমান ঠিকানা যে বিভাগের আওতাধীন)
+                    বর্তমান ঠিকানা (বিভাগ)
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.presentDivision}
                   </StyledTableCell>
                 </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell component="th" scope="row">
+                    বর্তমান ঠিকানা (জেলা)
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {biodataProfile.presentDistrict}
+                  </StyledTableCell>
+                </StyledTableRow>
+                {biodataProfile.presentDistrict == "চট্টগ্রাম" && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      বর্তমান ঠিকানা (উপজেলা)
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.presentSubDistrict}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
                     জন্মসন (আসল)
@@ -177,14 +197,16 @@ const MyBiodata = (props) => {
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    রক্তের গ্রুপ
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.yourBloodGroup}
-                  </StyledTableCell>
-                </StyledTableRow>
+                {biodataProfile.yourBloodGroup && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      রক্তের গ্রুপ
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.yourBloodGroup}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
                     পেশা
@@ -677,62 +699,46 @@ const MyBiodata = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয়
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.areYouPrayerRegu}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    নিয়মিত নামায কত সময় যাবত পড়ছেন
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.whenPrayerRegu}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    মাহরাম/নন-মাহরাম মেনে চলেন কি
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.areYouAbideByMahram}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.areYouReadQuranPurly}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    কোন মাঝহাব অনুসরণ করেন
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.whichMazhabFollow}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    রাজনৈতিক দর্শন
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.anyPoliticalIdology}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.takeAnyEntertainment}
-                  </StyledTableCell>
-                </StyledTableRow>
+                {biodataProfile.whichMazhabFollow && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      আপনার মাঝহাব বা আকীদা কী?
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.whichMazhabFollow}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                {biodataProfile.areYouPrayerRegu && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      নিয়মিত প্রার্থনা করেন তো?
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.areYouPrayerRegu}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                {biodataProfile.religiousIdo && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      আপনার ধর্মীয় দৃষ্টিভঙ্গী উল্লেখ করুন
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.religiousIdo}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+                {biodataProfile.anyPoliticalIdology && (
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      কোনো রাজনৈতিক দর্শন থাকলে লিখুন
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {biodataProfile.anyPoliticalIdology}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
                     মানসিক বা শারীরিক কোনো রোগ আছে কি
@@ -743,51 +749,28 @@ const MyBiodata = (props) => {
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন
+                    আপনার প্রিয় শখ কী?
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {biodataProfile.joinAnyIslamicWork}
+                    {biodataProfile.yourFavoriteHobby}
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    আপনি কি কোনো পীরের মুরিদ বা অনুসারী
+                    আপনার পছন্দের তিনজন আদর্শ মানুষের নাম লিখুন
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {biodataProfile.haveAnyIslamicFollower}
+                    {biodataProfile.favoriteMan}
                   </StyledTableCell>
                 </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.beliveOfMazar}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.favoriteIslamicBook}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    আপনার পছন্দের অন্তত ৩ জন আলেমের নাম
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.favoriteIslamicSpeaker}
-                  </StyledTableCell>
-                </StyledTableRow>
-                {biodataProfile.anyIslamicEduQua && (
+
+                {biodataProfile.anyExtraQua && (
                   <StyledTableRow>
                     <StyledTableCell component="th" scope="row">
                       বিশেষ দ্বীনি বা দুনিয়াবি যোগ্যতা
                     </StyledTableCell>
                     <StyledTableCell align="left">
-                      {biodataProfile.anyIslamicEduQua}
+                      {biodataProfile.anyExtraQua}
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
@@ -828,6 +811,84 @@ const MyBiodata = (props) => {
                     {biodataProfile.idologyOfMarit}
                   </StyledTableCell>
                 </StyledTableRow>
+                {biodataProfile.biodataType == "পাত্রের বায়োডাটা" &&
+                  biodataProfile.afterwWifeWear && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর স্ত্রীর পর্দার ব্যবস্থা রাখতে পারবেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterwWifeWear}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রের বায়োডাটা" &&
+                  biodataProfile.afterwWifeStudy && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর স্ত্রীকে পড়াশোনা করতে দিতে চান?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterwWifeStudy}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রের বায়োডাটা" &&
+                  biodataProfile.afterwWifeWork && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর স্ত্রীকে চাকরী করতে দিতে চান?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterwWifeWork}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রের বায়োডাটা" &&
+                  biodataProfile.afterwWifeHome && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর স্ত্রীকে কোথায় নিয়ে থাকবেন?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterwWifeHome}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রের বায়োডাটা" &&
+                  biodataProfile.afterwWifeDower && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে
+                        যৌতুক বা উপহার বা অর্থ আশা করবেন কি না?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterwWifeDower}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রীর বায়োডাটা" &&
+                  biodataProfile.afterYourStudy && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর পড়াশোনা চালিয়ে যেতে চান?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterYourStudy}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                {biodataProfile.biodataType == "পাত্রীর বায়োডাটা" &&
+                  biodataProfile.afterYourJob && (
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        বিয়ের পর চাকরি চালিয়ে যেতে চান?
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {biodataProfile.afterYourJob}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -966,14 +1027,6 @@ const MyBiodata = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.agreeYourGurdean}
-                  </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                  <StyledTableCell component="th" scope="row">
-                    আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য?
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {biodataProfile.isAllInfoReal}
                   </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>

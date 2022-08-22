@@ -129,33 +129,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   }}
                 >
                   <Grid item xs={6}>
-                    <span>স্থায়ী ঠিকানা</span>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <span> {biodataProfile.parmanentDistrict}</span>
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper
-                elevation={1}
-                sx={{
-                  pt: 2,
-                  mt: 1,
-                  // backgroundColor: "blue",
-                  // color: "white",
-                }}
-              >
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    p: 2,
-                    pt: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  <Grid item xs={6}>
-                    <span>বিভাগ</span>
+                    <span>স্থায়ী ঠিকানা (বিভাগ)</span>
                   </Grid>
                   <Grid item xs={6}>
                     <span> {biodataProfile.parmanentDivision}</span>
@@ -181,13 +155,42 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   }}
                 >
                   <Grid item xs={6}>
-                    <span>বর্তমান ঠিকানা</span>
+                    <span>স্থায়ী ঠিকানা (জেলা)</span>
                   </Grid>
                   <Grid item xs={6}>
-                    <span> {biodataProfile.presentDistrict}</span>
+                    <span> {biodataProfile.parmanentDistrict}</span>
                   </Grid>
                 </Grid>
               </Paper>
+              {biodataProfile.parmanentDistrict == "চট্টগ্রাম" && (
+                <Paper
+                  elevation={1}
+                  sx={{
+                    pt: 2,
+                    mt: 1,
+                    // backgroundColor: "blue",
+                    // color: "white",
+                  }}
+                >
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                      p: 2,
+                      pt: 0,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Grid item xs={6}>
+                      <span>স্থায়ী ঠিকানা (উপজেলা)</span>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <span> {biodataProfile.parmanentSubDistrict}</span>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              )}
+
               <Paper
                 elevation={1}
                 sx={{
@@ -207,13 +210,69 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   }}
                 >
                   <Grid item xs={6}>
-                    <span>বিভাগ</span>
+                    <span>বর্তমান ঠিকানা (বিভাগ)</span>
                   </Grid>
                   <Grid item xs={6}>
                     <span> {biodataProfile.presentDivision}</span>
                   </Grid>
                 </Grid>
               </Paper>
+
+              <Paper
+                elevation={1}
+                sx={{
+                  pt: 2,
+                  mt: 1,
+                  // backgroundColor: "blue",
+                  // color: "white",
+                }}
+              >
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{
+                    p: 2,
+                    pt: 0,
+                    textAlign: "center",
+                  }}
+                >
+                  <Grid item xs={6}>
+                    <span>বর্তমান ঠিকানা (জেলা)</span>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <span> {biodataProfile.presentDistrict}</span>
+                  </Grid>
+                </Grid>
+              </Paper>
+              {biodataProfile.presentDistrict == "চট্টগ্রাম" && (
+                <Paper
+                  elevation={1}
+                  sx={{
+                    pt: 2,
+                    mt: 1,
+                    // backgroundColor: "blue",
+                    // color: "white",
+                  }}
+                >
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                      p: 2,
+                      pt: 0,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Grid item xs={6}>
+                      <span>স্থায়ী ঠিকানা (উপজেলা)</span>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <span> {biodataProfile.presentSubDistrict}</span>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              )}
+
               <Paper
                 elevation={1}
                 sx={{
@@ -325,32 +384,35 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                 </Paper>
               )}
 
-              <Paper
-                elevation={1}
-                sx={{
-                  pt: 2,
-                  mt: 1,
-                  // backgroundColor: "blue",
-                  // color: "white",
-                }}
-              >
-                <Grid
-                  container
-                  spacing={2}
+              {biodataProfile.yourBloodGroup && (
+                <Paper
+                  elevation={1}
                   sx={{
-                    p: 2,
-                    pt: 0,
-                    textAlign: "center",
+                    pt: 2,
+                    mt: 1,
+                    // backgroundColor: "blue",
+                    // color: "white",
                   }}
                 >
-                  <Grid item xs={6}>
-                    <span>রক্তের গ্রুপ</span>
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                      p: 2,
+                      pt: 0,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Grid item xs={6}>
+                      <span>রক্তের গ্রুপ</span>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <span> {biodataProfile.yourBloodGroup}</span>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <span> {biodataProfile.yourBloodGroup}</span>
-                  </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              )}
+
               <Paper
                 elevation={1}
                 sx={{
