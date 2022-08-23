@@ -20,6 +20,16 @@ import Skeletons from "../Share/Skeletons/Skeletons";
 const PublicBiodatas = () => {
   const [publicBiodatas, setPublicBiodatas] = useState([]);
 
+  const [quarry, setQuarry] = useState({});
+
+  const handleOnChange = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = { ...quarry };
+    newInfo[field] = value;
+    setQuarry(newInfo);
+  };
+
   useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/biodatas")
       .then((res) => res.json())
@@ -58,7 +68,7 @@ const PublicBiodatas = () => {
           }}
         >
           <Paper elevation={3}>
-            <div style={{ textAlign: "center", padding: "30px" }}>
+            <div style={{ textAlign: "center", padding: "50px" }}>
               <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
                 <InputLabel
                   sx={{ color: "white" }}
@@ -69,10 +79,11 @@ const PublicBiodatas = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
+                  name="biodataType"
                   label="আমি খুঁজছি"
+                  onChange={handleOnChange}
                   sx={{ color: "white" }}
                 >
-                  <MenuItem value="সকল বায়োডাটা">সকল বায়োডাটা</MenuItem>
                   <MenuItem value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</MenuItem>
                   <MenuItem value="পাত্রীর বায়োডাটা">পাত্রীর বায়োডাটা</MenuItem>
                 </Select>
@@ -87,10 +98,11 @@ const PublicBiodatas = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
+                  name="maritalStatus"
                   label="বৈবাহিক অবস্থা"
+                  onChange={handleOnChange}
                   sx={{ color: "white" }}
                 >
-                  <MenuItem value="সকল">সকল</MenuItem>
                   <MenuItem value="অবিবাহিত">অবিবাহিত</MenuItem>
                   <MenuItem value="বিবাহিত">বিবাহিত</MenuItem>
                   <MenuItem value="ডিভোর্সড">ডিভোর্সড</MenuItem>
@@ -108,10 +120,12 @@ const PublicBiodatas = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
+                  name="district"
                   label="জেলা"
+                  onChange={handleOnChange}
                   sx={{ color: "white" }}
                 >
-                  <MenuItem value="সকল জেলা">সকল জেলা</MenuItem>
+                  <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                   <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
                   <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
                   <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
@@ -124,7 +138,6 @@ const PublicBiodatas = () => {
                   <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
                   <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
                   <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
-                  <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
                   <MenuItem value="চাঁপাইনবাবগঞ্জ">চাঁপাইনবাবগঞ্জ</MenuItem>
                   <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
                   <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
@@ -178,6 +191,43 @@ const PublicBiodatas = () => {
                   <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
                 </Select>
               </FormControl>
+              {quarry.district == "চট্টগ্রাম" && (
+                <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                  <InputLabel
+                    sx={{ color: "white" }}
+                    id="demo-simple-select-helper-label"
+                  >
+                    উপজেলা
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    name="subDistrict"
+                    label="জেলা"
+                    onChange={handleOnChange}
+                    sx={{ color: "white" }}
+                  >
+                    <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
+                    <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
+                    <MenuItem value="রাউজান">রাউজান</MenuItem>
+                    <MenuItem value="চট্টগ্রাম সদর(শহর)">
+                      চট্টগ্রাম সদর(শহর)
+                    </MenuItem>
+                    <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
+                    <MenuItem value="পটিয়া">পটিয়া</MenuItem>
+                    <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
+                    <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
+                    <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
+                    <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
+                    <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
+                    <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
+                    <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
+                    <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
+                    <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
+                    <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
               <TextField
                 sx={{
                   m: 1,
@@ -187,6 +237,7 @@ const PublicBiodatas = () => {
                 }}
                 fullWidth
                 label="বায়োডাটা নং"
+                name="biodataNo"
                 id="fullWidth"
               />
               <Stack

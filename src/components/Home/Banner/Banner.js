@@ -1,6 +1,6 @@
 import { Button, Paper, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 
 import banner from "../../../images/banner.jpg";
 
@@ -12,18 +12,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import { NavLink } from "react-router-dom";
 
 const Banner = () => {
-  const [gender, setGender] = React.useState("");
-  const [type, setType] = React.useState("");
-  const [distict, setDistict] = React.useState("");
+  const [quarry, setQuarry] = useState({});
 
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
-  };
-  const handleDistictChange = (event) => {
-    setDistict(event.target.value);
+  const handleOnChange = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = { ...quarry };
+    newInfo[field] = value;
+    setQuarry(newInfo);
   };
 
   return (
@@ -59,13 +55,12 @@ const Banner = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={gender}
+                  name="biodataType"
                   label="আমি খুঁজছি"
-                  onChange={handleGenderChange}
+                  onChange={handleOnChange}
                 >
-                  <MenuItem value={10}>সকল বায়োডাটা</MenuItem>
-                  <MenuItem value={20}>পাত্রের বায়োডাটা</MenuItem>
-                  <MenuItem value={30}>পাত্রীর বায়োডাটা</MenuItem>
+                  <MenuItem value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</MenuItem>
+                  <MenuItem value="পাত্রীর বায়োডাটা">পাত্রীর বায়োডাটা</MenuItem>
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
@@ -75,16 +70,15 @@ const Banner = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={type}
+                  name="maritalStatus"
                   label="বৈবাহিক অবস্থা"
-                  onChange={handleTypeChange}
+                  onChange={handleOnChange}
                 >
-                  <MenuItem value={10}>সকল</MenuItem>
-                  <MenuItem value={20}>অবিবাহিত</MenuItem>
-                  <MenuItem value={30}>বিবাহিত</MenuItem>
-                  <MenuItem value={40}>ডিভোর্সড</MenuItem>
-                  <MenuItem value={50}>বিধবা</MenuItem>
-                  <MenuItem value={60}>বিপত্নীক</MenuItem>
+                  <MenuItem value="অবিবাহিত">অবিবাহিত</MenuItem>
+                  <MenuItem value="বিবাহিত">বিবাহিত</MenuItem>
+                  <MenuItem value="ডিভোর্সড">ডিভোর্সড</MenuItem>
+                  <MenuItem value="বিধবা">বিধবা</MenuItem>
+                  <MenuItem value="বিপত্নীক">বিপত্নীক</MenuItem>
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
@@ -94,82 +88,115 @@ const Banner = () => {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={distict}
+                  name="district"
                   label="জেলা"
-                  onChange={handleDistictChange}
+                  onChange={handleOnChange}
                 >
-                  <MenuItem value={10}>সকল জেলা</MenuItem>
-                  <MenuItem value={20}>কুমিল্লা</MenuItem>
-                  <MenuItem value={30}>কক্সবাজার</MenuItem>
-                  <MenuItem value={40}>কুষ্টিয়া</MenuItem>
-                  <MenuItem value={50}>কিশোরগঞ্জ</MenuItem>
-                  <MenuItem value={60}>কুড়িগ্রাম</MenuItem>
-                  <MenuItem value={70}>খাগড়াছড়ি</MenuItem>
-                  <MenuItem value={80}>খুলনা</MenuItem>
-                  <MenuItem value={90}>গাজীপুর</MenuItem>
-                  <MenuItem value={100}>গোপালগঞ্জ</MenuItem>
-                  <MenuItem value={110}>গাইবান্ধা</MenuItem>
-                  <MenuItem value={120}>হবিগঞ্জ</MenuItem>
-                  <MenuItem value={130}>চাঁদপুর</MenuItem>
-                  <MenuItem value={140}>চট্টগ্রাম</MenuItem>
-                  <MenuItem value={150}>চাঁপাইনবাবগঞ্জ</MenuItem>
-                  <MenuItem value={160}>চুয়াডাঙ্গা</MenuItem>
-                  <MenuItem value={170}>জয়পুরহাট</MenuItem>
-                  <MenuItem value={180}>জামালপুর</MenuItem>
-                  <MenuItem value={190}>ঝিনাইদহ</MenuItem>
-                  <MenuItem value={200}>ঝালকাঠি</MenuItem>
-                  <MenuItem value={210}>যশোর</MenuItem>
-                  <MenuItem value={220}>শরীয়তপুর</MenuItem>
-                  <MenuItem value={230}>শেরপুর</MenuItem>
-                  <MenuItem value={240}>টাঙ্গাইল</MenuItem>
-                  <MenuItem value={250}>ঠাকুরগাঁও</MenuItem>
-                  <MenuItem value={260}>ঢাকা</MenuItem>
-                  <MenuItem value={270}>রাঙ্গামাটি</MenuItem>
-                  <MenuItem value={280}>রাজশাহী</MenuItem>
-                  <MenuItem value={290}>রাজবাড়ী</MenuItem>
-                  <MenuItem value={300}>রংপুর</MenuItem>
-                  <MenuItem value={310}>দিনাজপুর</MenuItem>
-                  <MenuItem value={320}>নোয়াখালী</MenuItem>
-                  <MenuItem value={330}>নাটোর</MenuItem>
-                  <MenuItem value={340}>নওগাঁ</MenuItem>
-                  <MenuItem value={350}>নড়াইল</MenuItem>
-                  <MenuItem value={360}>নরসিংদী</MenuItem>
-                  <MenuItem value={370}>নারায়ণগঞ্জ</MenuItem>
-                  <MenuItem value={380}>নীলফামারী</MenuItem>
-                  <MenuItem value={390}>নেত্রকোণা</MenuItem>
-                  <MenuItem value={400}>লক্ষ্মীপুর</MenuItem>
-                  <MenuItem value={410}>লালমনিরহাট</MenuItem>
-                  <MenuItem value={420}>সিরাজগঞ্জ</MenuItem>
-                  <MenuItem value={430}>সাতক্ষীরা</MenuItem>
-                  <MenuItem value={440}>সিলেট</MenuItem>
-                  <MenuItem value={450}>সুনামগঞ্জ</MenuItem>
-                  <MenuItem value={460}>পাবনা</MenuItem>
-                  <MenuItem value={470}>পটুয়াখালী</MenuItem>
-                  <MenuItem value={480}>পিরোজপুর</MenuItem>
-                  <MenuItem value={490}>পঞ্চগড়</MenuItem>
-                  <MenuItem value={500}>ফেনী</MenuItem>
-                  <MenuItem value={510}>ফরিদপুর</MenuItem>
-                  <MenuItem value={520}>ব্রাহ্মণবাড়িয়া</MenuItem>
-                  <MenuItem value={530}>বান্দরবান</MenuItem>
-                  <MenuItem value={540}>বগুড়া</MenuItem>
-                  <MenuItem value={550}>বাগেরহাট</MenuItem>
-                  <MenuItem value={560}>বরিশাল</MenuItem>
-                  <MenuItem value={570}>বরগুনা</MenuItem>
-                  <MenuItem value={580}>ভোলা</MenuItem>
-                  <MenuItem value={590}>ময়মনসিংহ</MenuItem>
-                  <MenuItem value={600}>মেহেরপুর</MenuItem>
-                  <MenuItem value={610}>মাগুরা</MenuItem>
-                  <MenuItem value={620}>মৌলভীবাজার</MenuItem>
-                  <MenuItem value={630}>মানিকগঞ্জ</MenuItem>
-                  <MenuItem value={640}>মুন্সিগঞ্জ</MenuItem>
-                  <MenuItem value={650}>মাদারীপুর</MenuItem>
+                  <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
+                  <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                  <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
+                  <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
+                  <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
+                  <MenuItem value="কুড়িগ্রাম">কুড়িগ্রাম</MenuItem>
+                  <MenuItem value="খাগড়াছড়ি">খাগড়াছড়ি</MenuItem>
+                  <MenuItem value="খুলনা">খুলনা</MenuItem>
+                  <MenuItem value="গাজীপুর">গাজীপুর</MenuItem>
+                  <MenuItem value="গোপালগঞ্জ">গোপালগঞ্জ</MenuItem>
+                  <MenuItem value="গাইবান্ধা">গাইবান্ধা</MenuItem>
+                  <MenuItem value="হবিগঞ্জ">হবিগঞ্জ</MenuItem>
+                  <MenuItem value="চাঁদপুর">চাঁদপুর</MenuItem>
+                  <MenuItem value="চাঁপাইনবাবগঞ্জ">চাঁপাইনবাবগঞ্জ</MenuItem>
+                  <MenuItem value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</MenuItem>
+                  <MenuItem value="জয়পুরহাট">জয়পুরহাট</MenuItem>
+                  <MenuItem value="জামালপুর">জামালপুর</MenuItem>
+                  <MenuItem value="ঝিনাইদহ">ঝিনাইদহ</MenuItem>
+                  <MenuItem value="ঝালকাঠি">ঝালকাঠি</MenuItem>
+                  <MenuItem value="যশোর">যশোর</MenuItem>
+                  <MenuItem value="শরীয়তপুর">শরীয়তপুর</MenuItem>
+                  <MenuItem value="শেরপুর">শেরপুর</MenuItem>
+                  <MenuItem value="টাঙ্গাইল">টাঙ্গাইল</MenuItem>
+                  <MenuItem value="ঠাকুরগাঁও">ঠাকুরগাঁও</MenuItem>
+                  <MenuItem value="ঢাকা">ঢাকা</MenuItem>
+                  <MenuItem value="রাঙ্গামাটি">রাঙ্গামাটি</MenuItem>
+                  <MenuItem value="রাজশাহী">রাজশাহী</MenuItem>
+                  <MenuItem value="রাজবাড়ী">রাজবাড়ী</MenuItem>
+                  <MenuItem value="রংপুর">রংপুর</MenuItem>
+                  <MenuItem value="দিনাজপুর">দিনাজপুর</MenuItem>
+                  <MenuItem value="নোয়াখালী">নোয়াখালী</MenuItem>
+                  <MenuItem value="নাটোর">নাটোর</MenuItem>
+                  <MenuItem value="নওগাঁ">নওগাঁ</MenuItem>
+                  <MenuItem value="নড়াইল">নড়াইল</MenuItem>
+                  <MenuItem value="নরসিংদী">নরসিংদী</MenuItem>
+                  <MenuItem value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</MenuItem>
+                  <MenuItem value="নীলফামারী">নীলফামারী</MenuItem>
+                  <MenuItem value="নেত্রকোণা">নেত্রকোণা</MenuItem>
+                  <MenuItem value="লক্ষ্মীপুর">লক্ষ্মীপুর</MenuItem>
+                  <MenuItem value="লালমনিরহাট">লালমনিরহাট</MenuItem>
+                  <MenuItem value="সিরাজগঞ্জ">সিরাজগঞ্জ</MenuItem>
+                  <MenuItem value="সাতক্ষীরা">সাতক্ষীরা</MenuItem>
+                  <MenuItem value="সিলেট">সিলেট</MenuItem>
+                  <MenuItem value="সুনামগঞ্জ">সুনামগঞ্জ</MenuItem>
+                  <MenuItem value="পাবনা">পাবনা</MenuItem>
+                  <MenuItem value="পটুয়াখালী">পটুয়াখালী</MenuItem>
+                  <MenuItem value="পিরোজপুর">পিরোজপুর</MenuItem>
+                  <MenuItem value="পঞ্চগড়">পঞ্চগড়</MenuItem>
+                  <MenuItem value="ফেনী">ফেনী</MenuItem>
+                  <MenuItem value="ফরিদপুর">ফরিদপুর</MenuItem>
+                  <MenuItem value="ব্রাহ্মণবাড়িয়া">ব্রাহ্মণবাড়িয়া</MenuItem>
+                  <MenuItem value="বান্দরবান">বান্দরবান</MenuItem>
+                  <MenuItem value="বগুড়া">বগুড়া</MenuItem>
+                  <MenuItem value="বাগেরহাট">বাগেরহাট</MenuItem>
+                  <MenuItem value="বরিশাল">বরিশাল</MenuItem>
+                  <MenuItem value="বরগুনা">বরগুনা</MenuItem>
+                  <MenuItem value="ভোলা">ভোলা</MenuItem>
+                  <MenuItem value="ময়মনসিংহ">ময়মনসিংহ</MenuItem>
+                  <MenuItem value="মেহেরপুর">মেহেরপুর</MenuItem>
+                  <MenuItem value="মাগুরা">মাগুরা</MenuItem>
+                  <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
+                  <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
+                  <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
+                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
                 </Select>
               </FormControl>
+              {quarry.district == "চট্টগ্রাম" && (
+                <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    উপজেলা
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    name="subDistrict"
+                    label="জেলা"
+                    onChange={handleOnChange}
+                  >
+                    <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
+                    <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
+                    <MenuItem value="রাউজান">রাউজান</MenuItem>
+                    <MenuItem value="চট্টগ্রাম সদর(শহর)">
+                      চট্টগ্রাম সদর(শহর)
+                    </MenuItem>
+                    <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
+                    <MenuItem value="পটিয়া">পটিয়া</MenuItem>
+                    <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
+                    <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
+                    <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
+                    <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
+                    <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
+                    <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
+                    <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
+                    <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
+                    <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
+                    <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
               <TextField
                 sx={{ m: 1, minWidth: 120 }}
                 fullWidth
                 label="বায়োডাটা নং"
                 id="fullWidth"
+                name="biodataNo"
               />
               <Stack
                 sx={{

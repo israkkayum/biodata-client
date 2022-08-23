@@ -71,12 +71,12 @@ const Header = () => {
       <AppBar position="static" sx={{ bgcolor: "white", color: "blue" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon
+            {/* <AdbIcon
               sx={{
                 display: { xs: "none", md: "flex" },
                 mr: 1,
               }}
-            />
+            /> */}
             <Typography
               variant="h6"
               noWrap
@@ -93,7 +93,7 @@ const Header = () => {
               }}
             >
               <NavLink to="/home" style={{ textDecoration: "none" }}>
-                LOGO
+                <img style={{ height: "40px" }} src={logo} />
               </NavLink>
             </Typography>
 
@@ -135,7 +135,7 @@ const Header = () => {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
             <Typography
               variant="h5"
               noWrap
@@ -153,7 +153,7 @@ const Header = () => {
               }}
             >
               <NavLink to="/home" style={{ textDecoration: "none" }}>
-                LOGO
+                <img style={{ height: "35px" }} src={logo} />
               </NavLink>
             </Typography>
             <Box
