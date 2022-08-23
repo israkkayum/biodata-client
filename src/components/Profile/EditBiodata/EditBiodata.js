@@ -246,7 +246,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     </FormControl>
                   </Box>
                 </fieldset>
-                <fieldset
+                {/* <fieldset
                   style={{
                     width: "100%",
                     border: "2px solid lightGray",
@@ -280,7 +280,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                       </Select>
                     </FormControl>
                   </Box>
-                </fieldset>
+                </fieldset> */}
                 <fieldset
                   style={{
                     width: "100%",
@@ -291,7 +291,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    স্থায়ী ঠিকানা (জেলা)*
+                    স্থায়ী ঠিকানা *
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
@@ -389,7 +389,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     }}
                   >
                     <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      স্থায়ী ঠিকানা (উপজেলা)*
+                      উপজেলা *
                     </legend>
                     <Box sx={{ width: "100%" }}>
                       <FormControl fullWidth>
@@ -425,10 +425,13 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                           <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
                         </Select>
                       </FormControl>
+                      <h5 style={{ color: "gray" }}>
+                        স্থায়ী ঠিকানা কোন উপজেলায়।
+                      </h5>
                     </Box>
                   </fieldset>
                 )}
-                <fieldset
+                {/* <fieldset
                   style={{
                     width: "100%",
                     border: "2px solid lightGray",
@@ -463,7 +466,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                       </Select>
                     </FormControl>
                   </Box>
-                </fieldset>
+                </fieldset> */}
                 <fieldset
                   style={{
                     width: "100%",
@@ -474,7 +477,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                   }}
                 >
                   <legend style={{ fontWeight: "bold", color: "gray" }}>
-                    বর্তমান ঠিকানা (জেলা)*
+                    বর্তমান ঠিকানা *
                   </legend>
                   <Box sx={{ width: "100%" }}>
                     <FormControl fullWidth>
@@ -571,7 +574,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     }}
                   >
                     <legend style={{ fontWeight: "bold", color: "gray" }}>
-                      বর্তমান ঠিকানা (উপজেলা)*
+                      বর্তমান ঠিকানা *
                     </legend>
                     <Box sx={{ width: "100%" }}>
                       <FormControl fullWidth>
@@ -607,6 +610,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                           <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
                         </Select>
                       </FormControl>
+                      <h5 style={{ color: "gray" }}>
+                        বর্তমান ঠিকানা কোন উপজেলায়।
+                      </h5>
                     </Box>
                   </fieldset>
                 )}

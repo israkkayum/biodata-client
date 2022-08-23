@@ -107,17 +107,17 @@ const MyBiodata = (props) => {
                     {biodataProfile.maritalStatus}
                   </StyledTableCell>
                 </StyledTableRow>
-                <StyledTableRow>
+                {/* <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
                     স্থায়ী ঠিকানা (বিভাগ)
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.parmanentDivision}
                   </StyledTableCell>
-                </StyledTableRow>
+                </StyledTableRow> */}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    স্থায়ী ঠিকানা (জেলা)
+                    স্থায়ী ঠিকানা
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.parmanentDistrict}
@@ -126,24 +126,24 @@ const MyBiodata = (props) => {
                 {biodataProfile.parmanentDistrict == "চট্টগ্রাম" && (
                   <StyledTableRow>
                     <StyledTableCell component="th" scope="row">
-                      স্থায়ী ঠিকানা (উপজেলা)
+                      উপজেলা
                     </StyledTableCell>
                     <StyledTableCell align="left">
                       {biodataProfile.parmanentSubDistrict}
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
-                <StyledTableRow>
+                {/* <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
                     বর্তমান ঠিকানা (বিভাগ)
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.presentDivision}
                   </StyledTableCell>
-                </StyledTableRow>
+                </StyledTableRow> */}
                 <StyledTableRow>
                   <StyledTableCell component="th" scope="row">
-                    বর্তমান ঠিকানা (জেলা)
+                    বর্তমান ঠিকানা
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {biodataProfile.presentDistrict}
@@ -152,7 +152,7 @@ const MyBiodata = (props) => {
                 {biodataProfile.presentDistrict == "চট্টগ্রাম" && (
                   <StyledTableRow>
                     <StyledTableCell component="th" scope="row">
-                      বর্তমান ঠিকানা (উপজেলা)
+                      উপজেলা
                     </StyledTableCell>
                     <StyledTableCell align="left">
                       {biodataProfile.presentSubDistrict}

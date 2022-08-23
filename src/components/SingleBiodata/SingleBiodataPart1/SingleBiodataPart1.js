@@ -110,7 +110,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   </Grid>
                 </Grid>
               </Paper>
-              <Paper
+              {/* <Paper
                 elevation={1}
                 sx={{
                   pt: 2,
@@ -135,7 +135,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                     <span> {biodataProfile.parmanentDivision}</span>
                   </Grid>
                 </Grid>
-              </Paper>
+              </Paper> */}
               <Paper
                 elevation={1}
                 sx={{
@@ -155,7 +155,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   }}
                 >
                   <Grid item xs={6}>
-                    <span>স্থায়ী ঠিকানা (জেলা)</span>
+                    <span>স্থায়ী ঠিকানা</span>
                   </Grid>
                   <Grid item xs={6}>
                     <span> {biodataProfile.parmanentDistrict}</span>
@@ -182,7 +182,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                     }}
                   >
                     <Grid item xs={6}>
-                      <span>স্থায়ী ঠিকানা (উপজেলা)</span>
+                      <span>উপজেলা</span>
                     </Grid>
                     <Grid item xs={6}>
                       <span> {biodataProfile.parmanentSubDistrict}</span>
@@ -191,7 +191,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                 </Paper>
               )}
 
-              <Paper
+              {/* <Paper
                 elevation={1}
                 sx={{
                   pt: 2,
@@ -216,7 +216,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                     <span> {biodataProfile.presentDivision}</span>
                   </Grid>
                 </Grid>
-              </Paper>
+              </Paper> */}
 
               <Paper
                 elevation={1}
@@ -237,7 +237,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                   }}
                 >
                   <Grid item xs={6}>
-                    <span>বর্তমান ঠিকানা (জেলা)</span>
+                    <span>বর্তমান ঠিকানা</span>
                   </Grid>
                   <Grid item xs={6}>
                     <span> {biodataProfile.presentDistrict}</span>
@@ -264,7 +264,7 @@ const SingleBiodataPart1 = ({ biodataProfile }) => {
                     }}
                   >
                     <Grid item xs={6}>
-                      <span>স্থায়ী ঠিকানা (উপজেলা)</span>
+                      <span>উপজেলা</span>
                     </Grid>
                     <Grid item xs={6}>
                       <span> {biodataProfile.presentSubDistrict}</span>
