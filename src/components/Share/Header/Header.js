@@ -19,6 +19,7 @@ import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
 import logo from "../../../images/logo.png";
+import loginAvator from "../../../images/login-avator.webp";
 
 // const pages = [
 //   "হোম",
@@ -59,7 +60,7 @@ const Header = () => {
   const { user, admin } = useAuth();
 
   React.useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
@@ -188,17 +189,19 @@ const Header = () => {
                 <Avatar
                   alt="Remy Sharp"
                   src={
-                    profile && profile.biodataType == "পাত্রীর বায়োডাটা"
-                      ? female
-                      : male
+                    profile
+                      ? profile.biodataType == "পাত্রীর বায়োডাটা"
+                        ? female
+                        : male
+                      : loginAvator
                   }
                 />
               </NavLink>
             ) : (
               <div>
                 <NavLink to="/login" style={{ textDecoration: "none" }}>
-                  <Button variant="outlined" startIcon={<FingerprintIcon />}>
-                    Login
+                  <Button>
+                    <Avatar src={loginAvator} />
                   </Button>
                 </NavLink>
               </div>

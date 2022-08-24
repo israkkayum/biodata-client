@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
+import loginAvator from "../../../images/login-avator.webp";
 import { Avatar, Link } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
@@ -67,7 +68,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
@@ -75,7 +76,7 @@ const Profile = () => {
   }, [user.email]);
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setbiodataProfile(data);
@@ -85,7 +86,7 @@ const Profile = () => {
   const handlePrivateStatus = (id) => {
     const status = { status: "private" };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -101,7 +102,7 @@ const Profile = () => {
   const handlePublicStatus = (id) => {
     const status = { status: "public" };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -115,7 +116,7 @@ const Profile = () => {
   };
 
   const handleRemoveBiodata = (id) => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -149,17 +150,19 @@ const Profile = () => {
                   }}
                 >
                   <Avatar
-                    alt="Remy Sharp"
+                    alt="Avator"
                     src={
-                      biodataProfile &&
-                      biodataProfile.biodataType == "পাত্রীর বায়োডাটা"
-                        ? female
-                        : male
+                      biodataProfile
+                        ? biodataProfile.biodataType == "পাত্রীর বায়োডাটা"
+                          ? female
+                          : male
+                        : loginAvator
                     }
                     sx={{
                       width: 125,
                       height: 125,
                       p: 3,
+                      mt: 1,
                       align: "center",
                     }}
                   />

@@ -23,7 +23,7 @@ const Body = () => {
             sx={{ py: 3, px: 10 }}
             variant="contained"
           >
-            আপনার বায়োডাটা সম্পূর্ণ করুন
+            আপনার বায়োডাটা তৈরি করুন
           </Button>
         </NavLink>
         <br></br>

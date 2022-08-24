@@ -145,7 +145,7 @@ const Feedback = ({ feedback }) => {
   const handleFeedbackRemove = (id) => {
     setisLoadding(true);
 
-    fetch(`https://biodata-server.herokuapp.com/feedback/remove/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/feedback/remove/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

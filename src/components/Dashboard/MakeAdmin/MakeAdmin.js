@@ -122,7 +122,7 @@ const MakeAdmin = ({ users }) => {
     setisLoadding(true);
 
     const user = { email };
-    fetch("https://biodata-server.herokuapp.com/users/admin", {
+    fetch("https://bibaho-mubarok-server.herokuapp.com/users/admin", {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -150,7 +150,7 @@ const MakeAdmin = ({ users }) => {
   const handleAdminRemove = (id) => {
     const user = { id };
 
-    fetch("https://biodata-server.herokuapp.com/users/admin/remove", {
+    fetch("https://bibaho-mubarok-server.herokuapp.com/users/admin/remove", {
       method: "PUT",
       headers: {
         "content-type": "application/json",

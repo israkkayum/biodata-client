@@ -20,8 +20,26 @@ const Footer = () => {
             <h4>© 2021 - 2022 bibahomubarok.com.</h4>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <h4 style={{ marginRight: "30px" }}>Our Facebook Page</h4>
-            <h4>Join Facebook Group</h4>
+            <Link
+              target="_blank"
+              sx={{
+                textDecoration: "none",
+                color: "white",
+              }}
+              href="https://www.facebook.com/Bibahomubarokcom-106952855464210"
+            >
+              <h4 style={{ marginRight: "30px" }}>Our Facebook Page</h4>
+            </Link>
+            <Link
+              target="_blank"
+              sx={{
+                textDecoration: "none",
+                color: "white",
+              }}
+              href="https://www.facebook.com/groups/2244714759001183"
+            >
+              <h4>Join Facebook Group</h4>
+            </Link>
           </div>
         </Box>
         <div

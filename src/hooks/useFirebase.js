@@ -188,13 +188,15 @@ const useFirebase = () => {
   };
 
   useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/users")
+    fetch("https://bibaho-mubarok-server.herokuapp.com/users")
       .then((res) => res.json())
       .then((data) => setGetuser(data));
   }, []);
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/users/admin/${user.email}`)
+    fetch(
+      `https://bibaho-mubarok-server.herokuapp.com/users/admin/${user.email}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setAdmin(data.admin);
@@ -203,7 +205,7 @@ const useFirebase = () => {
 
   const saveUser = (email, displayName, biodataNumber, method) => {
     const user = { email, displayName, biodataNumber };
-    fetch("https://biodata-server.herokuapp.com/users", {
+    fetch("https://bibaho-mubarok-server.herokuapp.com/users", {
       method: method,
       headers: {
         "content-type": "application/json",

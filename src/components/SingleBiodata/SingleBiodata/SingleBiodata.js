@@ -13,7 +13,9 @@ const SingleBiodata = () => {
   const [biodataProfile, setBiodataProfile] = useState({});
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/biodata/${biodatasId}`)
+    fetch(
+      `https://bibaho-mubarok-server.herokuapp.com/biodatas/biodata/${biodatasId}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setBiodataProfile(data);

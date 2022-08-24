@@ -47,7 +47,7 @@ const ManageBiodata = ({ email }) => {
   const [biodataProfile, setbiodataProfile] = React.useState({});
 
   React.useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${email}`)
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${email}`)
       .then((res) => res.json())
       .then((data) => {
         setbiodataProfile(data);

@@ -93,7 +93,7 @@ const Banner = () => {
                   onChange={handleOnChange}
                 >
                   <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
-                  <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                  {/* <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
                   <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
                   <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
                   <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
@@ -155,7 +155,7 @@ const Banner = () => {
                   <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
                   <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
                   <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
-                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem> */}
                 </Select>
               </FormControl>
               {quarry.district == "চট্টগ্রাম" && (

@@ -65,7 +65,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
     // send to the server
 
     if (biodataProfile == null) {
-      fetch("https://biodata-server.herokuapp.com/biodatas", {
+      fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -85,7 +85,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
           }
         });
     } else {
-      fetch("https://biodata-server.herokuapp.com/biodatas", {
+      fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas", {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -121,6 +121,9 @@ const EditBiodata = ({ biodataProfile, profile }) => {
     <div>
       <form onSubmit={handleBiodataSubmit}>
         <Box sx={{ maxWidth: "100%", p: { xs: 2, md: 3, lg: 3 } }}>
+          <Alert severity="info" sx={{ mb: 3 }}>
+            স্টার (*) চিহ্নিত ঘর অবশ্যই পূরণ করতে হবে !
+          </Alert>
           <Stepper activeStep={activeStep} orientation="vertical">
             <Step>
               <StepLabel>
@@ -3585,6 +3588,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
                     <TextField
                       autoComplete="email"
                       autoFocus
+                      type="email"
                       name="contactEmail"
                       defaultValue={
                         biodataProfile ? biodataProfile.contactEmail : ""

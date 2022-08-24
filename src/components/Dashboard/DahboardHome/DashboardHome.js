@@ -65,7 +65,7 @@ const DashboardHome = () => {
   const [isLoadding, setIsLoadding] = useState(false);
 
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/biodatas")
+    fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas")
       .then((res) => res.json())
       .then((data) => {
         setBiodatas(data);
@@ -73,7 +73,7 @@ const DashboardHome = () => {
   }, []);
 
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/users")
+    fetch("https://bibaho-mubarok-server.herokuapp.com/users")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -81,7 +81,7 @@ const DashboardHome = () => {
   }, []);
 
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/paymentList")
+    fetch("https://bibaho-mubarok-server.herokuapp.com/paymentList")
       .then((res) => res.json())
       .then((data) => {
         setPayment(data);
@@ -89,7 +89,7 @@ const DashboardHome = () => {
   }, []);
 
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/feedback")
+    fetch("https://bibaho-mubarok-server.herokuapp.com/feedback")
       .then((res) => res.json())
       .then((data) => {
         setFeedback(data);
@@ -101,7 +101,7 @@ const DashboardHome = () => {
 
     const status = { adminStatus: adminStatus };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/admin/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/admin/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -118,7 +118,7 @@ const DashboardHome = () => {
   const handleRemoveBiodata = (id) => {
     setIsLoadding(true);
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

@@ -190,7 +190,7 @@ const ContactRequest = () => {
       date: new Date().toDateString(),
     };
 
-    fetch("https://biodata-server.herokuapp.com/contactRequest", {
+    fetch("https://bibaho-mubarok-server.herokuapp.com/contactRequest", {
       method: "POST",
       headers: {
         "content-type": "application/json",

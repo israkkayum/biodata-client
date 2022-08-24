@@ -10,13 +10,14 @@ import useAuth from "../../../hooks/useAuth";
 
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
+import loginAvator from "../../../images/login-avator.webp";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 
 const MyProfile = ({ profile, biodataProfile }) => {
-  const { displayName, email, biodataNumber } = profile;
+  const { admin } = useAuth();
 
-  const { user, admin } = useAuth();
+  const { displayName, email, biodataNumber } = profile;
 
   return (
     <div>
@@ -35,11 +36,13 @@ const MyProfile = ({ profile, biodataProfile }) => {
             >
               <img
                 src={
-                  biodataProfile &&
-                  biodataProfile.biodataType == "পাত্রীর বায়োডাটা"
-                    ? female
-                    : male
+                  biodataProfile
+                    ? biodataProfile.biodataType == "পাত্রীর বায়োডাটা"
+                      ? female
+                      : male
+                    : loginAvator
                 }
+                width="100%"
               />
             </Grid>
             <Grid item xs={12} md={8}>
