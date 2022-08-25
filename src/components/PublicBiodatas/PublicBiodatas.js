@@ -31,7 +31,7 @@ const PublicBiodatas = () => {
   };
 
   useEffect(() => {
-    fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas")
+    fetch("https://biodata-server.herokuapp.com/biodatas")
       .then((res) => res.json())
       .then((data) => {
         setPublicBiodatas(data);

@@ -67,8 +67,13 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  if (profile == null) {
+    window.location.reload();
+  }
+
+  console.log(user.email);
   useEffect(() => {
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/users/${user.email}`)
+    fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
@@ -76,7 +81,7 @@ const Profile = () => {
   }, [user.email]);
 
   useEffect(() => {
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${user.email}`)
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setbiodataProfile(data);
@@ -86,7 +91,7 @@ const Profile = () => {
   const handlePrivateStatus = (id) => {
     const status = { status: "private" };
 
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -102,7 +107,7 @@ const Profile = () => {
   const handlePublicStatus = (id) => {
     const status = { status: "public" };
 
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -116,7 +121,7 @@ const Profile = () => {
   };
 
   const handleRemoveBiodata = (id) => {
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

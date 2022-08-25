@@ -60,7 +60,7 @@ const Header = () => {
   const { user, admin } = useAuth();
 
   React.useEffect(() => {
-    fetch(`https://bibaho-mubarok-server.herokuapp.com/biodatas/${user.email}`)
+    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);

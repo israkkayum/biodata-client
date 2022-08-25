@@ -17,11 +17,9 @@ import { Link } from "react-router-dom";
 const MyProfile = ({ profile, biodataProfile }) => {
   const { admin } = useAuth();
 
-  const { displayName, email, biodataNumber } = profile;
-
   return (
     <div>
-      {email ? (
+      {profile?.email ? (
         <div>
           <Grid container spacing={6}>
             <Grid
@@ -50,19 +48,19 @@ const MyProfile = ({ profile, biodataProfile }) => {
                 Full Name
               </Typography>
               <Typography style={{ fontWeight: "bold", marginBottom: "15px" }}>
-                {displayName}
+                {profile.displayName}
               </Typography>
               <Typography style={{ color: "gray", marginBottom: "10px" }}>
                 Email
               </Typography>
               <Typography style={{ fontWeight: "bold", marginBottom: "15px" }}>
-                {email}
+                {profile.email}
               </Typography>
               <Typography style={{ color: "gray", marginBottom: "10px" }}>
                 Biodata Number
               </Typography>
               <Typography style={{ fontWeight: "bold", marginBottom: "15px" }}>
-                {biodataNumber}
+                {profile.biodataNumber}
               </Typography>
               {admin && (
                 <div>

@@ -61,7 +61,7 @@ const Body = () => {
                 style={{ width: "100px", height: "100px", padding: "15px" }}
               />
               <Divider />
-              <h2>Loadding...</h2>
+              <h2>Loading...</h2>
               <h3 style={{ color: "blue" }}>মোট পাত্র-পাত্রীর বায়োডাটা</h3>
             </Paper>
             <Paper elevation={3}>
@@ -70,7 +70,7 @@ const Body = () => {
                 style={{ width: "100px", height: "100px", padding: "15px" }}
               />
               <Divider />
-              <h2>Loadding...</h2>
+              <h2>Loading...</h2>
               <h3 style={{ color: "blue" }}>মোট পাত্রের বায়োডাটা </h3>
             </Paper>
             <Paper elevation={3}>
@@ -79,7 +79,7 @@ const Body = () => {
                 style={{ width: "100px", height: "100px", padding: "15px" }}
               />
               <Divider />
-              <h2>Loadding...</h2>
+              <h2>Loading...</h2>
               <h3 style={{ color: "blue" }}>মোট পাত্রীর বায়োডাটা </h3>
             </Paper>
             <Paper elevation={3}>
@@ -88,7 +88,7 @@ const Body = () => {
                 style={{ width: "100px", height: "100px", padding: "15px" }}
               />
               <Divider />
-              <h2>Loadding...</h2>
+              <h2>Loading...</h2>
               <h3 style={{ color: "blue" }}>সর্বমোট সফল বিবাহ </h3>
             </Paper>
           </Box>

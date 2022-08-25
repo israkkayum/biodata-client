@@ -65,7 +65,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
     // send to the server
 
     if (biodataProfile == null) {
-      fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas", {
+      fetch("https://biodata-server.herokuapp.com/biodatas", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -85,7 +85,7 @@ const EditBiodata = ({ biodataProfile, profile }) => {
           }
         });
     } else {
-      fetch("https://bibaho-mubarok-server.herokuapp.com/biodatas", {
+      fetch("https://biodata-server.herokuapp.com/biodatas", {
         method: "PUT",
         headers: {
           "content-type": "application/json",

@@ -204,12 +204,9 @@ const PaymentList = ({ payment }) => {
   const handleOrderRemove = (id) => {
     setisLoadding(true);
 
-    fetch(
-      `https://bibaho-mubarok-server.herokuapp.com/paymentList/remove/${id}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`https://biodata-server.herokuapp.com/paymentList/remove/${id}`, {
+      method: "DELETE",
+    })
       .then((res) => res.json())
       .then((data) => {
         setisLoadding(false);
@@ -222,16 +219,13 @@ const PaymentList = ({ payment }) => {
 
     const status = { status: "Shifted" };
 
-    fetch(
-      `https://bibaho-mubarok-server.herokuapp.com/paymentList/shifted/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(status),
-      }
-    )
+    fetch(`https://biodata-server.herokuapp.com/paymentList/shifted/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(status),
+    })
       .then((res) => res.json())
       .then((data) => {
         setisLoadding(false);
