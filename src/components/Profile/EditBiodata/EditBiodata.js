@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -22,15 +22,38 @@ import {
   Typography,
 } from "@mui/material";
 import useAuth from "../../../hooks/useAuth";
+import { ConstructionOutlined } from "@mui/icons-material";
 
-const EditBiodata = ({ biodataProfile, profile }) => {
+const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
   const { user } = useAuth();
 
   const [bioData, setBioData] = useState({});
+  // const [localBioData, setLocalBioData] = useState({});
   const [activeStep, setActiveStep] = React.useState(0);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [publishFail, setPublishFail] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
+
+  // useEffect(() => {
+  //   const localStorageData = JSON.parse(localStorage.getItem("localData"));
+  //   setLocalBioData(localStorageData);
+  //   console.log(localBioData);
+  // }, []);
+
+  // useEffect(() => {
+  //   function checkUserData() {
+  //     const item = localStorage.getItem("localData");
+  //     if (item) {
+  //       setLocalBioData(item);
+  //     }
+  //   }
+  //   window.addEventListener("storage", checkUserData);
+  //   return () => {
+  //     window.removeEventListener("storage", checkUserData);
+  //   };
+  // }, []);
+
+  console.log(localBioData);
 
   // Handle On Change normal text field
 
@@ -111,6 +134,8 @@ const EditBiodata = ({ biodataProfile, profile }) => {
 
   const handleNext = (e) => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    // localStorage.setItem("localData", JSON.stringify(bioData));
   };
 
   const handleBack = () => {

@@ -71,7 +71,6 @@ const Profile = () => {
     window.location.reload();
   }
 
-  console.log(user.email);
   useEffect(() => {
     fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
       .then((res) => res.json())
@@ -317,8 +316,9 @@ const Profile = () => {
                 <TabPanel value={value} index={0}>
                   <MyProfile
                     key={Profile.email}
-                    profile={profile}
                     biodataProfile={biodataProfile}
+                    setbiodataProfile={setbiodataProfile}
+                    profile={profile}
                   ></MyProfile>
                 </TabPanel>
 
