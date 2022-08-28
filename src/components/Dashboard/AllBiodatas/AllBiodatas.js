@@ -28,7 +28,7 @@ const headCells = [
   },
   {
     id: "phone",
-    label: "Phone Number",
+    label: "Contact Number",
   },
   {
     id: "biodata nu",
@@ -165,7 +165,7 @@ const AllBiodatas = ({ biodatas, setBiodatas }) => {
                         </TableCell>
                         <TableCell align="left">{row.contactEmail}</TableCell>
                         <TableCell align="left">
-                          {row.GurdianPhoneNumber}
+                          {row.yourPhoneNumber}
                         </TableCell>
                         <TableCell align="left">{row.biodataNumber}</TableCell>
                         <TableCell align="left">

@@ -24,38 +24,14 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { ConstructionOutlined } from "@mui/icons-material";
 
-const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
+const EditBiodata = ({ biodataProfile, localBioData, profile }) => {
   const { user } = useAuth();
 
   const [bioData, setBioData] = useState({});
-  // const [localBioData, setLocalBioData] = useState({});
   const [activeStep, setActiveStep] = React.useState(0);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [publishFail, setPublishFail] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
-
-  // useEffect(() => {
-  //   const localStorageData = JSON.parse(localStorage.getItem("localData"));
-  //   setLocalBioData(localStorageData);
-  //   console.log(localBioData);
-  // }, []);
-
-  // useEffect(() => {
-  //   function checkUserData() {
-  //     const item = localStorage.getItem("localData");
-  //     if (item) {
-  //       setLocalBioData(item);
-  //     }
-  //   }
-  //   window.addEventListener("storage", checkUserData);
-  //   return () => {
-  //     window.removeEventListener("storage", checkUserData);
-  //   };
-  // }, []);
-
-  console.log(localBioData);
-
-  // Handle On Change normal text field
 
   const handleOnBlur = (e) => {
     const field = e.target.name;
@@ -135,7 +111,14 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
   const handleNext = (e) => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
-    // localStorage.setItem("localData", JSON.stringify(bioData));
+    const localDataAll = {
+      ...localBioData,
+      ...bioData,
+    };
+
+    setBioData(localDataAll);
+
+    localStorage.setItem("localData", JSON.stringify(localDataAll));
   };
 
   const handleBack = () => {
@@ -175,7 +158,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourName"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourName : ""
+                        biodataProfile
+                          ? biodataProfile.yourName
+                          : localBioData?.yourName
                       }
                       onBlur={handleOnBlur}
                       required
@@ -226,7 +211,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="biodataType"
                         defaultValue={
-                          biodataProfile ? biodataProfile.biodataType : ""
+                          biodataProfile
+                            ? biodataProfile.biodataType
+                            : localBioData?.biodataType
                         }
                         onChange={handleOnBlur}
                         required
@@ -260,7 +247,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="maritalStatus"
                         defaultValue={
-                          biodataProfile ? biodataProfile.maritalStatus : ""
+                          biodataProfile
+                            ? biodataProfile.maritalStatus
+                            : localBioData?.maritalStatus
                         }
                         onBlur={handleOnBlur}
                         required
@@ -328,7 +317,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="parmanentDistrict"
                         defaultValue={
-                          biodataProfile ? biodataProfile.parmanentDistrict : ""
+                          biodataProfile
+                            ? biodataProfile.parmanentDistrict
+                            : localBioData?.parmanentDistrict
                         }
                         onChange={handleOnBlur}
                         required
@@ -428,7 +419,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                           defaultValue={
                             biodataProfile
                               ? biodataProfile.parmanentSubDistrict
-                              : ""
+                              : localBioData?.parmanentSubDistrict
                           }
                           onBlur={handleOnBlur}
                           required
@@ -514,7 +505,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="presentDistrict"
                         defaultValue={
-                          biodataProfile ? biodataProfile.presentDistrict : ""
+                          biodataProfile
+                            ? biodataProfile.presentDistrict
+                            : localBioData?.presentDistrict
                         }
                         onChange={handleOnBlur}
                         required
@@ -613,7 +606,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                           defaultValue={
                             biodataProfile
                               ? biodataProfile.presentSubDistrict
-                              : ""
+                              : localBioData?.presentSubDistrict
                           }
                           onBlur={handleOnBlur}
                           required
@@ -662,7 +655,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         <DesktopDatePicker
                           inputFormat="MM/dd/yyyy"
                           defaultValue={
-                            biodataProfile ? biodataProfile.dateOfBirth : ""
+                            biodataProfile
+                              ? biodataProfile.dateOfBirth
+                              : localBioData?.dateOfBirth
                           }
                           value={bioData.dateOfBirth}
                           onChange={(newValue) =>
@@ -699,7 +694,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="yourSkinColor"
                         defaultValue={
-                          biodataProfile ? biodataProfile.yourSkinColor : ""
+                          biodataProfile
+                            ? biodataProfile.yourSkinColor
+                            : localBioData?.yourSkinColor
                         }
                         onBlur={handleOnBlur}
                       >
@@ -734,7 +731,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="yourHeight"
                         defaultValue={
-                          biodataProfile ? biodataProfile.yourHeight : ""
+                          biodataProfile
+                            ? biodataProfile.yourHeight
+                            : localBioData?.yourHeight
                         }
                         onBlur={handleOnBlur}
                       >
@@ -799,7 +798,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="yourWeight"
                         defaultValue={
-                          biodataProfile ? biodataProfile.yourWeight : ""
+                          biodataProfile
+                            ? biodataProfile.yourWeight
+                            : localBioData?.yourWeight
                         }
                         onBlur={handleOnBlur}
                       >
@@ -859,7 +860,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="yourBloodGroup"
                         defaultValue={
-                          biodataProfile ? biodataProfile.yourBloodGroup : ""
+                          biodataProfile
+                            ? biodataProfile.yourBloodGroup
+                            : localBioData?.yourBloodGroup
                         }
                         onBlur={handleOnBlur}
                       >
@@ -897,7 +900,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourProfession"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourProfession : ""
+                        biodataProfile
+                          ? biodataProfile.yourProfession
+                          : localBioData?.yourProfession
                       }
                       onBlur={handleOnBlur}
                       required
@@ -930,7 +935,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourMonthIncome"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourMonthIncome : ""
+                        biodataProfile
+                          ? biodataProfile.yourMonthIncome
+                          : localBioData?.yourMonthIncome
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -984,7 +991,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="parmanentAddress"
                       defaultValue={
-                        biodataProfile ? biodataProfile.parmanentAddress : ""
+                        biodataProfile
+                          ? biodataProfile.parmanentAddress
+                          : localBioData?.parmanentAddress
                       }
                       onBlur={handleOnBlur}
                       required
@@ -1017,7 +1026,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="presentAddress"
                       defaultValue={
-                        biodataProfile ? biodataProfile.presentAddress : ""
+                        biodataProfile
+                          ? biodataProfile.presentAddress
+                          : localBioData?.presentAddress
                       }
                       onBlur={handleOnBlur}
                       required
@@ -1050,7 +1061,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="growingUpLife"
                       defaultValue={
-                        biodataProfile ? biodataProfile.growingUpLife : ""
+                        biodataProfile
+                          ? biodataProfile.growingUpLife
+                          : localBioData?.growingUpLife
                       }
                       onBlur={handleOnBlur}
                       required
@@ -1100,7 +1113,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="studyMedium"
                         defaultValue={
-                          biodataProfile ? biodataProfile.studyMedium : ""
+                          biodataProfile
+                            ? biodataProfile.studyMedium
+                            : localBioData?.studyMedium
                         }
                         onChange={handleOnBlur}
                         required
@@ -1141,7 +1156,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                             id="demo-simple-select"
                             name="areYouHafez"
                             defaultValue={
-                              biodataProfile ? biodataProfile.areYouHafez : ""
+                              biodataProfile
+                                ? biodataProfile.areYouHafez
+                                : localBioData?.areYouHafez
                             }
                             onBlur={handleOnBlur}
                           >
@@ -1173,7 +1190,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                             defaultValue={
                               biodataProfile
                                 ? biodataProfile.areYouPassDawora
-                                : ""
+                                : localBioData?.areYouPassDawora
                             }
                             onChange={handleOnBlur}
                           >
@@ -1210,7 +1227,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.dateofPassDawora
-                                      : ""
+                                      : localBioData?.dateofPassDawora
                                   }
                                   value={bioData.dateofPassDawora}
                                   onChange={(newValue) =>
@@ -1249,7 +1266,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 defaultValue={
                                   biodataProfile
                                     ? biodataProfile.natizaOfDawora
-                                    : ""
+                                    : localBioData?.natizaOfDawora
                                 }
                                 onBlur={handleOnBlur}
                               >
@@ -1285,7 +1302,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 defaultValue={
                                   biodataProfile
                                     ? biodataProfile.areYouStudyTakasshos
-                                    : ""
+                                    : localBioData?.areYouStudyTakasshos
                                 }
                                 onChange={handleOnBlur}
                               >
@@ -1322,7 +1339,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.takasshosStudySub
-                                      : ""
+                                      : localBioData?.takasshosStudySub
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -1354,7 +1371,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.takasshosStudyDate
-                                      : ""
+                                      : localBioData?.takasshosStudyDate
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -1394,7 +1411,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                               defaultValue={
                                 biodataProfile
                                   ? biodataProfile.studyingYearDawora
-                                  : ""
+                                  : localBioData?.studyingYearDawora
                               }
                               onBlur={handleOnBlur}
                               fullWidth
@@ -1427,7 +1444,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                           defaultValue={
                             biodataProfile
                               ? biodataProfile.maxStudyQualification
-                              : ""
+                              : localBioData?.maxStudyQualification
                           }
                           onBlur={handleOnBlur}
                           multiline
@@ -1465,7 +1482,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                             id="demo-simple-select"
                             name="areYouSscPass"
                             defaultValue={
-                              biodataProfile ? biodataProfile.areYouSscPass : ""
+                              biodataProfile
+                                ? biodataProfile.areYouSscPass
+                                : localBioData?.areYouSscPass
                             }
                             onChange={handleOnBlur}
                           >
@@ -1498,7 +1517,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 id="demo-simple-select"
                                 name="sscResult"
                                 defaultValue={
-                                  biodataProfile ? biodataProfile.sscResult : ""
+                                  biodataProfile
+                                    ? biodataProfile.sscResult
+                                    : localBioData?.sscResult
                                 }
                                 onBlur={handleOnBlur}
                               >
@@ -1535,7 +1556,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 id="demo-simple-select"
                                 name="sscGroup"
                                 defaultValue={
-                                  biodataProfile ? biodataProfile.sscGroup : ""
+                                  biodataProfile
+                                    ? biodataProfile.sscGroup
+                                    : localBioData?.sscGroup
                                 }
                                 onBlur={handleOnBlur}
                               >
@@ -1576,7 +1599,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.dateofPassSsc
-                                      : ""
+                                      : localBioData?.dateofPassSsc
                                   }
                                   value={bioData.dateofPassSsc}
                                   onChange={(newValue) =>
@@ -1612,7 +1635,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 defaultValue={
                                   biodataProfile
                                     ? biodataProfile.areYouHscPass
-                                    : ""
+                                    : localBioData?.areYouHscPass
                                 }
                                 onChange={handleOnBlur}
                               >
@@ -1652,7 +1675,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                     defaultValue={
                                       biodataProfile
                                         ? biodataProfile.hscResult
-                                        : ""
+                                        : localBioData?.hscResult
                                     }
                                     onBlur={handleOnBlur}
                                   >
@@ -1695,7 +1718,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                     defaultValue={
                                       biodataProfile
                                         ? biodataProfile.hscGroup
-                                        : ""
+                                        : localBioData?.hscGroup
                                     }
                                     onBlur={handleOnBlur}
                                   >
@@ -1737,7 +1760,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                       defaultValue={
                                         biodataProfile
                                           ? biodataProfile.dateofPassHsc
-                                          : ""
+                                          : localBioData?.dateofPassHsc
                                       }
                                       value={bioData.dateofPassHsc}
                                       onChange={(newValue) =>
@@ -1780,7 +1803,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.hounrsQualification
-                                      : ""
+                                      : localBioData?.hounrsQualification
                                   }
                                   onBlur={handleOnBlur}
                                   multiline
@@ -1819,7 +1842,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.hounrsInstituteName
-                                      : ""
+                                      : localBioData?.hounrsInstituteName
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -1854,7 +1877,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.hounrsPassDate
-                                      : ""
+                                      : localBioData?.hounrsPassDate
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -1893,7 +1916,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                     defaultValue={
                                       biodataProfile
                                         ? biodataProfile.msxHscStuding
-                                        : ""
+                                        : localBioData?.msxHscStuding
                                     }
                                     onBlur={handleOnBlur}
                                   >
@@ -1946,7 +1969,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.diplomaStudySub
-                                      : ""
+                                      : localBioData?.diplomaStudySub
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -1982,7 +2005,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.diplomaInstituteName
-                                      : ""
+                                      : localBioData?.diplomaInstituteName
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -2017,7 +2040,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                   defaultValue={
                                     biodataProfile
                                       ? biodataProfile.diplomaPassDate
-                                      : ""
+                                      : localBioData?.diplomaPassDate
                                   }
                                   onBlur={handleOnBlur}
                                   fullWidth
@@ -2056,7 +2079,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                                 defaultValue={
                                   biodataProfile
                                     ? biodataProfile.minClassStudy
-                                    : ""
+                                    : localBioData?.minClassStudy
                                 }
                                 onBlur={handleOnBlur}
                               >
@@ -2100,7 +2123,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="otherEducationalQua"
                       defaultValue={
-                        biodataProfile ? biodataProfile.otherEducationalQua : ""
+                        biodataProfile
+                          ? biodataProfile.otherEducationalQua
+                          : localBioData?.otherEducationalQua
                       }
                       onBlur={handleOnBlur}
                       multiline
@@ -2157,7 +2182,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourFatherName"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourFatherName : ""
+                        biodataProfile
+                          ? biodataProfile.yourFatherName
+                          : localBioData?.yourFatherName
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2193,7 +2220,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourMotherName"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourMotherName : ""
+                        biodataProfile
+                          ? biodataProfile.yourMotherName
+                          : localBioData?.yourMotherName
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2230,7 +2259,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.YourFatherProfession
-                          : ""
+                          : localBioData?.YourFatherProfession
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2265,7 +2294,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.YourMotherProfession
-                          : ""
+                          : localBioData?.YourMotherProfession
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2297,7 +2326,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="numberOfSister"
                         defaultValue={
-                          biodataProfile ? biodataProfile.numberOfSister : ""
+                          biodataProfile
+                            ? biodataProfile.numberOfSister
+                            : localBioData?.numberOfSister
                         }
                         onBlur={handleOnBlur}
                         required
@@ -2336,7 +2367,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="numberOfBrother"
                         defaultValue={
-                          biodataProfile ? biodataProfile.numberOfBrother : ""
+                          biodataProfile
+                            ? biodataProfile.numberOfBrother
+                            : localBioData?.numberOfBrother
                         }
                         onBlur={handleOnBlur}
                         required
@@ -2378,7 +2411,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       ddefaultValue={
                         biodataProfile
                           ? biodataProfile.professionOfOtherRelated
-                          : ""
+                          : localBioData?.professionOfOtherRelated
                       }
                       onBlur={handleOnBlur}
                       multiline
@@ -2413,7 +2446,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.economicSocialPosition
-                          : ""
+                          : localBioData?.economicSocialPosition
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2467,7 +2500,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="whichMazhabFollow"
                       defaultValue={
-                        biodataProfile ? biodataProfile.whichMazhabFollow : ""
+                        biodataProfile
+                          ? biodataProfile.whichMazhabFollow
+                          : localBioData?.whichMazhabFollow
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -2498,7 +2533,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="areYouPrayerRegu"
                       defaultValue={
-                        biodataProfile ? biodataProfile.areYouPrayerRegu : ""
+                        biodataProfile
+                          ? biodataProfile.areYouPrayerRegu
+                          : localBioData?.areYouPrayerRegu
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -2526,7 +2563,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="religiousIdo"
                       defaultValue={
-                        biodataProfile ? biodataProfile.religiousIdo : ""
+                        biodataProfile
+                          ? biodataProfile.religiousIdo
+                          : localBioData?.religiousIdo
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -2568,7 +2607,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="anyPoliticalIdology"
                       defaultValue={
-                        biodataProfile ? biodataProfile.anyPoliticalIdology : ""
+                        biodataProfile
+                          ? biodataProfile.anyPoliticalIdology
+                          : localBioData?.anyPoliticalIdology
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -2596,7 +2637,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="haveAnyDiseases"
                       defaultValue={
-                        biodataProfile ? biodataProfile.haveAnyDiseases : ""
+                        biodataProfile
+                          ? biodataProfile.haveAnyDiseases
+                          : localBioData?.haveAnyDiseases
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2625,7 +2668,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourFavoriteHobby"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourFavoriteHobby : ""
+                        biodataProfile
+                          ? biodataProfile.yourFavoriteHobby
+                          : localBioData?.yourFavoriteHobby
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2655,7 +2700,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="favoriteMan"
                       defaultValue={
-                        biodataProfile ? biodataProfile.favoriteMan : ""
+                        biodataProfile
+                          ? biodataProfile.favoriteMan
+                          : localBioData?.favoriteMan
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2685,7 +2732,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="anyExtraQua"
                       defaultValue={
-                        biodataProfile ? biodataProfile.anyExtraQua : ""
+                        biodataProfile
+                          ? biodataProfile.anyExtraQua
+                          : localBioData?.anyExtraQua
                       }
                       onBlur={handleOnBlur}
                       multiline
@@ -2715,7 +2764,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="aboutYourSelf"
                       defaultValue={
-                        biodataProfile ? biodataProfile.aboutYourSelf : ""
+                        biodataProfile
+                          ? biodataProfile.aboutYourSelf
+                          : localBioData?.aboutYourSelf
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2773,7 +2824,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="agreeGuardian"
                       defaultValue={
-                        biodataProfile ? biodataProfile.agreeGuardian : ""
+                        biodataProfile
+                          ? biodataProfile.agreeGuardian
+                          : localBioData?.agreeGuardian
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2802,7 +2855,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="idologyOfMarit"
                       defaultValue={
-                        biodataProfile ? biodataProfile.idologyOfMarit : ""
+                        biodataProfile
+                          ? biodataProfile.idologyOfMarit
+                          : localBioData?.idologyOfMarit
                       }
                       onBlur={handleOnBlur}
                       required
@@ -2835,7 +2890,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterwWifeWear"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterwWifeWear : ""
+                          biodataProfile
+                            ? biodataProfile.afterwWifeWear
+                            : localBioData?.afterwWifeWear
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -2865,7 +2922,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterwWifeStudy"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterwWifeStudy : ""
+                          biodataProfile
+                            ? biodataProfile.afterwWifeStudy
+                            : localBioData?.afterwWifeStudy
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -2895,7 +2954,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterwWifeWork"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterwWifeWork : ""
+                          biodataProfile
+                            ? biodataProfile.afterwWifeWork
+                            : localBioData?.afterwWifeWork
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -2925,7 +2986,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterwWifeHome"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterwWifeHome : ""
+                          biodataProfile
+                            ? biodataProfile.afterwWifeHome
+                            : localBioData?.afterwWifeHome
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -2956,7 +3019,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterwWifeDower"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterwWifeDower : ""
+                          biodataProfile
+                            ? biodataProfile.afterwWifeDower
+                            : localBioData?.afterwWifeDower
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -2986,7 +3051,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterYourStudy"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterYourStudy : ""
+                          biodataProfile
+                            ? biodataProfile.afterYourStudy
+                            : localBioData?.afterYourStudy
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -3016,7 +3083,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       <TextField
                         name="afterYourJob"
                         defaultValue={
-                          biodataProfile ? biodataProfile.afterYourJob : ""
+                          biodataProfile
+                            ? biodataProfile.afterYourJob
+                            : localBioData?.afterYourJob
                         }
                         onBlur={handleOnBlur}
                         fullWidth
@@ -3066,7 +3135,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="anyQuary"
                       defaultValue={
-                        biodataProfile ? biodataProfile.anyQuary : ""
+                        biodataProfile
+                          ? biodataProfile.anyQuary
+                          : localBioData?.anyQuary
                       }
                       onBlur={handleOnBlur}
                       multiline
@@ -3125,7 +3196,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="ageOfLifePartner"
                       defaultValue={
-                        biodataProfile ? biodataProfile.ageOfLifePartner : ""
+                        biodataProfile
+                          ? biodataProfile.ageOfLifePartner
+                          : localBioData?.ageOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3156,7 +3229,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.skinColorOfLifePartner
-                          : ""
+                          : localBioData?.skinColorOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3187,7 +3260,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.minHeightOfLifePartner
-                          : ""
+                          : localBioData?.minHeightOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3218,7 +3291,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.minEduQuaOfLifePartner
-                          : ""
+                          : localBioData?.minEduQuaOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3249,7 +3322,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.districtOfLifePartner
-                          : ""
+                          : localBioData?.districtOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3280,7 +3353,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.maritalStatusOfLifePartner
-                          : ""
+                          : localBioData?.maritalStatusOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3311,7 +3384,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.professionOfLifePartner
-                          : ""
+                          : localBioData?.professionOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3342,7 +3415,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.economicOfLifePartner
-                          : ""
+                          : localBioData?.economicOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3373,7 +3446,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.FamilyStatusOfLifePartner
-                          : ""
+                          : localBioData?.FamilyStatusOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       fullWidth
@@ -3403,7 +3476,7 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       defaultValue={
                         biodataProfile
                           ? biodataProfile.characteristicsOfLifePartner
-                          : ""
+                          : localBioData?.characteristicsOfLifePartner
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3459,7 +3532,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="agreeYourGurdean"
                         defaultValue={
-                          biodataProfile ? biodataProfile.agreeYourGurdean : ""
+                          biodataProfile
+                            ? biodataProfile.agreeYourGurdean
+                            : localBioData?.agreeYourGurdean
                         }
                         onBlur={handleOnBlur}
                         required
@@ -3492,7 +3567,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                         id="demo-simple-select"
                         name="ourNoLiability"
                         defaultValue={
-                          biodataProfile ? biodataProfile.ourNoLiability : ""
+                          biodataProfile
+                            ? biodataProfile.ourNoLiability
+                            : localBioData?.ourNoLiability
                         }
                         onBlur={handleOnBlur}
                         required
@@ -3545,7 +3622,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="GurdianPhoneNumber"
                       defaultValue={
-                        biodataProfile ? biodataProfile.GurdianPhoneNumber : ""
+                        biodataProfile
+                          ? biodataProfile.GurdianPhoneNumber
+                          : localBioData?.GurdianPhoneNumber
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3580,7 +3659,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="phoneNumberRelated"
                       defaultValue={
-                        biodataProfile ? biodataProfile.phoneNumberRelated : ""
+                        biodataProfile
+                          ? biodataProfile.phoneNumberRelated
+                          : localBioData?.phoneNumberRelated
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3616,7 +3697,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                       type="email"
                       name="contactEmail"
                       defaultValue={
-                        biodataProfile ? biodataProfile.contactEmail : ""
+                        biodataProfile
+                          ? biodataProfile.contactEmail
+                          : localBioData?.contactEmail
                       }
                       onBlur={handleOnBlur}
                       required
@@ -3650,7 +3733,9 @@ const EditBiodata = ({ biodataProfile, setbiodataProfile, profile }) => {
                     <TextField
                       name="yourPhoneNumber"
                       defaultValue={
-                        biodataProfile ? biodataProfile.yourPhoneNumber : ""
+                        biodataProfile
+                          ? biodataProfile.yourPhoneNumber
+                          : localBioData?.yourPhoneNumber
                       }
                       onBlur={handleOnBlur}
                       required

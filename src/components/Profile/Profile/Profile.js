@@ -61,6 +61,7 @@ const Profile = () => {
   const [value, setValue] = React.useState(0);
   const [profile, setProfile] = useState({});
   const [biodataProfile, setbiodataProfile] = useState({});
+  const [localBioData, setlocalBioData] = useState({});
   const [disabled, setDisabled] = useState(true);
 
   const handleChange = (event, newValue) => {
@@ -85,6 +86,11 @@ const Profile = () => {
       .then((data) => {
         setbiodataProfile(data);
       });
+  }, [user.email]);
+
+  useEffect(() => {
+    const localStorageData = JSON.parse(localStorage.getItem("localData"));
+    setlocalBioData(localStorageData);
   }, [user.email]);
 
   const handlePrivateStatus = (id) => {
@@ -317,7 +323,6 @@ const Profile = () => {
                   <MyProfile
                     key={Profile.email}
                     biodataProfile={biodataProfile}
-                    setbiodataProfile={setbiodataProfile}
                     profile={profile}
                   ></MyProfile>
                 </TabPanel>
@@ -356,6 +361,7 @@ const Profile = () => {
                   <EditBiodata
                     key={Profile.email}
                     biodataProfile={biodataProfile}
+                    localBioData={localBioData}
                     profile={profile}
                   ></EditBiodata>
                 </TabPanel>

@@ -259,28 +259,35 @@ const Feedback = ({ feedback }) => {
                           }}
                         >
                           <div>
-                            <Typography variant="subtitle1" gutterBottom>
-                              <span style={{ fontWeight: "bold" }}>
-                                Name :{" "}
-                              </span>{" "}
-                              {row.name}
+                            <Typography
+                              style={{ color: "gray", marginBottom: "10px" }}
+                            >
+                              Name : {row.name}
                             </Typography>
-                            <Typography variant="subtitle1" gutterBottom>
-                              <span style={{ fontWeight: "bold" }}>
-                                Email :{" "}
-                              </span>{" "}
-                              {row.email}
+
+                            <Typography
+                              style={{ color: "gray", marginBottom: "10px" }}
+                            >
+                              Email : {row.email}
                             </Typography>
-                            <Typography variant="subtitle1" gutterBottom>
-                              <span style={{ fontWeight: "bold" }}>
-                                Subject :{" "}
-                              </span>{" "}
-                              {row.subject}
+
+                            <Typography
+                              style={{ color: "gray", marginBottom: "10px" }}
+                            >
+                              Subject : {row.subject}
+                            </Typography>
+
+                            <Typography
+                              style={{ color: "gray", marginBottom: "10px" }}
+                            >
+                              Dear,
                             </Typography>
                             <Typography
-                              variant="body1"
-                              gutterBottom
-                              sx={{ lineHeight: 1.8 }}
+                              style={{
+                                color: "gray",
+                                marginBottom: "15px",
+                                lineHeight: 1.8,
+                              }}
                             >
                               <ReadMore>{row.details}</ReadMore>
                             </Typography>
