@@ -5,6 +5,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Pagination,
   Paper,
   Select,
   Stack,
@@ -19,6 +20,8 @@ import Skeletons from "../Share/Skeletons/Skeletons";
 
 const PublicBiodatas = () => {
   const [publicBiodatas, setPublicBiodatas] = useState([]);
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   const [quarry, setQuarry] = useState({});
 
@@ -30,13 +33,20 @@ const PublicBiodatas = () => {
     setQuarry(newInfo);
   };
 
+  const size = 9;
+
   useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/biodatas")
+    fetch(
+      `https://biodata-server.herokuapp.com/publicbiodatas?page=${page}&&size=${size}`
+    )
       .then((res) => res.json())
       .then((data) => {
-        setPublicBiodatas(data);
+        setPublicBiodatas(data.biodatas);
+        const count = data.count;
+        const pageNumber = Math.ceil(count / size);
+        setPageCount(pageNumber);
       });
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -287,8 +297,16 @@ const PublicBiodatas = () => {
           <Skeletons></Skeletons>
         )}
       </Container>
+      <Box sx={{ display: "flex", justifyContent: "center", pb: 5 }}>
+        <Pagination
+          onChange={(event, value) => setPage(value - 1)}
+          count={pageCount}
+          page={page + 1}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
     </div>
   );
 };
-
 export default PublicBiodatas;

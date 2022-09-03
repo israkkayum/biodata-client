@@ -36,7 +36,7 @@ const Footer = () => {
                 textDecoration: "none",
                 color: "white",
               }}
-              href="https://www.facebook.com/groups/2244714759001183"
+              href="https://www.facebook.com/groups/790165582368505"
             >
               <h4>Join Facebook Group</h4>
             </Link>

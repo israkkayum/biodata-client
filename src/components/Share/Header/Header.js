@@ -34,7 +34,7 @@ const pagePath = [
   { page: "আমাদের সম্পর্কে", paths: "about" },
   { page: "প্রশ্ন ও উত্তর", paths: "faq" },
   { page: "টিউটোরিয়াল", paths: "tutorial" },
-  { page: "যোগাযোগ", paths: "contact" },
+  { page: "জিজ্ঞাসা", paths: "contact" },
 ];
 
 const settings = [
