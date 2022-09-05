@@ -182,7 +182,7 @@ const PublicBiodatas = () => {
                   <MenuItem value="বিপত্নীক">বিপত্নীক</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+              {/* <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
                 <InputLabel
                   sx={{ color: "white" }}
                   id="demo-simple-select-helper-label"
@@ -198,7 +198,7 @@ const PublicBiodatas = () => {
                   sx={{ color: "white" }}
                 >
                   <MenuItem value="চট্টগ্রাম">চট্টগ্রাম</MenuItem>
-                  {/* <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
+                 <MenuItem value="কুমিল্লা">কুমিল্লা</MenuItem>
                   <MenuItem value="কক্সবাজার">কক্সবাজার</MenuItem>
                   <MenuItem value="কুষ্টিয়া">কুষ্টিয়া</MenuItem>
                   <MenuItem value="কিশোরগঞ্জ">কিশোরগঞ্জ</MenuItem>
@@ -260,46 +260,47 @@ const PublicBiodatas = () => {
                   <MenuItem value="মৌলভীবাজার">মৌলভীবাজার</MenuItem>
                   <MenuItem value="মানিকগঞ্জ">মানিকগঞ্জ</MenuItem>
                   <MenuItem value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</MenuItem>
-                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem> */}
+                  <MenuItem value="মাদারীপুর">মাদারীপুর</MenuItem>
+                </Select>
+              </FormControl> */}
+              {/* {quarry.district == "চট্টগ্রাম" && ( */}
+
+              <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
+                <InputLabel
+                  sx={{ color: "white" }}
+                  id="demo-simple-select-helper-label"
+                >
+                  উপজেলা
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  name="subDistrict"
+                  label="জেলা"
+                  onChange={handleOnChange}
+                  sx={{ color: "white" }}
+                >
+                  <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
+                  <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
+                  <MenuItem value="রাউজান">রাউজান</MenuItem>
+                  <MenuItem value="চট্টগ্রাম সদর(শহর)">
+                    চট্টগ্রাম সদর(শহর)
+                  </MenuItem>
+                  <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
+                  <MenuItem value="পটিয়া">পটিয়া</MenuItem>
+                  <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
+                  <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
+                  <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
+                  <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
+                  <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
+                  <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
+                  <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
+                  <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
+                  <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
+                  <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
                 </Select>
               </FormControl>
-              {quarry.district == "চট্টগ্রাম" && (
-                <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
-                  <InputLabel
-                    sx={{ color: "white" }}
-                    id="demo-simple-select-helper-label"
-                  >
-                    উপজেলা
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    name="subDistrict"
-                    label="জেলা"
-                    onChange={handleOnChange}
-                    sx={{ color: "white" }}
-                  >
-                    <MenuItem value="ফটিকছড়ি">ফটিকছড়ি</MenuItem>
-                    <MenuItem value="হাটহাজারী ">হাটহাজারী</MenuItem>
-                    <MenuItem value="রাউজান">রাউজান</MenuItem>
-                    <MenuItem value="চট্টগ্রাম সদর(শহর)">
-                      চট্টগ্রাম সদর(শহর)
-                    </MenuItem>
-                    <MenuItem value="রাঙ্গুনিয়া">রাঙ্গুনিয়া</MenuItem>
-                    <MenuItem value="পটিয়া">পটিয়া</MenuItem>
-                    <MenuItem value="চন্দানাইশ">চন্দানাইশ</MenuItem>
-                    <MenuItem value="সীতাকুণ্ড">সীতাকুণ্ড</MenuItem>
-                    <MenuItem value="কর্ণফুলী">কর্ণফুলী</MenuItem>
-                    <MenuItem value="লোহাগড়া">লোহাগড়া</MenuItem>
-                    <MenuItem value="বোয়ালখালি">বোয়ালখালি</MenuItem>
-                    <MenuItem value="বাঁশখালি">বাঁশখালি</MenuItem>
-                    <MenuItem value="আনোয়ারা">আনোয়ারা</MenuItem>
-                    <MenuItem value="সন্দ্বীপ">সন্দ্বীপ</MenuItem>
-                    <MenuItem value="মীরসরাই">মীরসরাই</MenuItem>
-                    <MenuItem value="সাতকানিয়া">সাতকানিয়া</MenuItem>
-                  </Select>
-                </FormControl>
-              )}
+
               <TextField
                 sx={{
                   m: 1,
