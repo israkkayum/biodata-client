@@ -358,7 +358,7 @@ const PublicBiodatas = () => {
         {publicBiodatas.length != 0 ? (
           filterBiodata.length != 0 ? (
             <Grid container spacing={4}>
-              {filterBiodata.reverse().map(
+              {filterBiodata.map(
                 (publicBiodata) =>
                   publicBiodata.status == "public" &&
                   publicBiodata.adminStatus == "Accepted" && (
