@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -17,13 +18,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Container } from "@mui/system";
 import PublicBiodata from "../PublicBiodata/PublicBiodata";
 import Skeletons from "../Share/Skeletons/Skeletons";
+import nodata from "../../images/no-data.jpg";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const PublicBiodatas = () => {
   const [publicBiodatas, setPublicBiodatas] = useState([]);
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [hasPagination, setHasPagination] = useState(false);
 
   const [quarry, setQuarry] = useState({});
+  const [filterBiodata, setFilterBiodata] = useState([]);
 
   const handleOnChange = (e) => {
     const field = e.target.name;
@@ -31,6 +36,55 @@ const PublicBiodatas = () => {
     const newInfo = { ...quarry };
     newInfo[field] = value;
     setQuarry(newInfo);
+  };
+
+  const handleSearch = (e) => {
+    let matchedBiodatas;
+    if (quarry.biodataNo) {
+      matchedBiodatas = publicBiodatas.filter((biodata) =>
+        biodata.biodataNumber.includes(quarry.biodataNo)
+      );
+    } else if (
+      quarry.biodataType &&
+      quarry.maritalStatus &&
+      quarry.subDistrict
+    ) {
+      matchedBiodatas = publicBiodatas.filter(
+        (biodata) =>
+          biodata.biodataType.includes(quarry.biodataType) &&
+          biodata.maritalStatus.includes(quarry.maritalStatus) &&
+          biodata.parmanentSubDistrict.includes(quarry.subDistrict)
+      );
+    } else if (quarry.biodataType && quarry.maritalStatus) {
+      matchedBiodatas = publicBiodatas.filter(
+        (biodata) =>
+          biodata.biodataType.includes(quarry.biodataType) &&
+          biodata.maritalStatus.includes(quarry.maritalStatus)
+      );
+    } else if (quarry.biodataType && quarry.subDistrict) {
+      matchedBiodatas = publicBiodatas.filter(
+        (biodata) =>
+          biodata.biodataType.includes(quarry.biodataType) &&
+          biodata.parmanentSubDistrict.includes(quarry.subDistrict)
+      );
+    } else if (quarry.maritalStatus && quarry.subDistrict) {
+      matchedBiodatas = publicBiodatas.filter(
+        (biodata) =>
+          biodata.maritalStatus.includes(quarry.maritalStatus) &&
+          biodata.parmanentSubDistrict.includes(quarry.subDistrict)
+      );
+    } else {
+      matchedBiodatas = publicBiodatas.filter(
+        (biodata) =>
+          biodata.biodataType.includes(quarry.biodataType) ||
+          biodata.maritalStatus.includes(quarry.maritalStatus) ||
+          biodata.parmanentSubDistrict.includes(quarry.subDistrict) ||
+          biodata.biodataNumber.includes(quarry.biodataNo)
+      );
+    }
+
+    setFilterBiodata(matchedBiodatas);
+    setHasPagination(true);
   };
 
   const size = 9;
@@ -41,12 +95,20 @@ const PublicBiodatas = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setPublicBiodatas(data.biodatas);
+        setFilterBiodata(data.biodatas);
         const count = data.count;
         const pageNumber = Math.ceil(count / size);
         setPageCount(pageNumber);
+
+        setHasPagination(false);
       });
   }, [page]);
+
+  useEffect(() => {
+    fetch("https://biodata-server.herokuapp.com/biodatas")
+      .then((res) => res.json())
+      .then((data) => setPublicBiodatas(data));
+  }, []);
 
   return (
     <div>
@@ -249,6 +311,7 @@ const PublicBiodatas = () => {
                 label="বায়োডাটা নং"
                 name="biodataNo"
                 id="fullWidth"
+                onChange={handleOnChange}
               />
               <Stack
                 sx={{
@@ -265,10 +328,23 @@ const PublicBiodatas = () => {
                     sx={{ color: "white" }}
                     variant="outlined"
                     startIcon={<SearchIcon />}
+                    onClick={handleSearch}
                   >
                     বায়োডাটা খুঁজুন
                   </Button>
                 </NavLink>
+                {hasPagination && (
+                  <Button
+                    sx={{ color: "white" }}
+                    variant="outlined"
+                    startIcon={<ReplayIcon />}
+                    onClick={() => {
+                      window.location.reload();
+                    }}
+                  >
+                    রিলোড দিন
+                  </Button>
+                )}
               </Stack>
             </div>
           </Paper>
@@ -279,20 +355,26 @@ const PublicBiodatas = () => {
           বায়োডাটা সমূহ
         </h1>
         {publicBiodatas.length != 0 ? (
-          <Grid container spacing={4}>
-            {publicBiodatas.reverse().map(
-              (publicBiodata) =>
-                publicBiodata.status == "public" &&
-                publicBiodata.adminStatus == "Accepted" && (
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-                    <PublicBiodata
-                      key={publicBiodata.email}
-                      publicBiodata={publicBiodata}
-                    />
-                  </Grid>
-                )
-            )}
-          </Grid>
+          filterBiodata.length != 0 ? (
+            <Grid container spacing={4}>
+              {filterBiodata.reverse().map(
+                (publicBiodata) =>
+                  publicBiodata.status == "public" &&
+                  publicBiodata.adminStatus == "Accepted" && (
+                    <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                      <PublicBiodata
+                        key={publicBiodata.email}
+                        publicBiodata={publicBiodata}
+                      />
+                    </Grid>
+                  )
+              )}
+            </Grid>
+          ) : (
+            <div>
+              <img src={nodata} style={{ width: "100%", height: "100%" }} />
+            </div>
+          )
         ) : (
           <Skeletons></Skeletons>
         )}
@@ -304,6 +386,7 @@ const PublicBiodatas = () => {
           page={page + 1}
           variant="outlined"
           shape="rounded"
+          disabled={hasPagination ? true : false}
         />
       </Box>
     </div>
