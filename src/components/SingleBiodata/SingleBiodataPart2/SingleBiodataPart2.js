@@ -843,7 +843,8 @@ const SingleBiodataPart2 = ({ biodataProfile }) => {
                     </span>
                     <Box sx={{ pt: 3, pb: 2 }}>
                       <NavLink
-                        to="/contact-request"
+                        // to="/contact-request"
+                        to={`/contact-request/${biodataProfile._id}`}
                         style={{ textDecoration: "none" }}
                       >
                         <Button

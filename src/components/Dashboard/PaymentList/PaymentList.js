@@ -479,21 +479,31 @@ const PaymentList = ({ payment }) => {
                                       <TableCell>{row.biodataNumber}</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                      <TableCell>Total Biodata</TableCell>
-                                      <TableCell>{row.totalBiodata}</TableCell>
+                                      <TableCell>
+                                        Guardian Mobile Number
+                                      </TableCell>
+                                      <TableCell>
+                                        {row.guardianPhoneNumber}
+                                      </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell>Guardian</TableCell>
+                                      <TableCell>
+                                        {row.guardianRelated}
+                                      </TableCell>
                                     </TableRow>
                                     <TableRow>
                                       <TableCell>Total Balance</TableCell>
                                       <TableCell>{row.totalBlance}</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    {/* <TableRow>
                                       <TableCell>Payment Method</TableCell>
                                       <TableCell>{row.method}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                       <TableCell>Payment Number</TableCell>
                                       <TableCell>{row.paymentNumber}</TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
                                     {/* <TableRow>
                                       <TableCell>Transaction ID</TableCell>
                                       <TableCell>

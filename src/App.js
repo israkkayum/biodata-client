@@ -20,6 +20,7 @@ import SingleBiodata from "./components/SingleBiodata/SingleBiodata/SingleBiodat
 import ContactRequest from "./components/ContactRequest/ContactRequest";
 import AdminRoute from "./components/Security/AdminRoute/AdminRoute";
 import DashboardHome from "./components/Dashboard/DahboardHome/DashboardHome";
+import Proposal from "./components/Proposal/Proposal";
 
 function App() {
   render(
@@ -39,6 +40,7 @@ function App() {
             path="biodatas/:biodatasId"
             element={<SingleBiodata></SingleBiodata>}
           />
+
           <Route
             path="/profile"
             element={
@@ -47,14 +49,25 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
+            path="contact-request/:biodatasId"
+            element={
+              <PrivateRoute>
+                <Proposal></Proposal>
+              </PrivateRoute>
+            }
+          />
+
+          {/* <Route
             path="/contact-request"
             element={
               <PrivateRoute>
                 <ContactRequest></ContactRequest>
               </PrivateRoute>
             }
-          />
+          /> */}
+
           <Route
             path="/dashboard"
             element={

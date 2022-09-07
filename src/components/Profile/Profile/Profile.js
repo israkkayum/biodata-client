@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import male from "../../../images/male.png";
 import female from "../../../images/female.png";
 import loginAvator from "../../../images/login-avator.webp";
-import { Avatar, Link } from "@mui/material";
+import { Avatar, Button, Link } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,6 +22,9 @@ import MyProfile from "../MyProfile/MyProfile";
 import EditBiodata from "../EditBiodata/EditBiodata";
 import MyBiodata from "../MyBiodata/MyBiodata";
 import HideDeleteData from "../HideDeleteData/HideDeleteData";
+import PermPhoneMsgIcon from "@mui/icons-material/PermPhoneMsg";
+import MyProposal from "../MyProposal/MyProposal";
+import { NavLink } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,6 +65,7 @@ const Profile = () => {
   const [profile, setProfile] = useState({});
   const [biodataProfile, setbiodataProfile] = useState({});
   const [localBioData, setlocalBioData] = useState({});
+  const [proposal, setProposal] = useState([]);
   const [disabled, setDisabled] = useState(true);
 
   const handleChange = (event, newValue) => {
@@ -71,6 +75,14 @@ const Profile = () => {
   if (profile == null) {
     window.location.reload();
   }
+
+  useEffect(() => {
+    fetch(`https://biodata-server.herokuapp.com/proposal/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProposal(data);
+      });
+  }, [user.email]);
 
   useEffect(() => {
     fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
@@ -213,8 +225,8 @@ const Profile = () => {
                         display: "flow",
                         justifyContent: "left",
                         textAlign: "left",
-                        marginTop: "-5px",
-                        marginBottom: "-5px",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
                       }}
                       {...a11yProps(0)}
                       iconPosition="start"
@@ -231,8 +243,8 @@ const Profile = () => {
                         display: "flow",
                         justifyContent: "left",
                         textAlign: "left",
-                        marginTop: "-5px",
-                        marginBottom: "-5px",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
                       }}
                       icon={<FingerprintIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
@@ -249,8 +261,8 @@ const Profile = () => {
                         display: "flow",
                         justifyContent: "left",
                         textAlign: "left",
-                        marginTop: "-5px",
-                        marginBottom: "-5px",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
                       }}
                       icon={<EditIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
@@ -271,14 +283,33 @@ const Profile = () => {
                         display: "flow",
                         justifyContent: "left",
                         textAlign: "left",
-                        marginTop: "-5px",
-                        marginBottom: "-5px",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
                         lineHeight: "2",
                       }}
                       icon={<DeleteIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
                       label=" Delete / Hide Biodata"
                       {...a11yProps(3)}
+                    />
+
+                    {/* My Proposal  */}
+
+                    <Tab
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                        display: "flow",
+                        justifyContent: "left",
+                        textAlign: "left",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
+                        lineHeight: "2",
+                      }}
+                      icon={<PermPhoneMsgIcon sx={{ pr: 5 }} />}
+                      iconPosition="start"
+                      label="My Proposal"
+                      {...a11yProps(5)}
                     />
 
                     {/* Logout  */}
@@ -290,8 +321,8 @@ const Profile = () => {
                         display: "flow",
                         justifyContent: "left",
                         textAlign: "left",
-                        marginTop: "-5px",
-                        marginBottom: "-5px",
+                        // marginTop: "-5px",
+                        // marginBottom: "-5px",
                       }}
                       icon={<LogoutIcon sx={{ pr: 5 }} />}
                       iconPosition="start"
@@ -393,6 +424,31 @@ const Profile = () => {
                           label="Create Biodata"
                         />
                       </Tabs>
+                    </Box>
+                  )}
+                </TabPanel>
+
+                {/* My Proposal */}
+
+                <TabPanel value={value} index={4}>
+                  {proposal.length != 0 ? (
+                    <MyProposal
+                      proposal={proposal}
+                      key={proposal.email}
+                    ></MyProposal>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <NavLink
+                        to="/biodatas"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button>Send Contact Request</Button>
+                      </NavLink>
                     </Box>
                   )}
                 </TabPanel>
