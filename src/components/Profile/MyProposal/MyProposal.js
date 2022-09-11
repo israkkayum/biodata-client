@@ -331,6 +331,45 @@ const MyProposal = ({ proposal }) => {
                                   </div>
                                 )}
                               </Stack>
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="flex-start"
+                                spacing={5}
+                                marginBottom="10px"
+                              >
+                                <span>Contact Email</span>
+                                <span></span>
+                                <span></span>
+
+                                {row?.status == "Shifted" ? (
+                                  <span>{row.contactEmail}</span>
+                                ) : (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <Tooltip
+                                      placement="top"
+                                      title="আপনার তথ্য যাচাই করতে 48 ঘন্টা পর্যন্ত সময় লাগতে পারে। পরে আবার চেক করুন."
+                                    >
+                                      <IconButton>
+                                        <VisibilityIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                    <img
+                                      src={blurnumber}
+                                      style={{
+                                        width: "150px",
+                                        height: "20px",
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </Stack>
                             </Box>
                           </div>
                           <div>

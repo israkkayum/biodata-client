@@ -183,6 +183,7 @@ const Proposal = () => {
       biodataNumber: biodataProfile.biodataNumber,
       guardianPhoneNumber: biodataProfile.GurdianPhoneNumber,
       guardianRelated: biodataProfile.phoneNumberRelated,
+      contactEmail: biodataProfile.contactEmail,
       date: new Date().toDateString(),
     };
 
