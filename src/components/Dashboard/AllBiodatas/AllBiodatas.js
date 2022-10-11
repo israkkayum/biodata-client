@@ -1,4 +1,5 @@
 import * as React from "react";
+// file import from mui
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -17,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { Chip } from "@mui/material";
 
+// Table head cells data
 const headCells = [
   {
     id: "name",
@@ -40,6 +42,7 @@ const headCells = [
   },
 ];
 
+// Table head function
 function EnhancedTableHead(props) {
   return (
     <TableHead>
@@ -57,6 +60,8 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
+
+// set table name and filter option in table head
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
@@ -116,6 +121,8 @@ const AllBiodatas = ({ biodatas, setBiodatas }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  //arow function for pagination
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -160,7 +167,6 @@ const AllBiodatas = ({ biodatas, setBiodatas }) => {
                           padding="normal"
                         >
                           {/* body row name  */}
-
                           {row.yourName}
                         </TableCell>
                         <TableCell align="left">{row.contactEmail}</TableCell>
@@ -207,6 +213,7 @@ const AllBiodatas = ({ biodatas, setBiodatas }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          {/* pagination  */}
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"

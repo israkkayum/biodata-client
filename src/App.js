@@ -21,6 +21,7 @@ import ContactRequest from "./components/ContactRequest/ContactRequest";
 import AdminRoute from "./components/Security/AdminRoute/AdminRoute";
 import DashboardHome from "./components/Dashboard/DahboardHome/DashboardHome";
 import Proposal from "./components/Proposal/Proposal";
+import Tutorial from "./components/Tutorial/Tutorial";
 
 function App() {
   render(
@@ -33,6 +34,7 @@ function App() {
           <Route path="/about" element={<About></About>} />
           <Route path="/faq" element={<FAQ></FAQ>} />
           <Route path="/contact" element={<Contact></Contact>} />
+          <Route path="/tutorial" element={<Tutorial></Tutorial>} />
           <Route path="/login" element={<Login></Login>} />
           <Route path="/register" element={<Register></Register>} />
           <Route path="/biodatas" element={<PublicBiodatas></PublicBiodatas>} />

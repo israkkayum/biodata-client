@@ -2,22 +2,19 @@ import * as React from "react";
 import {
   Box,
   CircularProgress,
-  Divider,
   Paper,
-  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Tabs,
 } from "@mui/material";
 
-import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
 
+// coustom css for table cell
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F0F0F0",
@@ -46,6 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const ManageBiodata = ({ email }) => {
   const [biodataProfile, setbiodataProfile] = React.useState({});
 
+  // get biodata by email
   React.useEffect(() => {
     fetch(`https://biodata-server.herokuapp.com/biodatas/${email}`)
       .then((res) => res.json())

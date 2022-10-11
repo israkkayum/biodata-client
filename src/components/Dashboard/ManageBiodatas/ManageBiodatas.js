@@ -32,6 +32,7 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 
+// dialog
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -45,6 +46,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
+// table name and filter option
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
 
@@ -99,6 +101,7 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
+// accordion style
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -114,6 +117,7 @@ const Accordion = styled((props) => (
   },
 }));
 
+// accordion summary style
 const AccordionSummary = styled((props) => (
   <MuiAccordionSummary
     expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
@@ -137,6 +141,7 @@ const AccordionSummary = styled((props) => (
   },
 }));
 
+// accordion details style
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
   borderLeft: "1px solid rgba(0, 0, 0, .125)",
@@ -146,10 +151,9 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const ManageBiodatas = (props) => {
   const { biodatas, isLoadding } = props;
-
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openAccept, setOpenAccept] = React.useState(false);
   const [openUnAccept, setOpenUnAccept] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -158,10 +162,12 @@ const ManageBiodatas = (props) => {
 
   const [expanded, setExpanded] = React.useState("");
 
+  // handle accordion expand
   const handleExpandChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
+  // change page / pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -171,6 +177,7 @@ const ManageBiodatas = (props) => {
     setPage(0);
   };
 
+  // modal open
   const handleAcceptOpen = (id) => {
     setOpenAccept(true);
     setId(id);
@@ -185,6 +192,7 @@ const ManageBiodatas = (props) => {
     setId(id);
   };
 
+  // modal close
   const handleClose = () => {
     setOpenAccept(false);
     setOpenUnAccept(false);

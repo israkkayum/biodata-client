@@ -28,6 +28,8 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 
+// modal dialog from mui
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -40,6 +42,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     alignItems: "flex-start",
   },
 }));
+
+// expand article
 
 const ReadMore = ({ children }) => {
   const text = children;
@@ -60,6 +64,8 @@ const ReadMore = ({ children }) => {
     </p>
   );
 };
+
+// table name and filter option
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
@@ -118,30 +124,32 @@ const EnhancedTableToolbar = (props) => {
 const Feedback = ({ feedback }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
   const [openDelete, setOpenDelete] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [id, setId] = React.useState("");
   const [isLoadding, setisLoadding] = React.useState(false);
 
+  // pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // modal open
   const handleDeleteOpen = (id) => {
     setOpenDelete(true);
     setId(id);
   };
 
+  // modal close
   const handleClose = () => {
     setOpenDelete(false);
   };
 
+  // delete feedback
   const handleFeedbackRemove = (id) => {
     setisLoadding(true);
 
@@ -319,6 +327,7 @@ const Feedback = ({ feedback }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          {/* pagination  */}
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"

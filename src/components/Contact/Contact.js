@@ -14,6 +14,8 @@ const Contact = () => {
   const [failure, setFailure] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  //Get data from user -> handleOnChange
+
   const handleOnChange = (e) => {
     const field = e.target.name;
     const value = e.target.value;
@@ -21,6 +23,8 @@ const Contact = () => {
     newInfo[field] = value;
     setFeedback(newInfo);
   };
+
+  //Sent Data to server
 
   const handleFeedbackSubmit = (e) => {
     setIsLoading(true);
@@ -83,6 +87,8 @@ const Contact = () => {
             আপনার যে কোন জিজ্ঞাসা নিম্নোক্ত ফর্মে পূরণ করে আমাদের কাছে পাঠিয়ে
             দিন। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করবো ইন শা আল্লাহ।
           </p>
+
+          {/* Form  */}
           <form onSubmit={handleFeedbackSubmit}>
             <div
               style={{
@@ -96,6 +102,7 @@ const Contact = () => {
                   maxWidth: "100%",
                 }}
               >
+                {/* Message  success or fail*/}
                 <Box>
                   {success && (
                     <Alert severity="success">Successfuly Submitted !!! </Alert>
@@ -107,6 +114,7 @@ const Contact = () => {
                   )}
                 </Box>
 
+                {/* Name Text Field  */}
                 <TextField
                   sx={{ my: 3 }}
                   fullWidth
@@ -117,6 +125,8 @@ const Contact = () => {
                   required
                   onChange={handleOnChange}
                 />
+
+                {/* Email text field  */}
                 <TextField
                   fullWidth
                   label="ইমেইল"
@@ -126,6 +136,8 @@ const Contact = () => {
                   required
                   onChange={handleOnChange}
                 />
+
+                {/* Subject text field  */}
                 <TextField
                   sx={{ my: 3 }}
                   fullWidth
@@ -135,6 +147,8 @@ const Contact = () => {
                   required
                   onChange={handleOnChange}
                 />
+
+                {/* Details text field  */}
                 <TextField
                   fullWidth
                   multiline
@@ -145,6 +159,8 @@ const Contact = () => {
                   required
                   onChange={handleOnChange}
                 />
+
+                {/* Submit button  */}
                 <Box sx={{ textAlign: "center", pb: 3 }}>
                   <Button
                     sx={{ mt: 3, backgroundColor: "blue", width: "100%" }}

@@ -1,5 +1,5 @@
 import { Container, textAlign } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -7,13 +7,7 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-
-import { Avatar, Link } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import FingerprintIcon from "@mui/icons-material/Fingerprint";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import RingVolumeIcon from "@mui/icons-material/RingVolume";
@@ -23,6 +17,8 @@ import ManageBiodatas from "../ManageBiodatas/ManageBiodatas";
 import MakeAdmin from "../MakeAdmin/MakeAdmin";
 import PaymentList from "../PaymentList/PaymentList";
 import Feedback from "../Feedback/Feedback";
+
+// tab panel
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,6 +60,7 @@ const DashboardHome = () => {
   const [feedback, setFeedback] = React.useState([]);
   const [isLoadding, setIsLoadding] = useState(false);
 
+  // get all biodatas from server
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/biodatas")
       .then((res) => res.json())
@@ -72,6 +69,7 @@ const DashboardHome = () => {
       });
   }, []);
 
+  //get all users from server
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/users")
       .then((res) => res.json())
@@ -80,6 +78,7 @@ const DashboardHome = () => {
       });
   }, []);
 
+  //get all contact request data from server
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/paymentList")
       .then((res) => res.json())
@@ -88,6 +87,7 @@ const DashboardHome = () => {
       });
   }, []);
 
+  //get all feedback from server
   React.useEffect(() => {
     fetch("https://biodata-server.herokuapp.com/feedback")
       .then((res) => res.json())
@@ -96,6 +96,7 @@ const DashboardHome = () => {
       });
   }, []);
 
+  // set biodatas status (accepted / unaccepted)
   const handleAdminStatus = (id, adminStatus) => {
     setIsLoadding(true);
 
@@ -115,6 +116,7 @@ const DashboardHome = () => {
       });
   };
 
+  // delete biodata
   const handleRemoveBiodata = (id) => {
     setIsLoadding(true);
 
@@ -129,6 +131,8 @@ const DashboardHome = () => {
   };
 
   const [value, setValue] = React.useState(0);
+
+  // handleChange for tab
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

@@ -24,7 +24,9 @@ import Stack from "@mui/material/Stack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import { modalview } from "react-ga";
 
+//BootstrapDialog
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -38,6 +40,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
+// stack item custom css
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -49,6 +52,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+// table name and filter option
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
 
@@ -109,15 +113,16 @@ const MakeAdmin = ({ users }) => {
   const [success, setSuccess] = React.useState(false);
   const [failure, setfailure] = React.useState(false);
   const [isLoadding, setisLoadding] = React.useState(false);
-
   const [openDelete, setOpenDelete] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [id, setId] = React.useState("");
 
+  // handle on blur
   const handleOnBlur = (e) => {
     setEmail(e.target.value);
   };
 
+  // add admin
   const handleAdminSubmit = (e) => {
     setisLoadding(true);
 
@@ -147,6 +152,7 @@ const MakeAdmin = ({ users }) => {
     e.preventDefault();
   };
 
+  // remove admin
   const handleAdminRemove = (id) => {
     const user = { id };
 
@@ -165,11 +171,13 @@ const MakeAdmin = ({ users }) => {
       });
   };
 
+  // modal open
   const handleDeleteOpen = (id) => {
     setOpenDelete(true);
     setId(id);
   };
 
+  // modal close
   const handleClose = () => {
     setOpenDelete(false);
   };
