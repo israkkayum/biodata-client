@@ -188,13 +188,13 @@ const useFirebase = () => {
   };
 
   useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/users")
+    fetch("https://biodata-server.up.railway.app/users")
       .then((res) => res.json())
       .then((data) => setGetuser(data));
   }, []);
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/users/admin/${user.email}`)
+    fetch(`https://biodata-server.up.railway.app/users/admin/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setAdmin(data.admin);
@@ -203,7 +203,7 @@ const useFirebase = () => {
 
   const saveUser = (email, displayName, biodataNumber, method) => {
     const user = { email, displayName, biodataNumber };
-    fetch("https://biodata-server.herokuapp.com/users", {
+    fetch("https://biodata-server.up.railway.app/users", {
       method: method,
       headers: {
         "content-type": "application/json",

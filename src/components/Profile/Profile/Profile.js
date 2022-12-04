@@ -77,7 +77,7 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/proposal/${user.email}`)
+    fetch(`https://biodata-server.up.railway.app/proposal/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProposal(data);
@@ -85,7 +85,7 @@ const Profile = () => {
   }, [user.email]);
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/users/${user.email}`)
+    fetch(`https://biodata-server.up.railway.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
@@ -93,7 +93,7 @@ const Profile = () => {
   }, [user.email]);
 
   useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${user.email}`)
+    fetch(`https://biodata-server.up.railway.app/biodatas/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setbiodataProfile(data);
@@ -108,7 +108,7 @@ const Profile = () => {
   const handlePrivateStatus = (id) => {
     const status = { status: "private" };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -124,7 +124,7 @@ const Profile = () => {
   const handlePublicStatus = (id) => {
     const status = { status: "public" };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/biodatas/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -138,7 +138,7 @@ const Profile = () => {
   };
 
   const handleRemoveBiodata = (id) => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/biodatas/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

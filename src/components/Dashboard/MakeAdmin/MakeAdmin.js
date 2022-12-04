@@ -127,7 +127,7 @@ const MakeAdmin = ({ users }) => {
     setisLoadding(true);
 
     const user = { email };
-    fetch("https://biodata-server.herokuapp.com/users/admin", {
+    fetch("https://biodata-server.up.railway.app/users/admin", {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -156,7 +156,7 @@ const MakeAdmin = ({ users }) => {
   const handleAdminRemove = (id) => {
     const user = { id };
 
-    fetch("https://biodata-server.herokuapp.com/users/admin/remove", {
+    fetch("https://biodata-server.up.railway.app/users/admin/remove", {
       method: "PUT",
       headers: {
         "content-type": "application/json",

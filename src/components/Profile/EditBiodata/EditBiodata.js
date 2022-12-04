@@ -64,7 +64,7 @@ const EditBiodata = ({ biodataProfile, localBioData, profile }) => {
     // send to the server
 
     if (biodataProfile == null) {
-      fetch("https://biodata-server.herokuapp.com/biodatas", {
+      fetch("https://biodata-server.up.railway.app/biodatas", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -84,7 +84,7 @@ const EditBiodata = ({ biodataProfile, localBioData, profile }) => {
           }
         });
     } else {
-      fetch("https://biodata-server.herokuapp.com/biodatas", {
+      fetch("https://biodata-server.up.railway.app/biodatas", {
         method: "PUT",
         headers: {
           "content-type": "application/json",

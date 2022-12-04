@@ -157,7 +157,9 @@ const Proposal = () => {
   const totalBlance = "০০ টাকা";
 
   React.useEffect(() => {
-    fetch(`https://biodata-server.herokuapp.com/biodatas/biodata/${biodatasId}`)
+    fetch(
+      `https://biodata-server.up.railway.app/biodatas/biodata/${biodatasId}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setBiodataProfile(data);
@@ -187,7 +189,7 @@ const Proposal = () => {
       date: new Date().toDateString(),
     };
 
-    fetch("https://biodata-server.herokuapp.com/contactRequest", {
+    fetch("https://biodata-server.up.railway.app/contactRequest", {
       method: "POST",
       headers: {
         "content-type": "application/json",

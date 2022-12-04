@@ -127,7 +127,7 @@ const MyProposal = ({ proposal }) => {
   const handleFeedbackRemove = (id) => {
     setisLoadding(true);
 
-    fetch(`https://biodata-server.herokuapp.com/paymentList/remove/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/paymentList/remove/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

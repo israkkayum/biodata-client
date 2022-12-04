@@ -35,7 +35,7 @@ const Contact = () => {
       date: new Date().toDateString(),
     };
 
-    fetch("https://biodata-server.herokuapp.com/feedback", {
+    fetch("https://biodata-server.up.railway.app/feedback", {
       method: "POST",
       headers: {
         "content-type": "application/json",

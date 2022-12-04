@@ -62,7 +62,7 @@ const DashboardHome = () => {
 
   // get all biodatas from server
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/biodatas")
+    fetch("https://biodata-server.up.railway.app/biodatas")
       .then((res) => res.json())
       .then((data) => {
         setBiodatas(data);
@@ -71,7 +71,7 @@ const DashboardHome = () => {
 
   //get all users from server
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/users")
+    fetch("https://biodata-server.up.railway.app/users")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -80,7 +80,7 @@ const DashboardHome = () => {
 
   //get all contact request data from server
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/paymentList")
+    fetch("https://biodata-server.up.railway.app/paymentList")
       .then((res) => res.json())
       .then((data) => {
         setPayment(data);
@@ -89,7 +89,7 @@ const DashboardHome = () => {
 
   //get all feedback from server
   React.useEffect(() => {
-    fetch("https://biodata-server.herokuapp.com/feedback")
+    fetch("https://biodata-server.up.railway.app/feedback")
       .then((res) => res.json())
       .then((data) => {
         setFeedback(data);
@@ -102,7 +102,7 @@ const DashboardHome = () => {
 
     const status = { adminStatus: adminStatus };
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/admin/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/biodatas/admin/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -120,7 +120,7 @@ const DashboardHome = () => {
   const handleRemoveBiodata = (id) => {
     setIsLoadding(true);
 
-    fetch(`https://biodata-server.herokuapp.com/biodatas/${id}`, {
+    fetch(`https://biodata-server.up.railway.app/biodatas/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
