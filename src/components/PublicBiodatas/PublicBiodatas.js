@@ -91,7 +91,7 @@ const PublicBiodatas = () => {
 
   useEffect(() => {
     fetch(
-      `https://biodata-server.up.railway.app/publicbiodatas?page=${page}&&size=${size}`
+      `https://biodata-server.vercel.app/publicbiodatas?page=${page}&&size=${size}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -105,7 +105,7 @@ const PublicBiodatas = () => {
   }, [page]);
 
   useEffect(() => {
-    fetch("https://biodata-server.up.railway.app/biodatas")
+    fetch("https://biodata-server.vercel.app/biodatas")
       .then((res) => res.json())
       .then((data) => setPublicBiodatas(data));
   }, []);

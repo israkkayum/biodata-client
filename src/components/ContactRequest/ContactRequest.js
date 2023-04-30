@@ -190,7 +190,7 @@
 //       date: new Date().toDateString(),
 //     };
 
-//     fetch("https://biodata-server.up.railway.app/contactRequest", {
+//     fetch("https://biodata-server.vercel.app/contactRequest", {
 //       method: "POST",
 //       headers: {
 //         "content-type": "application/json",

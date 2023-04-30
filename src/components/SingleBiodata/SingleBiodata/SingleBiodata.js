@@ -13,9 +13,7 @@ const SingleBiodata = () => {
   const [biodataProfile, setBiodataProfile] = useState({});
 
   useEffect(() => {
-    fetch(
-      `https://biodata-server.up.railway.app/biodatas/biodata/${biodatasId}`
-    )
+    fetch(`https://biodata-server.vercel.app/biodatas/biodata/${biodatasId}`)
       .then((res) => res.json())
       .then((data) => {
         setBiodataProfile(data);

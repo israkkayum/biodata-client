@@ -45,7 +45,7 @@ const ManageBiodata = ({ email }) => {
 
   // get biodata by email
   React.useEffect(() => {
-    fetch(`https://biodata-server.up.railway.app/biodatas/${email}`)
+    fetch(`https://biodata-server.vercel.app/biodatas/${email}`)
       .then((res) => res.json())
       .then((data) => {
         setbiodataProfile(data);

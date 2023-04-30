@@ -204,7 +204,7 @@ const PaymentList = ({ payment }) => {
   const handleOrderRemove = (id) => {
     setisLoadding(true);
 
-    fetch(`https://biodata-server.up.railway.app/paymentList/remove/${id}`, {
+    fetch(`https://biodata-server.vercel.app/paymentList/remove/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -219,7 +219,7 @@ const PaymentList = ({ payment }) => {
 
     const status = { status: "Shifted" };
 
-    fetch(`https://biodata-server.up.railway.app/paymentList/shifted/${id}`, {
+    fetch(`https://biodata-server.vercel.app/paymentList/shifted/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

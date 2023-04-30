@@ -153,7 +153,7 @@ const Feedback = ({ feedback }) => {
   const handleFeedbackRemove = (id) => {
     setisLoadding(true);
 
-    fetch(`https://biodata-server.up.railway.app/feedback/remove/${id}`, {
+    fetch(`https://biodata-server.vercel.app/feedback/remove/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
